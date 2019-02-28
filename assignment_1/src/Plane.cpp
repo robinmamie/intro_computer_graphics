@@ -35,14 +35,31 @@ intersect(const Ray& _ray,
           vec3&      _intersection_normal,
           double&    _intersection_t ) const
 {
-    /** \todo
-     * - compute the intersection of the plane with `_ray`
-     * - if ray and plane are parallel there is no intersection
-     * - otherwise compute intersection data and store it in `_intersection_point`, `_intersection_normal`, and `_intersection_t`.
-     * - return whether there is an intersection in front of the viewer (t > 0)
-    */
+	const vec3 &rayDir = _ray.direction;
+    const vec3 &rayOrigin = _ray.origin;
+    double dotRayDirNormal = dot(rayDir, normal);
 
-    return false;
+    _intersection_t = NO_INTERSECTION;
+
+    //check if parallel
+    if(dotRayDirNormal == 0){
+		return false;		
+	}
+	
+	//if not, compute intersection
+	const vec3   oc = _ray.origin - center;
+	double t = (norm(oc) - dot(rayOrigin, normal)) / dotRayDirNormal;
+	
+	//check if solution is in front of the viewer
+	if(t > 0){
+		return  false;
+	}
+	
+	_intersection_t = t;
+	_intersection_point  = _ray(_intersection_t);
+	_intersection_normal = normal;
+
+    return true;
 }
 
 
