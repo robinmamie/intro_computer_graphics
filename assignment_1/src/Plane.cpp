@@ -48,10 +48,10 @@ intersect(const Ray& _ray,
 	
 	//if not, compute intersection
 	const vec3   oc = _ray.origin - center;
-	double t = (norm(oc) - dot(rayOrigin, normal)) / dotRayDirNormal;
+	double t = dot(normal, center - rayOrigin) / dotRayDirNormal;
 	
 	//check if solution is in front of the viewer
-	if(t > 0){
+	if(t < 0){
 		return  false;
 	}
 	
