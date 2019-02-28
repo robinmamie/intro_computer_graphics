@@ -32,8 +32,7 @@ public:
     Cylinder(const vec3 &_center = vec3(0,0,0),
              double _radius = 1,
              const vec3 &_axis = vec3(1,0,0),
-             double _height = 1)
-        :  center(_center), radius(_radius), axis(_axis), height(_height) { }
+             double _height = 1);
 
     /// Construct a cylinder with parameters parsed from an input stream.
     Cylinder(std::istream &is) { parse(is); }
@@ -59,12 +58,12 @@ public:
 private:
     /// center position
     vec3 center;
+    
+    /// radius
+    double radius;
 
     /// unit axis vector
     vec3 axis;
-
-    /// radius
-    double radius;
 
     /// height
     double height;
