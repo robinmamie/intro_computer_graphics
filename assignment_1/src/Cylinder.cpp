@@ -67,7 +67,9 @@ intersect(const Ray&  _ray,
 
     //store normal at _intersection_point in `_intersection_normal`.
     vec3* point = new vec3(center[0], _intersection_point[1], center[2]);
-    _intersection_normal = _intersection_point - *point / norm(_intersection_point - *point);
+    //vec3* point = new vec3(center[0], center[1], _intersection_point[2]);
+    _intersection_normal = normalize(_intersection_point-*point);
+    _intersection_normal = reflect(_intersection_normal, normalize(axis));
 
     //return whether there is an intersection with t > 0
     return true; // already return false if NO_INTERSECTION
