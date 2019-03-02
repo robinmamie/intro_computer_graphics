@@ -16,16 +16,7 @@
 #include <cmath>
 
 //== IMPLEMENTATION =========================================================
-
-
-Cylinder::Cylinder(const vec3 &_center,
-                   double _radius,
-                   const vec3 &_axis,
-                   double _height)
-: center(_center), radius(_radius), axis(_axis), height(_height)
-{
-}
-
+// def on Cylinder is in Cylinder.h
 //-----------------------------------------------------------------------------
 
 
