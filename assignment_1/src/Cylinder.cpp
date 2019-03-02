@@ -73,8 +73,9 @@ intersect(const Ray&  _ray,
     vec3 offset_on_axis = reflect(_intersection_point - center, axis);
     _intersection_normal = normalize(_intersection_point - center + offset_on_axis);
 
-    if(distance(normalize(_intersection_normal),(normalize(_ray.direction)))<1.4) // TODO: why 1.4? No idea...
+    if(dot(_intersection_normal, _ray.direction)>0){ // Two vectors form an acute angle if their dot product is positive -> ~same direction
         _intersection_normal *= -1;
+    }
 
     //return whether there is an intersection with t > 0
     return true; // already return false if NO_INTERSECTION
