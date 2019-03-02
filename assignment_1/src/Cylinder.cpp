@@ -59,7 +59,7 @@ intersect(const Ray&  _ray,
         //if (t[i] > 0 && norm(distance_on_axis)<height/2) _intersection_t = std::min(_intersection_t, t[i]);
 
         double min_value = std::min(_intersection_t, t[i]);
-        if (t[i] > 0 && distance(_ray(min_value), center)<height/2) _intersection_t = min_value;
+        if (t[i] > 0 && distance(_ray(min_value), center)< sqrt(radius*radius + (height/2)*(height/2))) _intersection_t = min_value;
     }
 
     if (_intersection_t == NO_INTERSECTION) return false;
