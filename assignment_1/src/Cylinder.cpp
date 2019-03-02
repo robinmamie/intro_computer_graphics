@@ -55,11 +55,11 @@ intersect(const Ray&  _ray,
     _intersection_t = NO_INTERSECTION;
 
     for (size_t i = 0; i < nsol; ++i) { // closest intersection
-        //vec3 distance_on_axis = reflect(_ray(t[i])- center, axis);
-        //if (t[i] > 0 && norm(distance_on_axis)<height/2) _intersection_t = std::min(_intersection_t, t[i]);
-
         double min_value = std::min(_intersection_t, t[i]);
-        if (t[i] > 0 && distance(_ray(min_value), center)< sqrt(radius*radius + (height/2)*(height/2))) _intersection_t = min_value;
+        double center_to_border = sqrt(radius*radius + (height/2)*(height/2));
+        if (t[i] > 0 && distance(_ray(min_value), center) < center_to_border){
+            _intersection_t = min_value;
+        }
     }
 
     if (_intersection_t == NO_INTERSECTION) return false;
@@ -72,7 +72,9 @@ intersect(const Ray&  _ray,
     //store normal at _intersection_point in `_intersection_normal`.
     vec3 offset_on_axis = reflect(_intersection_point - center, axis);
     _intersection_normal = normalize(_intersection_point - center + offset_on_axis);
-    //_intersection_normal *= -1;
+
+    if(distance(normalize(_intersection_normal),(normalize(_ray.direction)))<1.4) // TODO: why 1.4? No idea...
+        _intersection_normal *= -1;
 
     //return whether there is an intersection with t > 0
     return true; // already return false if NO_INTERSECTION

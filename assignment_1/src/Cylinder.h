@@ -43,7 +43,7 @@ public:
     /// \param[in] _ray the ray to intersect the plane with
     /// \param[out] _intersection_point position of the intersection
     /// \param[out] _intersection_normal normal vector at the intersection point
-    /// \param[out] _intersection_t ray parameter at the intesection point
+    /// \param[out] _intersection_t ray parameter at the intersection point
     virtual bool intersect(const Ray&  _ray,
                            vec3&       _intersection_point,
                            vec3&       _intersection_normal,
