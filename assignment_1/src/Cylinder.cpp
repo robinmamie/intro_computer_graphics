@@ -28,46 +28,47 @@ intersect(const Ray&  _ray,
           double&     _intersection_t) const
 {
 
-    //compute the first valid intersection `_ray` with the cylinder
-    //(valid means in front of the viewer: t > 0)
+    // Compute the first valid (i.e. in front of the viewer, t > 0)
+    // intersection `_ray` with the cylinder.
 
-    const vec3 &dir = _ray.direction;
-    const vec3 oc = _ray.origin - center;
-    const vec3 &product = dot(_ray.direction, axis)*axis;
+    const vec3    &dir = _ray.direction;
+    const vec3      &x = dir - dot(dir, axis) * axis;
     const vec3 &deltaP = _ray.origin - center;
-    const vec3 &preA = dir - product;
-    const vec3 &preB = deltaP - dot(deltaP, axis)*axis;
+    const vec3      &y = deltaP - dot(deltaP, axis) * axis;
 
     std::array<double, 2> t;
-    size_t nsol = solveQuadratic(dot(preA, preA),
-                                 2*dot(dir - product, deltaP - dot(deltaP, axis)*axis),
-                                 dot(preB, preB) - radius*radius, t);
+    size_t nsol = solveQuadratic(dot(x, x),
+                                 2 * dot(x, y),
+                                 dot(y, y) - radius * radius, t);
 
     _intersection_t = NO_INTERSECTION;
 
-    for (size_t i = 0; i < nsol; ++i) { // closest intersection
-        double min_value = std::min(_intersection_t, t[i]);
-        double center_to_border = sqrt(radius*radius + (height/2)*(height/2));
-        if (t[i] > 0 && distance(_ray(min_value), center) < center_to_border){
+    // Compute the closest intersection.
+    for (size_t i = 0; i < nsol; ++i) {
+        double min_value =
+            std::min(_intersection_t, t[i]);
+
+        double center_to_border =
+            sqrt(radius * radius + height/2 * height/2);
+
+        if (t[i] > 0 && distance(_ray(min_value), center) < center_to_border) {
             _intersection_t = min_value;
         }
     }
 
-    if (_intersection_t == NO_INTERSECTION) return false;
-
-    //store intersection point in `_intersection_point`
-    _intersection_point  = _ray(_intersection_t);
-
-    //store ray parameter in `_intersection_t`
-
-    //store normal at _intersection_point in `_intersection_normal`.
-    vec3 offset_on_axis = reflect(_intersection_point - center, axis);
-    _intersection_normal = normalize(_intersection_point - center + offset_on_axis);
-
-    if(dot(_intersection_normal, _ray.direction)>0){ // Two vectors form an acute angle if their dot product is positive -> ~same direction
-        _intersection_normal *= -1;
+    // Stop if there is no intersection.
+    if (_intersection_t == NO_INTERSECTION) {
+        return false;
     }
 
-    //return whether there is an intersection with t > 0
-    return true; // already return false if NO_INTERSECTION
+    // Return intersection point in `_intersection_point`.
+    _intersection_point  = _ray(_intersection_t);
+
+    // Return normal at _intersection_point in `_intersection_normal`..
+    vec3 offset_on_axis = reflect(_intersection_point - center, axis);
+    _intersection_normal = normalize(_intersection_point - center + offset_on_axis);
+    // NB: 2 vectors form an acute angle if their dot product is positive
+    _intersection_normal *= dot(_intersection_normal, dir) > 0 ? -1 : 1;
+
+    return true;
 }
