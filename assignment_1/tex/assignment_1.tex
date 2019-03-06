@@ -19,7 +19,7 @@ Deriving the implicit formula for the cylinder}
     where $x$ is the intersection of the ray and the cylinder, $c'$ is the projection of this point onto the axis of the cylinder and $r$ its radius.
     
     To compute $c'$, let us define $\vec{a}$ as its normalized axis, $c$ as its center and $\vec{b}$ as the vector pointing from $c$ to $x$ -- i.e. $\vec{b} = x - c$.
-    By computing the dot product between $\vec{b} \cdot \vec{a}$, we get the distance between $c$ and $c'$.
+    By computing the dot product between $\vec{b} \cdot \vec{a}$, we get the distance between $c$ and $c'$ since $\vec{a}$ is normal -- it's an orthogonal projection.
     We get $c'$ by using the following:
     
     \[ c + (\vec{b} \cdot \vec{a}) \, \vec{a} \]
