@@ -4,6 +4,7 @@
 \usepackage{geometry}
 
 \newcommand{\norm}[1]{\left\lVert\,#1\,\right\rVert}
+\newcommand{\vecb}[1]{\overrightarrow{#1}}
 
 \title{{\Huge \textbf{Assignment 1}}}
 \author{Ding Markus \and Mamie Robin \and Montial Charline}
@@ -61,35 +62,37 @@
         C = y^2 - r^2 &= \left(o - c - ((o - c) \cdot \vec{a}) \, \vec{a}\right) \cdot \left(o - c - ((o - c) \cdot \vec{a}) \, \vec{a}\right) - r^2.
     \end{align*}
 
-    This gives us the implicit formula for an infinite cylinder. In order to \textit{cut} it, we only need to check that the distance between the point on the cylinder and its center isn't grater than:
+    This gives us the implicit formula for an infinite cylinder.
+    In order to \textit{cut} it, we only need to check that the distance between the point on the cylinder and its center isn't greater than:
 
     \begin{align*}
-        \sqrt{radius^2+\frac{height}{2}^2}
+        \sqrt{radius^2 + \left(\frac{height}{2}\right)^2}
     \end{align*}
 
-    Which is the Pythagoras formula for the line going from the center of the cylinder to its end points.
+    which is the Pythagorean theorem applied for the line going from the center of the cylinder to its end points.
 
-    \section{Deriving the normal vector for the ray-cylinder intersection}
+    \section{Deriving the normal vector of the ray-cylinder intersection}
 
-    To compute the normal vector, we need the following elements: $\vec{i_c}$ the intersection point, $\vec{c}$ the center of the cyclinder and the axis of the cylinder.
+    To compute the normal vector, we need the following elements: $\vecb{i_c}$ the intersection point, $\vec{c}$ the center of the cyclinder and the axis of the cylinder.
 
     We start by computing the vector $\vec{oi}$ which is the vector between the center of the cylinder and the intersection point:
 
     \begin{align*}
-        \vec{oi} = \vec{i_c} - \vec{c}
+        \vecb{oi} = \vecb{i_c} - \vecb{c}
     \end{align*}
 
-    Which is then projected onto the axis ($\vec{oi'}$) in order to find the offset (from the center) of the intersection point along the axis. This allows us to compute the vector going from the axis of the cylinder towards the intersection point (on the same "height") which we have to normalize in order to find the normal vector:
+    Which is then projected onto the axis ($\vecb{oi}'$) in order to find the offset (from the center) of the intersection point along the axis.
+    This allows us to compute the vector going from the axis of the cylinder towards the intersection point (on the same "height") which we have to normalize in order to find the normal vector:
 
     \begin{align*}
-        \vec{normal} = \frac{\vec{oi} + \vec{oi'}}{\norm{\vec{oi} + \vec{oi'}}}
+        \vecb{normal} = \frac{\vecb{oi} + \vecb{oi}'}{\norm{\vecb{oi} + \vecb{oi}'}}
     \end{align*}
 
-    The last step that is required is to make sure that our noraml vector is front-facing, ie towards the viewer. For this, it must always point in the opposite direction of the view ray direction vector ($\vec{dir}$).\\
+    The last step that is required is to make sure that our normal vector is front-facing, i.e. towards the viewer.
+    For this, it must always point in the opposite direction of the view ray direction vector ($\vecb{dir}$).\\
 
-    We recall from our \textit{Linear Algebra} course that \textit{Two vectors form an acute angle if their dot product is positive}, we apply the same principle in our 3D scenario which means that if $\vec{dir}\cdot\vec{norm}$ is positive, we must inverse our normal vector because both are roughly in the same direction.
+    We recall from our \textit{Linear Algebra} course that "\textit{Two vectors form an acute angle if their dot product is positive}", we apply the same principle in our 3D scenario which means that if $\vecb{dir} \cdot \vecb{norm}$ is positive, we must inverse our normal vector because both are roughly in the same direction.
     Which is simply done by multiplying the normal by the scalar $-1$.
 
-    
 \end{document}
 
