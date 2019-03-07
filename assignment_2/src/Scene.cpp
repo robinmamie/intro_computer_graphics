@@ -15,6 +15,7 @@
 #include "Sphere.h"
 #include "Cylinder.h"
 #include "Mesh.h"
+#include "Object.h"
 
 #include <limits>
 #include <map>
@@ -146,34 +147,39 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
     * the existing vector functions in vec3.h e.g. mirror, reflect, norm, dot, normalize
     */
 
-    vec3 ambient = ambience * _material.ambient;
+    const vec3& ambient = ambience * _material.ambient;
     vec3 diffuse(0, 0, 0);
-    vec3 spectacular(0, 0, 0);
+    vec3 specular(0, 0, 0);
 
-    // Loop for adding diffusion + spectacular when needed
+    // Adding diffusion + specular for each light source.
     for(const auto light: lights) {
-		
-		vec3 lightColor = light.color;
-		vec3 lightDir = normalize(light.position - _point);
-		double dotNL = dot(_normal, lightDir);
-        vec3 reflectedRay = 2 * _normal * dotNL - lightDir;
-        double dotRV = dot(reflectedRay, _view);
-        double cosine = dot(normalize(reflectedRay), normalize(_view));
 
-        
-        if(dotNL >= 0) {
-			// Diffusion
-            diffuse +=  lightColor * _material.diffuse * dotNL;
-      
-            if(dotRV >= 0){
-				// Spectacular
-				spectacular += lightColor *  _material.specular * pow(dotRV, _material.shininess);
+		const vec3& lightDir = normalize(light.position - _point);
+		const double dotNL = dot(_normal, lightDir);
+
+        const vec3& offset_point = _point + lightDir * 1e-10;
+        Ray ray(offset_point, lightDir);
+        Object_ptr object = nullptr;
+        vec3 a(0,0,0);
+        double t;
+        bool shadow = intersect(ray, object, a, a, t);
+
+		// Diffusion
+        if (!shadow && dotNL >= 0) {
+            diffuse +=  light.color * _material.diffuse * dotNL;
+
+            const vec3& reflectedRay = 2 * _normal * dotNL - lightDir;
+            const double dotRV = dot(reflectedRay, _view);
+
+			// Specular
+            if (dotRV >= 0){
+				specular += light.color *  _material.specular * pow(dotRV, _material.shininess);
 			}
         }
     }
-    
-    // visualize the normal as a RGB color for now.
-    vec3 color = ambient + diffuse + spectacular;
+
+    // Visualize the normal as a RGB color for now.
+    vec3 color = ambient + diffuse + specular;
 
     return color;
 }
