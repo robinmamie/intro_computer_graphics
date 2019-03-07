@@ -152,6 +152,7 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
 
     // Loop for adding diffusion + spectacular when needed
     for(const auto light: lights) {
+		
 		vec3 lightColor = light.color;
 		vec3 lightDir = normalize(light.position - _point);
 		double dotNL = dot(_normal, lightDir);
@@ -161,9 +162,11 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
 
         
         if(dotNL >= 0) {
+			// Diffusion
             diffuse +=  lightColor * _material.diffuse * dotNL;
       
             if(dotRV >= 0){
+				// Spectacular
 				spectacular += lightColor *  _material.specular * pow(dotRV, _material.shininess);
 			}
         }
