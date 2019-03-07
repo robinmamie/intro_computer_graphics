@@ -29,6 +29,7 @@
 #include <tbb/parallel_for.h>
 #endif
 
+#define EPS 1e-10
 //-----------------------------------------------------------------------------
 
 Image Scene::render()
@@ -93,18 +94,19 @@ vec3 Scene::trace(const Ray& _ray, int _depth)
         return background;
     }
 
-    // compute local Phong lighting (ambient+diffuse+specular)
+    // Compute local Phong lighting (ambient+diffuse+specular)
     vec3 color = lighting(point, normal, -_ray.direction, object->material);
 
+    // Compute reflections
+    double alpha = object->material.mirror;
 
-    /** \todo
-     * Compute reflections by recursive ray tracing:
-     * - check whether `object` is reflective by checking its `material.mirror`
-     * - check recursion depth
-     * - generate reflected ray, compute its color contribution, and mix it with
-     * the color computed by local Phong lighting (use `object->material.mirror` as weight)
-     * - check whether your recursive algorithm reflects the ray `max_depth` times
-     */
+    if (alpha > 0.0) {
+        vec3 reflected_dir = reflect(_ray.direction, normal);
+        Ray ray_out(point + reflected_dir * EPS, reflected_dir);
+        vec3 reflected_color = trace(ray_out, _depth + 1);
+
+        color = (1 - alpha) * color + alpha * reflected_color;
+    }
 
     return color;
 }
@@ -137,16 +139,6 @@ bool Scene::intersect(const Ray& _ray, Object_ptr& _object, vec3& _point, vec3& 
 vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view, const Material& _material)
 {
 
-    /** \todo
-    * Compute the Phong lighting:
-    * - start with global ambient contribution
-    * - for each light source (stored in vector `lights`) add diffuse and specular contribution
-    * - only add diffuse and specular light if object is not in shadow
-    *
-    * You can look at the classes `Light` and `Material` to check their attributes. Feel free to use
-    * the existing vector functions in vec3.h e.g. mirror, reflect, norm, dot, normalize
-    */
-
     const vec3& ambient = ambience * _material.ambient;
     vec3 diffuse(0, 0, 0);
     vec3 specular(0, 0, 0);
@@ -154,26 +146,27 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
     // Adding diffusion + specular for each light source.
     for(const auto light: lights) {
 
-		const vec3& lightDir = normalize(light.position - _point);
-		const double dotNL = dot(_normal, lightDir);
+		const vec3& light_dir = normalize(light.position - _point);
+		const double dot_nl = dot(_normal, light_dir);
 
-        const vec3& offset_point = _point + lightDir * 1e-10;
-        Ray ray(offset_point, lightDir);
-        Object_ptr object = nullptr;
-        vec3 a(0,0,0);
+        // Compute shadows
+        const vec3& offset_point = _point + light_dir * EPS;
+        Ray ray(offset_point, light_dir);
+        Object_ptr object;
+        vec3 a;
         double t;
         bool shadow = intersect(ray, object, a, a, t);
 
 		// Diffusion
-        if (!shadow && dotNL >= 0) {
-            diffuse +=  light.color * _material.diffuse * dotNL;
+        if (!shadow && dot_nl >= 0) {
+            diffuse +=  light.color * _material.diffuse * dot_nl;
 
-            const vec3& reflectedRay = 2 * _normal * dotNL - lightDir;
-            const double dotRV = dot(reflectedRay, _view);
+            const vec3& reflectedRay = 2 * _normal * dot_nl - light_dir;
+            const double dot_rv = dot(reflectedRay, _view);
 
 			// Specular
-            if (dotRV >= 0){
-				specular += light.color *  _material.specular * pow(dotRV, _material.shininess);
+            if (dot_rv >= 0) {
+				specular += light.color *  _material.specular * pow(dot_rv, _material.shininess);
 			}
         }
     }
