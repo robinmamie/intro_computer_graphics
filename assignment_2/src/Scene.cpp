@@ -134,21 +134,30 @@ bool Scene::intersect(const Ray& _ray, Object_ptr& _object, vec3& _point, vec3& 
 vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view, const Material& _material)
 {
 
-     /** \todo
-     * Compute the Phong lighting:
-     * - start with global ambient contribution
-     * - for each light source (stored in vector `lights`) add diffuse and specular contribution
-     * - only add diffuse and specular light if object is not in shadow
-     *
-     * You can look at the classes `Light` and `Material` to check their attributes. Feel free to use
-     * the existing vector functions in vec3.h e.g. mirror, reflect, norm, dot, normalize
-     */
+    /** \todo
+    * Compute the Phong lighting:
+    * - start with global ambient contribution
+    * - for each light source (stored in vector `lights`) add diffuse and specular contribution
+    * - only add diffuse and specular light if object is not in shadow
+    *
+    * You can look at the classes `Light` and `Material` to check their attributes. Feel free to use
+    * the existing vector functions in vec3.h e.g. mirror, reflect, norm, dot, normalize
+    */
 
-	 vec3 ambient = ambience * _material.ambient;
-
+    vec3 ambient = ambience * _material.ambient;
+    vec3 diffuse(0, 0, 0);
+    
+    for(const auto light: lights) {
+        vec3 lightDir = normalize(light.position - _point);
+        double dotNLD = dot(_normal, lightDir);
+        
+        if(dotNLD >= 0) {
+            diffuse +=  light.color * _material.diffuse * dotNLD;
+        }
+    }
     // visualize the normal as a RGB color for now.
-    vec3 color = ambient;
-	
+    vec3 color = ambient + diffuse;
+
     return color;
 }
 
