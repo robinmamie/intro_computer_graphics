@@ -144,9 +144,11 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
      * the existing vector functions in vec3.h e.g. mirror, reflect, norm, dot, normalize
      */
 
-    // visualize the normal as a RGB color for now.
-    vec3 color = (_normal + vec3(1)) / 2.0;
+	 vec3 ambient = ambience * _material.ambient;
 
+    // visualize the normal as a RGB color for now.
+    vec3 color = ambient;
+	
     return color;
 }
 
