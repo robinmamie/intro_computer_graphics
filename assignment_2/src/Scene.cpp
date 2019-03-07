@@ -21,6 +21,8 @@
 #include <functional>
 #include <stdexcept>
 
+#include <cmath>
+
 #if HAS_TBB
 #include <tbb/tbb.h>
 #include <tbb/parallel_for.h>
@@ -146,17 +148,28 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
 
     vec3 ambient = ambience * _material.ambient;
     vec3 diffuse(0, 0, 0);
-    
+    vec3 spectacular(0, 0, 0);
+
+    // Loop for adding diffusion + spectacular when needed
     for(const auto light: lights) {
-        vec3 lightDir = normalize(light.position - _point);
-        double dotNLD = dot(_normal, lightDir);
+		vec3 lightColor = light.color;
+		vec3 lightDir = normalize(light.position - _point);
+		double dotNL = dot(_normal, lightDir);
+        vec3 reflectedRay = 2*_normal*dotNL - lightDir;
+        double dotRV = dot(reflectedRay, _view);
+        double cosine = dot(normalize(reflectedRay), normalize(_view));
+
         
-        if(dotNLD >= 0) {
-            diffuse +=  light.color * _material.diffuse * dotNLD;
+        if(dotNL >= 0) {
+            diffuse +=  lightColor * _material.diffuse * dotNL;
+      
+            if(dotRV >= 0){
+				spectacular += lightColor *  _material.specular * pow(dotRV, _material.shininess);
+			}
         }
     }
     // visualize the normal as a RGB color for now.
-    vec3 color = ambient + diffuse;
+    vec3 color = ambient + diffuse + spectacular;
 
     return color;
 }
