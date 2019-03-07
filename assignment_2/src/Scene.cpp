@@ -156,7 +156,7 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
 		vec3 lightColor = light.color;
 		vec3 lightDir = normalize(light.position - _point);
 		double dotNL = dot(_normal, lightDir);
-        vec3 reflectedRay = 2*_normal*dotNL - lightDir;
+        vec3 reflectedRay = 2 * _normal * dotNL - lightDir;
         double dotRV = dot(reflectedRay, _view);
         double cosine = dot(normalize(reflectedRay), normalize(_view));
 
@@ -171,6 +171,7 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
 			}
         }
     }
+    
     // visualize the normal as a RGB color for now.
     vec3 color = ambient + diffuse + spectacular;
 
