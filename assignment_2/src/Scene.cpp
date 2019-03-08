@@ -153,9 +153,12 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
         const vec3& offset_point = _point + light_dir * EPS;
         Ray ray(offset_point, light_dir);
         Object_ptr object;
-        vec3 a;
+        vec3 int_point;
+        vec3 int_normal;
         double t;
-        bool shadow = intersect(ray, object, a, a, t);
+        vec3 point_light = light.position - _point;
+        double dist_light = norm(point_light);
+        bool shadow = intersect(ray, object, int_point, int_normal, t) && t < dist_light;
 
 		// Diffusion
         if (!shadow && dot_nl >= 0) {
