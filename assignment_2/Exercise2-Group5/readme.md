@@ -17,6 +17,7 @@ At the end, we must make sure that the two conditions n⋅l≥0 and n⋅r≥0 ar
 4) Shadows:
 We simply had to compute a shadow ray which is the same as what we needed to implement in the first assignment but if there is an intersection between our shadow ray and any other object, then we know that there will be a shadow in which case we do not compute the diffuse and specular elements.
 We needed to add a small offset in order to counteract the precision problems (due to the floating point representation) which cause the "shadow acne".
+There was one additional point that we forgot to consider at first. Indeed, if an object placed on the other side of the light source intersected with the ray, it would create a shadow on the starting point. We resolved that by thresholding the distance of the ray with the distance of the light source with respect to the starting point.
 
 
 5) Reflections:
