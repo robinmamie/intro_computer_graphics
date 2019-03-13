@@ -3,7 +3,7 @@
 No major difficulty was encountered during the implementation of this part, thanks to crystal clear instructions and a good team work.
 
 ## 1. Ambient
-We simply needed to change the color that is used. We replaced the normal color by the ambient one which is the multiplication of the ambiance lightning and the material properties.
+We simply needed to change the color that is used. We replaced the normal color by the ambient one which is the multiplication of the ambiance lighting and the material properties.
 
 ## 2. Diffuse
 We had to compute the contribution of each light ray which obviously depends on its direction (the difference between the light source position and the concerned point).
@@ -11,7 +11,7 @@ We are only considering the diffuse light that is going outside of the spheres (
 
 ## 3. Specular
 Once again, we had to consider all light rays. In order to compute their specular reflection, we simply applied the formula seen in class: [I = I_l * m_s(r⋅v)^s](https://lgg.epfl.ch/teaching/ICG2019/icg_lectures/03-Lighting.html#/specular-reflection-4) with [r = 2n(n⋅l) − l](https://lgg.epfl.ch/teaching/ICG2019/icg_lectures/03-Lighting.html#/specular-reflection-2) whose implementation is trivial with the helper function in the vec3 class.
-At the end, we must make sure that the two conditions n⋅l≥0 and n⋅r≥0 are satisfied, otherwise there is no illumination.
+At the end, we must make sure that the two conditions n⋅l ≥ 0 and n⋅r ≥ 0 are satisfied, otherwise there is no illumination.
 
 
 ## 4. Shadows
