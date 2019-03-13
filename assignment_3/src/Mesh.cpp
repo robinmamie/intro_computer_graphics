@@ -150,7 +150,27 @@ void Mesh::compute_normals()
      * - Compute vertex normals by averaging the normals of their incident triangles.
      * - Store the vertex normals in the Vertex::normal member variable.
      * - Weigh the normals by their triangles' angles.
+     *
+     *   Done by Robin, to verify.
      */
+    for (const Triangle t: triangles_)
+    {
+        double w0, w1, w2;
+        Vertex& v0 = vertices_[t.i0];
+        Vertex& v1 = vertices_[t.i1];
+        Vertex& v2 = vertices_[t.i2];
+        angleWeights(v0.position, v1.position, v2.position, w0, w1, w2);
+
+        const vec3& n = t.normal;
+        v0.normal += w0 * n;
+        v1.normal += w1 * n;
+        v2.normal += w2 * n;
+    }
+
+    for (Vertex& v: vertices_)
+    {
+        v.normal = normalize(v.normal);
+    }
 }
 
 
@@ -241,9 +261,13 @@ intersect_triangle(const Triangle&  _triangle,
                    vec3&            _intersection_normal,
                    double&          _intersection_t) const
 {
-    const vec3& p0 = vertices_[_triangle.i0].position;
-    const vec3& p1 = vertices_[_triangle.i1].position;
-    const vec3& p2 = vertices_[_triangle.i2].position;
+    const Vertex& v0 = vertices_[_triangle.i0];
+    const Vertex& v1 = vertices_[_triangle.i1];
+    const Vertex& v2 = vertices_[_triangle.i2];
+
+    const vec3& p0 = v0.position;
+    const vec3& p1 = v1.position;
+    const vec3& p2 = v2.position;
 
     /** \todo
     * - intersect _ray with _triangle
@@ -257,9 +281,47 @@ intersect_triangle(const Triangle&  _triangle,
     * Hint: Rearrange `ray.origin + t*ray.dir = a*p0 + b*p1 + (1-a-b)*p2` to obtain a solvable
     * system for a, b and t.
     * Refer to [Cramer's Rule](https://en.wikipedia.org/wiki/Cramer%27s_rule) to easily solve it.
+    *
+    * Done by Robin, to verify.
      */
 
-    return false;
+    _intersection_t = NO_INTERSECTION;
+
+    const vec3& col_1 = p0 - p2;
+    const vec3& col_2 = p1 - p2;
+    const vec3& col_3 = - _ray.direction;
+    const vec3& col_r = _ray.origin - p2;
+
+    double det_M = dot(cross(col_1, col_2), col_3);
+
+    if (det_M == 0.0) {
+        return false;
+    }
+
+    double det_M1 = dot(cross(col_r, col_2), col_3);
+    double det_M2 = dot(cross(col_1, col_r), col_3);
+    double det_M3 = dot(cross(col_1, col_2), col_r);
+
+    double a = det_M1 / det_M;
+    double b = det_M2 / det_M;
+    double c = 1 - a - b;
+    double t = det_M3 / det_M;
+
+    if (a < 0 || b < 0 || c < 0 || t < 0) {
+        return false;
+    }
+
+    _intersection_t = t;
+    _intersection_point = a * p0 + b * p1 + c * p2;
+
+    if (draw_mode_ == FLAT) {
+        _intersection_normal = _triangle.normal;
+    } else {
+        _intersection_normal =
+            normalize(a * v0.normal + b * v1.normal + c * v2.normal);
+    }
+
+    return true;
 }
 
 
