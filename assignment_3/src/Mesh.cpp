@@ -204,9 +204,27 @@ bool Mesh::intersect_bounding_box(const Ray& _ray) const
     * This function is ued in `Mesh::intersect()` to avoid the intersection test
     * with all triangles of every mesh in the scene. The bounding boxes are computed
     * in `Mesh::compute_bounding_box()`.
+    *
+    * Done by Robin, to verify.
+    * Source of code:
+    * https://tavianator.com/fast-branchless-raybounding-box-intersections/
+    * Archive link:
+    * https://web.archive.org/web/20180218205615/https://tavianator.com/fast-branchless-raybounding-box-intersections/
     */
+    const vec3& d_inv = vec3(1 / _ray.direction[0],
+                             1 / _ray.direction[1],
+                             1 / _ray.direction[2]);
 
-    return true;
+    const vec3& t1 = (bb_min_ - _ray.origin) * d_inv;
+    const vec3& t2 = (bb_max_ - _ray.origin) * d_inv;
+
+    const vec3& tmin = min(t1, t2);
+    const vec3& tmax = max(t1, t2);
+
+    double vmin = std::max(tmin[0], std::max(tmin[1], tmin[2]));
+    double vmax = std::min(tmax[0], std::min(tmax[1], tmax[2]));
+
+    return vmin <= vmax;
 }
 
 
