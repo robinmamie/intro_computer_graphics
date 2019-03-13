@@ -15,23 +15,21 @@
 #include "Sphere.h"
 #include "Cylinder.h"
 #include "Mesh.h"
+#include "Object.h"
 
 #include <limits>
 #include <map>
 #include <functional>
 #include <stdexcept>
 
+#include <cmath>
+
 #if HAS_TBB
 #include <tbb/tbb.h>
 #include <tbb/parallel_for.h>
 #endif
 
-// To prevent spurious intersections caused by numerical issues, we need to
-// offset the shadow and reflected ray emission points from the surface
-// intersection.
-constexpr double shadow_ray_offset = 1e-5;
-constexpr double reflection_ray_offset = 1e-5;
-
+#define EPS 1e-10
 //-----------------------------------------------------------------------------
 
 Image Scene::render()
@@ -96,11 +94,19 @@ vec3 Scene::trace(const Ray& _ray, int _depth)
         return background;
     }
 
-    // compute local Phong lighting (ambient+diffuse+specular)
+    // Compute local Phong lighting (ambient+diffuse+specular)
     vec3 color = lighting(point, normal, -_ray.direction, object->material);
 
+    // Compute reflections
+    double alpha = object->material.mirror;
 
-    // \todo Paste your assignment 2 solution here.
+    if (alpha > 0.0) {
+        vec3 reflected_dir = reflect(_ray.direction, normal);
+        Ray ray_out(point + reflected_dir * EPS, reflected_dir);
+        vec3 reflected_color = trace(ray_out, _depth + 1);
+
+        color = (1 - alpha) * color + alpha * reflected_color;
+    }
 
     return color;
 }
@@ -133,8 +139,43 @@ bool Scene::intersect(const Ray& _ray, Object_ptr& _object, vec3& _point, vec3& 
 vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view, const Material& _material)
 {
 
-    // \todo Paste your assignment 2 solution here.
-    vec3 color = (_normal + vec3(1)) / 2.0;
+    const vec3& ambient = ambience * _material.ambient;
+    vec3 diffuse(0, 0, 0);
+    vec3 specular(0, 0, 0);
+
+    // Adding diffusion + specular for each light source.
+    for(const auto light: lights) {
+
+		const vec3& light_dir = normalize(light.position - _point);
+		const double dot_nl = dot(_normal, light_dir);
+
+        // Compute shadows
+        const vec3& offset_point = _point + light_dir * EPS;
+        Ray ray(offset_point, light_dir);
+        Object_ptr object;
+        vec3 int_point;
+        vec3 int_normal;
+        double t;
+        vec3 point_light = light.position - _point;
+        double dist_light = norm(point_light);
+        bool shadow = intersect(ray, object, int_point, int_normal, t) && t < dist_light;
+
+		// Diffusion
+        if (!shadow && dot_nl >= 0) {
+            diffuse +=  light.color * _material.diffuse * dot_nl;
+
+            const vec3& reflectedRay = 2 * _normal * dot_nl - light_dir;
+            const double dot_rv = dot(reflectedRay, _view);
+
+			// Specular
+            if (dot_rv >= 0) {
+				specular += light.color *  _material.specular * pow(dot_rv, _material.shininess);
+			}
+        }
+    }
+
+    // Visualize the normal as a RGB color for now.
+    vec3 color = ambient + diffuse + specular;
 
     return color;
 }
