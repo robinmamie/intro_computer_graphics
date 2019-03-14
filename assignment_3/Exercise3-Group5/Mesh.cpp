@@ -291,7 +291,7 @@ intersect_triangle(const Triangle&  _triangle,
     double c = 1 - a - b;
     double t = det_M3 / det_M;
 
-    if (a < 0 || b < 0 || c < 0 || t < 0) {
+    if (a < 0 || b < 0 || c < 0 || t <= 0) {
         return false;
     }
 
