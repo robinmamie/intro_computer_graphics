@@ -12,9 +12,6 @@ In order to compute the intersections and solve the equation which lead to them,
 To check if the ray was in the bounding box or not, we have implemented the following: we considered the box as the inner-volume delimited by three pairs of parallel planes, which, all together, form the sides of the cube.
 Then, the ray is cut wherever it does not belong to the volume of the cube and if no piece of the ray remains, we know that it does not intersect with the box and otherwise, it surely does.
 
-## 4. Parallelization
-
-
 Ding Markus 30%
 Mamie Robin 40%
 Montial Charline 30%
