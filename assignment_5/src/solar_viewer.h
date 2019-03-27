@@ -73,6 +73,9 @@ protected:
     void update_body_positions();
 
     void randomize_planets();
+    
+    ///render the planet passed as parameter
+    void render_planet(Planet &p, mat4 &_projection, mat4 &_view, float animTime);
 
 private:
 
