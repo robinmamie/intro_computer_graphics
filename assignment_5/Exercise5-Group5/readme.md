@@ -38,6 +38,8 @@ In order to have a correct behaviour, we have to apply the rotation along the x-
 
 ## Contributions
 Ding Markus 30%
+
 Mamie Robin 30%
+
 Montial Charline 40%
 
