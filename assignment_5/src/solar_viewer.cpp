@@ -352,8 +352,8 @@ void Solar_viewer::paint()
 	} else {
 		center = planet_to_look_at_->pos_;
 		eye = mat4::translate(center) 
-		* mat4::rotate_x(x_angle_) 
 		* mat4::rotate_y(y_angle_) 
+		* mat4::rotate_x(x_angle_) 
 		* mat4::translate(vec3(0, 0, dist_factor_ * planet_to_look_at_->radius_)) 
 		* eye;
 	}
