@@ -212,9 +212,7 @@ void Solar_viewer::update_body_positions() {
      venus_.pos_ =  mat4::rotate_y(venus_.angle_orbit_) * vec4(venus_.distance_, 0, 0, 1);
      earth_.pos_ =  mat4::rotate_y(earth_.angle_orbit_) * vec4(earth_.distance_, 0, 0, 1);
      mars_.pos_ =  mat4::rotate_y(mars_.angle_orbit_) * vec4(mars_.distance_, 0, 0, 1);
-     
-     ///TODO:MOON
-     //moon_.pos = 
+     moon_.pos_ =  mat4::translate(earth_.pos_) * mat4::rotate_y(moon_.angle_orbit_) * vec4(moon_.distance_, 0, 0, 1);;
 }
 
 //-----------------------------------------------------------------------------
@@ -353,7 +351,8 @@ void Solar_viewer::paint()
 		//eye = eye *
 	} else {
 		center = planet_to_look_at_->pos_;
-		eye = mat4::translate(center) * mat4::rotate_x(x_angle_) 
+		eye = mat4::translate(center) 
+		* mat4::rotate_x(x_angle_) 
 		* mat4::rotate_y(y_angle_) 
 		* mat4::translate(vec3(0, 0, dist_factor_ * planet_to_look_at_->radius_)) 
 		* eye;
