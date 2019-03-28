@@ -212,6 +212,7 @@ void Solar_viewer::update_body_positions() {
      venus_.pos_ =  mat4::rotate_y(venus_.angle_orbit_) * vec4(venus_.distance_, 0, 0, 1);
      earth_.pos_ =  mat4::rotate_y(earth_.angle_orbit_) * vec4(earth_.distance_, 0, 0, 1);
      mars_.pos_ =  mat4::rotate_y(mars_.angle_orbit_) * vec4(mars_.distance_, 0, 0, 1);
+     
      ///TODO:MOON
      //moon_.pos = 
 }
@@ -368,20 +369,20 @@ void Solar_viewer::paint()
 }
 //-----------------------------------------------------------------------------
 //Helper function to modularize the code to rendere the elements of the scene
-void Solar_viewer::render_planet(Planet &p, mat4 &_projection, mat4 &_view, float animTime) {
+void Solar_viewer::render_planet(Planet &planet, mat4 &_projection, mat4 &_view, float animTime) {
 	mat4 m_matrix;
 	mat4 mv_matrix;
 	mat4 mvp_matrix;
-	m_matrix = mat4::translate(p.pos_) * mat4::rotate_y(p.angle_self_) * mat4::scale(p.radius_);
+	m_matrix = mat4::translate(planet.pos_) * mat4::rotate_y(planet.angle_self_) * mat4::scale(planet.radius_);
 	mv_matrix = _view * m_matrix;
 	mvp_matrix = _projection * mv_matrix;
 	color_shader_.use();
 	color_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
 	color_shader_.set_uniform("t", animTime, true /* Indicate that time parameter is optional;
-                                                             it may be optimized away by the GLSL    compiler if it's unused. */);
+                                                   it may be optimized away by the GLSL    compiler if it's unused. */);
 	color_shader_.set_uniform("tex", 0);
 	color_shader_.set_uniform("greyscale", (int) greyscale_);
-	p.tex_.bind();
+	planet.tex_.bind();
 	unit_sphere_.draw();
 }
 //-----------------------------------------------------------------------------
@@ -439,19 +440,21 @@ void Solar_viewer::draw_scene(mat4& _projection, mat4& _view)
      *
      *  Hint: See how it is done for the Sun in the code above.
      */
-     
+    // Render sun and planets
     Solar_viewer::render_planet(sun_, _projection, _view, sun_animation_time);
-	Solar_viewer::render_planet(stars_, _projection, _view, sun_animation_time);
+    Solar_viewer::render_planet(mercury_, _projection, _view, sun_animation_time);
+    Solar_viewer::render_planet(venus_, _projection, _view, sun_animation_time);
 	Solar_viewer::render_planet(earth_, _projection, _view, sun_animation_time);
 	Solar_viewer::render_planet(mars_, _projection, _view, sun_animation_time);
-	Solar_viewer::render_planet(venus_, _projection, _view, sun_animation_time);
-	Solar_viewer::render_planet(mercury_, _projection, _view, sun_animation_time);
 	Solar_viewer::render_planet(moon_, _projection, _view, sun_animation_time);
-     
-    //render spaceshit
+	
+	// Render background
+    Solar_viewer::render_planet(stars_, _projection, _view, sun_animation_time);
+
+    // Render spaceshit
     ///TODO: IMPLEMENT ME !
 
-    // check for OpenGL errors
+    // Check for OpenGL errors
     glCheckError();
 }
 
