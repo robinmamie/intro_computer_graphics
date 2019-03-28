@@ -14,7 +14,9 @@
 #include <array>
 
 //=============================================================================
-
+const float DIST_FACTOR_INCREMENT = 2.f;
+const float DIST_FACTOR_MIN = 2.5f;
+const float DIST_FACTOR_MAX = 20.f;
 
 Solar_viewer::Solar_viewer(const char* _title, int _width, int _height)
     : GLFW_window(_title, _width, _height),
@@ -88,10 +90,19 @@ keyboard(int key, int scancode, int action, int mods)
                 break;
             }
 
-            /** \todo Implement the ability to change the viewer's distance to the celestial body.
-             *    - key 9 should increase and key 8 should decrease the `dist_factor_`
-             *    - 2.5 < `dist_factor_` < 20.0
-             */
+            case GLFW_KEY_8: // decrease dist_factor_
+            {
+                dist_factor_ -= DIST_FACTOR_INCREMENT;
+                dist_factor_ = (dist_factor_ < DIST_FACTOR_MIN) ? DIST_FACTOR_MIN: dist_factor_;
+                break;
+            }
+
+            case GLFW_KEY_9: // increase dist_factor_
+            {
+                dist_factor_ += DIST_FACTOR_INCREMENT;
+                dist_factor_ = (dist_factor_ > DIST_FACTOR_MAX) ? DIST_FACTOR_MAX: dist_factor_;
+                break;
+            }
 
             case GLFW_KEY_R:
             {
