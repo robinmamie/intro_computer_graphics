@@ -15,14 +15,14 @@ First, the camera behaves differently if the ship view is selected or not.
 If we are not in the ship, we first translate to the distance factor to avoid being in the planet. Then we rotate if the arrows keys have been pressed to finally translate to the center of the planet we want to look at.
 
 ### In spaceship mode
-
+//TODO
 
 ## Rendering
 ### Planets
 The planets could have been rendered almost like the sun, the only difference is to choose the correct planet instance. Thus, to have a clearer code, the code rendering the sun has been extracted as a method which takes a Planet as argument as well as other parameters.
 
 ### Spaceship
-//TODO
+The only difference with the planets is that we can draw the ship using the function draw(). We also had to use its own texture.
 
 ## Keyboard events
 //TODO
