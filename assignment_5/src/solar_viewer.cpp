@@ -347,11 +347,17 @@ void Solar_viewer::paint()
     
     if(in_ship_){
 		center = ship_.pos_;
-		///SHIP:TODO
-		//eye = eye *
+		eye = mat4::translate(center)
+		* mat4::rotate_y(y_angle_ + ship_.angle_ + 180)
+		* mat4::rotate_x(-10)
+		* mat4::translate(vec3(0, 0, 30 * ship_.radius_))
+		* eye;
+		up = mat4::rotate_y(y_angle_ + ship_.angle_ + 180)
+		* mat4::rotate_x(-10)
+		* up;
 	} else {
 		center = planet_to_look_at_->pos_;
-		eye = mat4::translate(center) 
+		eye = mat4::translate(center)
 		* mat4::rotate_y(y_angle_) 
 		* mat4::rotate_x(x_angle_) 
 		* mat4::translate(vec3(0, 0, dist_factor_ * planet_to_look_at_->radius_)) 
@@ -450,8 +456,19 @@ void Solar_viewer::draw_scene(mat4& _projection, mat4& _view)
 	// Render background
     Solar_viewer::render_planet(stars_, _projection, _view, sun_animation_time);
 
-    // Render spaceshit
-    ///TODO: IMPLEMENT ME !
+    // Render spaceship
+	m_matrix = mat4::translate(ship_.pos_) * mat4::rotate_y(ship_.angle_) * mat4::scale(ship_.radius_);
+	mv_matrix = _view * m_matrix;
+	mvp_matrix = _projection * mv_matrix;
+	color_shader_.use();
+	color_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
+	color_shader_.set_uniform("t", sun_animation_time, true /* Indicate that time parameter is optional;
+                                                   it may be optimized away by the GLSL    compiler if it's unused. */);
+	color_shader_.set_uniform("tex", 0);
+	color_shader_.set_uniform("greyscale", (int) greyscale_);
+	ship_.tex_.bind();
+	ship_.draw();
+
 
     // Check for OpenGL errors
     glCheckError();

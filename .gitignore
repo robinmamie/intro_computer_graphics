@@ -2,6 +2,11 @@ build
 build_debug
 .vscode
 
+### ECLIPSE ###
+*.cproject
+*.project
+*.settings
+
 ### LATEX ###
 
 ## Core latex/pdflatex auxiliary files:
