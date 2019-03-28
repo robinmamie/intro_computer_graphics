@@ -360,11 +360,11 @@ void Solar_viewer::paint()
 		center = ship_.pos_;
 		eye = mat4::translate(center)
 		* mat4::rotate_y(y_angle_ + ship_.angle_ + 180)
-		* mat4::rotate_x(-10)
-		* mat4::translate(vec3(0, 0, 30 * ship_.radius_))
+		* mat4::rotate_x(-15)
+		* mat4::translate(vec3(0, 0, 4 * dist_factor_ * ship_.radius_))
 		* eye;
 		up = mat4::rotate_y(y_angle_ + ship_.angle_ + 180)
-		* mat4::rotate_x(-10)
+		* mat4::rotate_x(-15)
 		* up;
 	} else {
 		center = planet_to_look_at_->pos_;
