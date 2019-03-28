@@ -26,3 +26,8 @@ The only difference with the planets is that we can draw the ship using the func
 
 ## Keyboard events
 //TODO
+
+
+Ding Markus 30%
+Mamie Robin 30%
+Montial Charline 40%
