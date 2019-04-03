@@ -7,3 +7,5 @@
 - [x] **Assignment 3: Raytracing Meshes**: Thursday, 21 March 2019, 13:00 // Submitted by Markus
 - [x] **Assignment 4: OpenGL "Hello World"**: Thursday, 27 March 2019, 13:00 // Submitted by Charline
 - [x] **Assignment 5: Transformations and Viewing**: Thursday 4 April 2019, 13:00 // Submitted by Markus
+- [ ] **Assignment 6 - Texturing and Lighting**: Thursday, 11 April 2019, 13:00 // TODO
+
