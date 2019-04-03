@@ -449,14 +449,7 @@ void Solar_viewer::draw_scene(mat4& _projection, mat4& _view)
 
     static float sun_animation_time = 0;
     if (timer_active_) sun_animation_time += 0.01f;
-
-    /** TODO Render the sun's halo here using the "color_shader_"
-    *   - Construct a model matrix that scales the billboard to 3 times the
-    *     sun's radius and orients it according to billboard_x_angle_ and
-    *     billboard_y_angle_
-    *   - Bind the texture for and draw sunglow_
-    **/
-
+    
     // Render sun
     /*m_matrix = mat4::rotate_y(sun_.angle_self_) * mat4::scale(sun_.radius_);
     mv_matrix = _view * m_matrix;
@@ -469,6 +462,20 @@ void Solar_viewer::draw_scene(mat4& _projection, mat4& _view)
     sun_.tex_.bind();
     unit_sphere_.draw();*/
     render_planet(sun_,     _projection, _view, sun_animation_time, color_shader_, unit_sphere_, greyscale_);
+
+    /** TODO Render the sun's halo here using the "color_shader_"
+    *   - Construct a model matrix that scales the billboard to 3 times the
+    *     sun's radius and orients it according to billboard_x_angle_ and
+    *     billboard_y_angle_
+    *   - Bind the texture for and draw sunglow_
+    **/
+	
+	//sun glow
+    mat4 model_matrix_sunglow = mat4::scale(3 * sun_.radius_);
+    color_shader_.use();
+    color_shader_.set_uniform("modelview_projection_matrix", _projection * _view * model_matrix_sunglow);
+    sunglow_.tex_.bind();
+    sunglow_.draw();
 
 
     /** TODO Switch from using color_shader_ to the fancier shaders you'll
