@@ -90,6 +90,7 @@ bool Texture::uploadImage(std::vector<unsigned char> &img, unsigned width, unsig
 
 
 //-----------------------------------------------------------------------------
+#define N_CHANNELS 4
 
 bool Texture::createSunBillboardTexture()
 {
@@ -98,7 +99,7 @@ bool Texture::createSunBillboardTexture()
     std::vector<unsigned char> img;
     int width = 900;
     int height = 900;
-    img.resize(width*height * 4);
+    img.resize(width*height * N_CHANNELS);
 
     /** \todo Set up the texture for the sun billboard.
     *   - Draw an opaque circle with a 150 pixel radius in its middle
@@ -106,15 +107,13 @@ bool Texture::createSunBillboardTexture()
     *   - Make sure that your texture is fully transparent at its borders to avoid seeing visible edges
     *   - Experiment with the color and with how fast you change the transparency until the effect satisfies you
     **/
+    int color[4] = {255, 140, 0, 100};
 
     for (int col = 0; col < width; ++col) {
         for (int row = 0; row < height; ++row) {
-            img[(row * width + col) * 4 + 0] = 255; // R
-            img[(row * width + col) * 4 + 1] = 140; // G
-            img[(row * width + col) * 4 + 2] = 0; // B
-            img[(row * width + col) * 4 + 3] = 100; // A
-            //glEnable(GL_BLEND);
-			//glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			for (int e = 0; e < N_CHANNELS; ++e) {
+				img[(row * width + col) * N_CHANNELS + e] = color[e];
+			}            
         }
     }
 
