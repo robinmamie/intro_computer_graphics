@@ -475,8 +475,6 @@ void Solar_viewer::draw_scene(mat4& _projection, mat4& _view)
     mat4 model_matrix_sunglow = mat4::scale(3 * sun_.radius_) * rotation;
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    mat4 model_matrix_sunglow = mat4::scale(3 * sun_.radius_);
     color_shader_.use();
     color_shader_.set_uniform("modelview_projection_matrix", _projection * _view * model_matrix_sunglow);
     color_shader_.set_uniform("tex", 0);
