@@ -469,20 +469,10 @@ void Solar_viewer::draw_scene(mat4& _projection, mat4& _view)
     *     billboard_y_angle_
     *   - Bind the texture for and draw sunglow_
     **/
-	
-	//sun glow
-    mat4 rotation = mat4::rotate_y(y_angle_)*mat4::rotate_x(x_angle_);
-    mat4 model_matrix_sunglow = mat4::scale(3 * sun_.radius_) * rotation;
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    color_shader_.use();
-    color_shader_.set_uniform("modelview_projection_matrix", _projection * _view * model_matrix_sunglow);
-    color_shader_.set_uniform("tex", 0);
-    color_shader_.set_uniform("greyscale", (int) greyscale_);
-    sunglow_.tex_.bind();
-
-    sunglow_.draw();
-    glDisable(GL_BLEND);
+   
+   
+   
+   
 
     /** TODO Switch from using color_shader_ to the fancier shaders you'll
      * implement in this assignment:
@@ -507,7 +497,23 @@ void Solar_viewer::draw_scene(mat4& _projection, mat4& _view)
     // Render spaceship
     render_ship(ship_,     _projection, _view, sun_animation_time, color_shader_, greyscale_);
 
-    // check for OpenGL errors
+    // Transparency
+    glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	
+	// Sun glow
+    mat4 model_matrix_sunglow = mat4::scale(3 * sun_.radius_) 
+    * mat4::rotate_y(y_angle_) 
+    * mat4::rotate_x(x_angle_);
+    color_shader_.use();
+    color_shader_.set_uniform("t", sun_animation_time, true);
+    color_shader_.set_uniform("modelview_projection_matrix", _projection * _view * model_matrix_sunglow);
+    color_shader_.set_uniform("tex", 0);
+    color_shader_.set_uniform("greyscale", (int) greyscale_);
+    sunglow_.tex_.bind();
+    sunglow_.draw();
+
+    // Check for OpenGL errors
     glCheckError();
 }
 
