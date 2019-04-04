@@ -502,9 +502,16 @@ void Solar_viewer::draw_scene(mat4& _projection, mat4& _view)
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	
 	// Sun glow
-    mat4 model_matrix_sunglow = mat4::scale(3 * sun_.radius_) 
-    * mat4::rotate_y(y_angle_) 
-    * mat4::rotate_x(x_angle_);
+	mat4 rotation_matrix_sunglow;
+	if(in_ship_){
+		rotation_matrix_sunglow = mat4::rotate_y(y_angle_ + ship_.angle_ + BEHIND_SHIP)
+                 * mat4::rotate_x(ABOVE_SHIP);
+	} else {
+		rotation_matrix_sunglow = mat4::rotate_y(y_angle_) * mat4::rotate_x(x_angle_);
+
+	}
+    mat4 model_matrix_sunglow = mat4::scale(3 * sun_.radius_) * rotation_matrix_sunglow ;
+    
     color_shader_.use();
     color_shader_.set_uniform("t", sun_animation_time, true);
     color_shader_.set_uniform("modelview_projection_matrix", _projection * _view * model_matrix_sunglow);
