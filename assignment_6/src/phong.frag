@@ -41,15 +41,16 @@ void main()
 
     float dot_nl = dot(v2f_normal, v2f_light);
 
-    if (dot_nl > 0) {
+    if (dot_nl > 0.0) {
         // Diffuse
         color += dot_nl;
-        vec3 r = 2 * v2f_normal * dot_nl - v2f_light;
-
+        
+        vec3 r = 2.0 * v2f_normal * dot_nl - v2f_light;
         float dot_rv = dot(r, v2f_view);
-        if (dot_rv > 0) {
+        
+        if (dot_rv > 0.0) {
             // Specular
-            color += pow(dot_rv, texture(tex, v2f_texcoord).s);
+            color += pow(dot_rv, shininess);
         }
     }
     

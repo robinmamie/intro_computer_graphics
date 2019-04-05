@@ -397,9 +397,7 @@ void render_object(mat4& m_matrix, mat4 &_projection, mat4 &_view, float animTim
 
 	mat4 mv_matrix  = _view * m_matrix;
     mat4 mvp_matrix = _projection * mv_matrix;
-    mat4 reduce_3 = mat4::identity();
-    reduce_3(3,3) = 0;
-    mat3 n_matrix = reduce_3 * mv_matrix;
+    mat3 n_matrix = transpose(inverse(mat3(mv_matrix)));
 
     color_shader.use();
     color_shader.set_uniform("modelview_projection_matrix", mvp_matrix);
