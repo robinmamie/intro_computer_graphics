@@ -6,6 +6,7 @@ build_debug
 *.cproject
 *.project
 *.settings
+Debug
 
 ### LATEX ###
 
