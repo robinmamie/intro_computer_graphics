@@ -329,6 +329,12 @@ void Solar_viewer::initialize()
     ship_path_renderer_.sample(ship_path_);
     ship_path_cp_renderer_.setPoints(ship_path_.bezier_control_points());
 }
+//-----------------------------------------------------------------------------
+//Helper function to find the sign of a number
+// Inspired from: https://stackoverflow.com/questions/1903954/is-there-a-standard-sign-function-signum-sgn-in-c-c
+int sgn(float nb){
+    return (nb<0)-(nb>0);
+}
 
 //-----------------------------------------------------------------------------
 // Ship constants
@@ -373,14 +379,13 @@ void Solar_viewer::paint()
 
     // Billboard orientation
     vec3 billboard_direction = normalize(eye);
-    billboard_x_angle_ = (asin(-billboard_direction.y))*180/M_PI;
-    billboard_y_angle_ = (atan(billboard_direction.x/billboard_direction.z))*180/M_PI;
+    billboard_x_angle_ = asin(billboard_direction.y*sgn(billboard_direction.z))*180/M_PI;
+    billboard_y_angle_ = atan(billboard_direction.x/billboard_direction.z)*180/M_PI;
 
     mat4 projection = mat4::perspective(fovy_, (float)width_/(float)height_, near_, far_);
     draw_scene(projection, view);
 
 }
-
 
 //-----------------------------------------------------------------------------
 //Helper function to modularize the code to render the elements of the scene
