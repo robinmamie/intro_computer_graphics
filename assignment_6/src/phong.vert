@@ -36,12 +36,11 @@ void main()
       Hint: Write the final vertex position to gl_Position
     */
 
-    vec3 position = (vec3) (modelview_projection * position);
-    vec3 normal   = (vec3) (modelview_projection * ((vec4) v_normal);
+    vec3 position = vec3(modelview_matrix * v_position);
 
     v2f_texcoord  = v_texcoord;
-    v2f_normal    = normal_matrix * normal;
-    v2f_light     = normalize(((vec3) light_position) - position);
+    v2f_normal    = normal_matrix * v_normal;
+    v2f_light     = normalize(vec3(light_position) - position);
     v2f_view      = normalize(-position);
 
     gl_Position   = modelview_projection_matrix * v_position;

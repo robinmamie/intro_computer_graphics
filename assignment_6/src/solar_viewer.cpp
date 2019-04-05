@@ -420,6 +420,8 @@ void render_ship(Ship& ship, mat4 &_projection, mat4 &_view, float animTime, Sha
     ship.draw();
 }
 
+#define PLANETS {mercury_}
+
 void Solar_viewer::draw_scene(mat4& _projection, mat4& _view)
 {
     switch (curve_display_mode_) {
@@ -439,12 +441,6 @@ void Solar_viewer::draw_scene(mat4& _projection, mat4& _view)
             break;
     }
 
-    // the matrices we need: model, modelview, modelview-projection, normal
-    mat4 m_matrix;
-    mat4 mv_matrix;
-    mat4 mvp_matrix;
-    mat3 n_matrix;
-
     // the sun is centered at the origin and -- for lighting -- considered to be a point, so that is the light position in world coordinates
     vec4 light = vec4(0.0, 0.0, 0.0, 1.0); //in world coordinates
     // convert light into camera coordinates
@@ -452,18 +448,7 @@ void Solar_viewer::draw_scene(mat4& _projection, mat4& _view)
 
     static float sun_animation_time = 0;
     if (timer_active_) sun_animation_time += 0.01f;
-    
-    // Render sun
-    /*m_matrix = mat4::rotate_y(sun_.angle_self_) * mat4::scale(sun_.radius_);
-    mv_matrix = _view * m_matrix;
-    mvp_matrix = _projection * mv_matrix;
-    sun_shader_.use();
-    sun_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
-    sun_shader_.set_uniform("t", sun_animation_time, true); // Indicate that time parameter is optional; it may be optimized away by the GLSL compiler if it's unused.
-    sun_shader_.set_uniform("tex", 0);
-    sun_shader_.set_uniform("greyscale", (int)greyscale_);
-    sun_.tex_.bind();
-    unit_sphere_.draw();*/
+
     render_planet(sun_,     _projection, _view, sun_animation_time, color_shader_, unit_sphere_, greyscale_);
 
     /** TODO Switch from using color_shader_ to the fancier shaders you'll
@@ -475,9 +460,34 @@ void Solar_viewer::draw_scene(mat4& _projection, mat4& _view)
      *  Phong shading, you need to pass in the modelview matrix, the normal transformation
      *  matrix, and light position in addition to the color_shader_ parameters.
      */
-    
+#define shader phong_shader_
+    // Mercury
+    Planet planet = mercury_;
+    mat4 m_matrix = mat4::translate(planet.pos_)
+                    * mat4::rotate_y(planet.angle_self_)
+                    * mat4::scale(planet.radius_);
+    mat4 mv_matrix  = _view * m_matrix;
+    mat4 mvp_matrix = _projection * mv_matrix;
+
+    shader.use();
+    shader.set_uniform("modelview_projection_matrix", mvp_matrix);
+    shader.set_uniform("t", sun_animation_time, true);
+    shader.set_uniform("modelview_matrix", mv_matrix);
+    mat3 n_matrix = mat3();
+    for (int i = 0; i < 3; ++i) {
+        for (int j = 0; j < 3; ++j) {
+            n_matrix(i,j) = mv_matrix(i,j);
+        }
+    }
+    shader.set_uniform("normal_matrix", n_matrix);
+    shader.set_uniform("light_position", light);
+    shader.set_uniform("tex", 0);
+    shader.set_uniform("greyscale", (int) greyscale_);
+    planet.tex_.bind();
+    unit_sphere_.draw();
+
     // Render planets
-    render_planet(mercury_, _projection, _view, sun_animation_time, color_shader_, unit_sphere_, greyscale_);
+    //render_planet(mercury_, _projection, _view, sun_animation_time, phong_shader_, unit_sphere_, greyscale_);
     render_planet(venus_,   _projection, _view, sun_animation_time, color_shader_, unit_sphere_, greyscale_);
     render_planet(earth_,   _projection, _view, sun_animation_time, color_shader_, unit_sphere_, greyscale_);
     render_planet(mars_,    _projection, _view, sun_animation_time, color_shader_, unit_sphere_, greyscale_);

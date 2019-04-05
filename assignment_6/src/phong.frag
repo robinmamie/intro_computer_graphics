@@ -35,6 +35,25 @@ void main()
      */
 
     vec3 color = vec3(0.0,0.0,0.0);
+    vec3 t_color = texture(tex, v2f_texcoord).rgb;
+
+    // Ambient
+    color += 0.2 * sunlight * t_color;
+
+    float dot_nl = dot(v2f_normal, v2f_light);
+
+    if (dot_nl > 0) {
+        // Diffuse
+        color += sunlight * t_color * dot_nl;
+        vec3 r = 2 * v2f_normal * dot_nl - v2f_light;
+
+        float dot_rv = dot(r, v2f_view);
+        if (dot_rv > 0) {
+            // Specular
+            color += sunlight * t_color * pow(dot_rv, texture(tex, v2f_texcoord).s);
+        }
+    }
+
 
     // convert RGB color to YUV color and use only the luminance
     if (greyscale) color = vec3(0.299*color.r+0.587*color.g+0.114*color.b);
