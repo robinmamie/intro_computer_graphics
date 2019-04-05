@@ -107,10 +107,25 @@ bool Texture::createSunBillboardTexture()
     *   - Make sure that your texture is fully transparent at its borders to avoid seeing visible edges
     *   - Experiment with the color and with how fast you change the transparency until the effect satisfies you
     **/
-    int color[4] = {255, 140, 0, 100};
+    const int SUN_RADIUS = width/6;
+    const float MAX_SQUARED_DISTANCE = 1.75*SUN_RADIUS*SUN_RADIUS; //custom value
+    const int OFFSET_CORRECTION = width/2; // assume it is a square, offset for interpolation
+    const int ALPHA_CORRECTION = MAX_SQUARED_DISTANCE/50; // custom 
+    const int SCALING_FACTOR = 255;
+    
 
     for (int col = 0; col < width; ++col) {
         for (int row = 0; row < height; ++row) {
+            float x = row - OFFSET_CORRECTION;
+            float y = col - OFFSET_CORRECTION;
+            float squared_distance = x*x+y*y;
+            float alpha = 0;
+
+            if (squared_distance > 0.9*SUN_RADIUS*SUN_RADIUS && squared_distance < MAX_SQUARED_DISTANCE){
+                alpha = SCALING_FACTOR*(MAX_SQUARED_DISTANCE - squared_distance + ALPHA_CORRECTION)/MAX_SQUARED_DISTANCE;
+            }
+            
+            int color[N_CHANNELS] = {255, 140, 0, (int)alpha};
 			for (int e = 0; e < N_CHANNELS; ++e) {
 				img[(row * width + col) * N_CHANNELS + e] = color[e];
 			}            

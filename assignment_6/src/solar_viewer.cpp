@@ -371,12 +371,10 @@ void Solar_viewer::paint()
 
     mat4 view = mat4::look_at(vec3(eye), vec3(center), vec3(up));
 
-    /** TODO: Orient the billboard used to display the sun's glow
-     *  Update billboard_x_andle_ and billboard_y_angle_ so that the billboard plane
-     *  drawn to produce the sun's halo is orthogonal to the view vector for
-     *  the sun's center.
-     */
-    billboard_x_angle_ = billboard_y_angle_ = 0.0f;
+    // Billboard orientation
+    vec3 billboard_direction = normalize(eye);
+    billboard_x_angle_ = (asin(-billboard_direction.y))*180/M_PI;
+    billboard_y_angle_ = (atan(billboard_direction.x/billboard_direction.z))*180/M_PI;
 
     mat4 projection = mat4::perspective(fovy_, (float)width_/(float)height_, near_, far_);
     draw_scene(projection, view);
@@ -463,17 +461,6 @@ void Solar_viewer::draw_scene(mat4& _projection, mat4& _view)
     unit_sphere_.draw();*/
     render_planet(sun_,     _projection, _view, sun_animation_time, color_shader_, unit_sphere_, greyscale_);
 
-    /** TODO Render the sun's halo here using the "color_shader_"
-    *   - Construct a model matrix that scales the billboard to 3 times the
-    *     sun's radius and orients it according to billboard_x_angle_ and
-    *     billboard_y_angle_
-    *   - Bind the texture for and draw sunglow_
-    **/
-   
-   
-   
-   
-
     /** TODO Switch from using color_shader_ to the fancier shaders you'll
      * implement in this assignment:
      *      mercury, venus, moon, mars, ship: phong_shader_
@@ -501,17 +488,12 @@ void Solar_viewer::draw_scene(mat4& _projection, mat4& _view)
     glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	
-	// Sun glow
-	mat4 rotation_matrix_sunglow;
-	if(in_ship_){
-		rotation_matrix_sunglow = mat4::rotate_y(y_angle_ + ship_.angle_ + BEHIND_SHIP)
-                 * mat4::rotate_x(ABOVE_SHIP);
-	} else {
-		rotation_matrix_sunglow = mat4::rotate_y(y_angle_) * mat4::rotate_x(x_angle_);
+	// RenderSun glow  
+    mat4 model_matrix_sunglow = mat4::scale(3 * sun_.radius_) 
+    * mat4::rotate_y(billboard_y_angle_) 
+    * mat4::rotate_x(billboard_x_angle_);
+     
 
-	}
-    mat4 model_matrix_sunglow = mat4::scale(3 * sun_.radius_) * rotation_matrix_sunglow ;
-    
     color_shader_.use();
     color_shader_.set_uniform("t", sun_animation_time, true);
     color_shader_.set_uniform("modelview_projection_matrix", _projection * _view * model_matrix_sunglow);
