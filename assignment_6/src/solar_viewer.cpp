@@ -397,7 +397,6 @@ void render_object(mat4& m_matrix, mat4 &_projection, mat4 &_view, float animTim
 
 	mat4 mv_matrix  = _view * m_matrix;
     mat4 mvp_matrix = _projection * mv_matrix;
-    mat3 n_matrix = transpose(inverse(mat3(mv_matrix)));
 
     color_shader.use();
     color_shader.set_uniform("modelview_projection_matrix", mvp_matrix);
@@ -405,6 +404,7 @@ void render_object(mat4& m_matrix, mat4 &_projection, mat4 &_view, float animTim
     color_shader.set_uniform("tex", 0);
     color_shader.set_uniform("greyscale", (int) greyscale);
     if (phong) {
+        mat3 n_matrix = transpose(inverse(mat3(mv_matrix)));
     	color_shader.set_uniform("modelview_matrix", mv_matrix);
     	color_shader.set_uniform("normal_matrix", n_matrix);
     	color_shader.set_uniform("light_position", light);
@@ -412,10 +412,38 @@ void render_object(mat4& m_matrix, mat4 &_projection, mat4 &_view, float animTim
 }
 
 void render_planet(Planet& planet, mat4 &_projection, mat4 &_view, float animTime, Shader& cs, Sphere unit_sphere, bool greyscale, bool phong = true) {
+	mat4 m_matrix = mat4::translate(planet.pos_)
+	                    * mat4::rotate_y(planet.angle_self_)
+	                    * mat4::scale(planet.radius_);
+	render_object(m_matrix, _projection, _view, animTime, cs, greyscale, phong);
+
+	planet.tex_.bind();
+	unit_sphere.draw();
+
+}
+
+void render_earth(Planet& planet, mat4 &_projection, mat4 &_view, float animTime, Shader& color_shader, Sphere unit_sphere, bool greyscale) {
     mat4 m_matrix = mat4::translate(planet.pos_)
                     * mat4::rotate_y(planet.angle_self_)
                     * mat4::scale(planet.radius_);
-    render_object(m_matrix, _projection, _view, animTime, cs, greyscale, phong);
+    vec4 light = vec4(0.0, 0.0, 0.0, 1.0);
+    light = _view * light;
+
+	mat4 mv_matrix  = _view * m_matrix;
+    mat4 mvp_matrix = _projection * mv_matrix;
+    mat3 n_matrix = transpose(inverse(mat3(mv_matrix)));
+
+    color_shader.use();
+    color_shader.set_uniform("modelview_projection_matrix", mvp_matrix);
+    color_shader.set_uniform("modelview_matrix", mv_matrix);
+    color_shader.set_uniform("normal_matrix", n_matrix);
+    color_shader.set_uniform("light_position", light);
+    color_shader.set_uniform("t", animTime, true);
+    color_shader.set_uniform("day_texture", 0);
+    color_shader.set_uniform("night_texture", 1);
+    color_shader.set_uniform("cloud_texture", 2);
+    color_shader.set_uniform("gloss_texture", 3);
+    color_shader.set_uniform("greyscale", (int) greyscale);
     planet.tex_.bind();
     unit_sphere.draw();
 }
@@ -471,7 +499,7 @@ void Solar_viewer::draw_scene(mat4& _projection, mat4& _view)
     // Render planets
     render_planet(mercury_, _projection, _view, sun_animation_time, phong_shader_, unit_sphere_, greyscale_);
     render_planet(venus_,   _projection, _view, sun_animation_time, phong_shader_, unit_sphere_, greyscale_);
-    render_planet(earth_,   _projection, _view, sun_animation_time, phong_shader_, unit_sphere_, greyscale_);
+    render_earth(earth_,   _projection, _view, sun_animation_time, earth_shader_, unit_sphere_, greyscale_);
     render_planet(mars_,    _projection, _view, sun_animation_time, phong_shader_, unit_sphere_, greyscale_);
     render_planet(moon_,    _projection, _view, sun_animation_time, phong_shader_, unit_sphere_, greyscale_);
 

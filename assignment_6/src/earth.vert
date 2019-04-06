@@ -33,4 +33,12 @@ void main()
      *   and continue with the fragment shader
      */
 
+    vec3 position = vec3(modelview_matrix * v_position);
+
+    v2f_texcoord  = v_texcoord;
+    v2f_normal    = normalize(normal_matrix * v_normal);
+    v2f_light     = normalize(vec3(light_position) - position);
+    v2f_view      = normalize(-position);
+
+    gl_Position   = modelview_projection_matrix * v_position;
 }
