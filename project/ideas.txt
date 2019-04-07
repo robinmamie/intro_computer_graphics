@@ -1,0 +1,43 @@
+CS-341: Project ideas
+
+- Random terrain generation with noise
+	- min: Mountain landscape generated + basic phong lighting from sun
+	- bonus0: add multiple light sources (eg lamps?)
+	- bonus1: ice (glacier) + water level with different specular elemtns.
+	- bonus 2: different biome generation -> multiple textures
+	- bonus 3: make water look like fluid (waves/like optional sun step)
+
+- Recursive raytracing -> mirrors (maybe with screen as light source?)
+	- Object (horse?) + 2/3 mirrors in an angle
+	- multiple instance of scene in mirrors and multiple shadows?
+
+- Realistic tree generation with noise/fractals + raytracing?
+	- min: single tree generation + basic raytracing
+	- bonus0: volumic light sources -> soft shadows
+	- bonus1: add animation (eg wind?)
+	- bonus2: different parameters -> seasons (no/with leaves, different color)
+	- bonus3: generate forest with multiple trees
+
+- City skyline with different light models
+	- min: skyline + phong
+	- bonus1: sliders for changing parameters (position sun, color, etc)
+	- bonus2: clouds + water for reflections?
+	- bonus3: fog that acts as a filter for light intensity (ex -20%)
+	- bonus4: real time rendering -> eg sunrise/sunset + light effects
+
+- Rain + water on ground scene?
+	- refraction?
+	- semi-specular (on inversed side) -> fake transparency?
+
+- Clouds + lightening ?
+	- lightening path generation with noise (as billboard?)
+	- cloud 3d (noise generated) where can move the camera with keyboard
+	- Some ambient light (phong model) and lightening = extra short time light
+
+- Old map generation? artificially age it with light effects?
+
+- Raytracing on diamond-like stone? Shiny!
+	- with transparency/refraction?
+	- fake it: consider one ray inside, can not go out, 0.9 attenuation and output the lightray on the normal that goes inside?
+
+- Particle effects? (eg fire, firework, realistic watter flow, etc)
