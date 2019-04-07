@@ -41,3 +41,29 @@ CS-341: Project ideas
 	- fake it: consider one ray inside, can not go out, 0.9 attenuation and output the lightray on the normal that goes inside?
 
 - Particle effects? (eg fire, firework, realistic watter flow, etc)
+
+Links:
+	- Noise for maps:
+		1) https://www.redblobgames.com/maps/terrain-from-noise/
+		2) https://www.redblobgames.com/articles/noise/introduction.html
+
+	- Procedural tree generation:
+		1) https://www.grid.uns.ac.rs/jged/download.php?fid=167
+
+	- Procedural city generation (general info about noise):
+		1) http://www.diva-portal.org/smash/get/diva2:1119094/FULLTEXT02.pdf
+
+	- Particle effects (with Cesium?):
+		1) http://52.4.31.236/tutorials/Particle-Systems-Tutorial/
+		2) https://cesium.com/docs/tutorials/particle-systems/
+		3) https://en.wikipedia.org/wiki/Particle_system
+		4) https://help.yoyogames.com/hc/en-us/articles/216754758-Quick-Start-To-Programming-Particles
+
+	- Soft shadows (raytracing with area light source):
+		1) https://graphics.ethz.ch/teaching/former/seminar/handouts/Lang_SoftShadowVolumes.pdf
+
+	- Reflection and refraction in raytracing:
+		1) https://www.scratchapixel.com/lessons/3d-basic-rendering/introduction-to-shading/reflection-refraction-fresnel
+		2) https://computergraphics.stackexchange.com/questions/4573/refraction-in-a-ray-tracer-what-do-with-an-intersection-within-the-medium
+		3) https://stackoverflow.com/questions/42218704/how-to-properly-handle-refraction-in-raytracing
+		4) https://graphics.stanford.edu/courses/cs148-10-summer/docs/2006--degreve--reflection_refraction.pdf
