@@ -379,8 +379,8 @@ void Solar_viewer::paint()
 
     // Billboard orientation
     vec3 billboard_direction = normalize(eye);
-    billboard_x_angle_ = asin(billboard_direction.y*sgn(billboard_direction.z))*180/M_PI;
-    billboard_y_angle_ = atan(billboard_direction.x/billboard_direction.z)*180/M_PI;
+    billboard_x_angle_ = asin(billboard_direction.y * sgn(billboard_direction.z)) * 180 / M_PI;
+    billboard_y_angle_ = atan(billboard_direction.x / billboard_direction.z) * 180 / M_PI;
 
     mat4 projection = mat4::perspective(fovy_, (float)width_/(float)height_, near_, far_);
     draw_scene(projection, view);
@@ -513,7 +513,7 @@ void Solar_viewer::draw_scene(mat4& _projection, mat4& _view)
     glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	// RenderSun glow
+	// Render sunglow
     mat4 model_matrix_sunglow = mat4::scale(3 * sun_.radius_)
     * mat4::rotate_y(billboard_y_angle_)
     * mat4::rotate_x(billboard_x_angle_);
