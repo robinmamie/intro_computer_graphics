@@ -101,18 +101,12 @@ bool Texture::createSunBillboardTexture()
     int height = 900;
     img.resize(width * height * N_CHANNELS);
 
-    /** \todo Set up the texture for the sun billboard.
-    *   - Draw an opaque circle with a 150 pixel radius in its middle
-    *   - Outside that circle the texture should become more and more transparent to mimic a nice glow effect
-    *   - Make sure that your texture is fully transparent at its borders to avoid seeing visible edges
-    *   - Experiment with the color and with how fast you change the transparency until the effect satisfies you
-    **/
     const int SUN_RADIUS = width / 6;
     const float MAX_SQUARED_DISTANCE = 1.75 * SUN_RADIUS * SUN_RADIUS; //custom value
     const int OFFSET_CORRECTION = width / 2; // assume it is a square, offset for interpolation
-    const int ALPHA_CORRECTION = MAX_SQUARED_DISTANCE / 50; // custom value 
+    const int ALPHA_CORRECTION = MAX_SQUARED_DISTANCE / 50; // custom value
     const int SCALING_FACTOR = 255;
-    
+
 
     for (int col = 0; col < width; ++col) {
         for (int row = 0; row < height; ++row) {
@@ -124,11 +118,11 @@ bool Texture::createSunBillboardTexture()
             if (squared_distance > 0.9 * SUN_RADIUS * SUN_RADIUS && squared_distance < MAX_SQUARED_DISTANCE){
                 alpha = SCALING_FACTOR * (MAX_SQUARED_DISTANCE - squared_distance + ALPHA_CORRECTION) / MAX_SQUARED_DISTANCE;
             }
-            
+
             int color[N_CHANNELS] = {255, 140, 0, (int) alpha};
 			for (int e = 0; e < N_CHANNELS; ++e) {
 				img[(row * width + col) * N_CHANNELS + e] = color[e];
-			}            
+            }
         }
     }
 
