@@ -1,31 +1,40 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <title>Procedural generation of the caribbean alps</title>
-  <style type="text/css">code{white-space: pre;}</style>
-  <link rel="stylesheet" href="icg_report.css" type="text/css" />
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <link rel="stylesheet" href="icg_report.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
 </head>
 <body>
-<div id="header">
+<header id="title-block-header">
 <h1 class="title">Procedural generation of the caribbean alps</h1>
-</div>
-<div class="figure">
-<img src="images/mountains.jpg" alt="A nice mountainy landscape" width="600" />
-<p class="caption">A nice mountainy landscape</p>
-</div>
+</header>
+<figure>
+<img src="images/mountains.jpg" alt="A nice mountainy landscape" width="600" /><figcaption>A nice mountainy landscape</figcaption>
+</figure>
 <h1 id="description">Description</h1>
-<p>In this project, we want to generate a landscape procedurally. We will be using <a href="https://en.wikipedia.org/wiki/Perlin_noise">Perlin Noise</a> in order to create a mountainy landscape.</p>
+<p>In this project, we want to generate a mountainous landscape procedurally, using <a href="https://en.wikipedia.org/wiki/Perlin_noise">Perlin Noise</a> to achieve this.</p>
 <h1 id="goals-and-deliverables">Goals and Deliverables</h1>
+<p>Voir: https://lgg.epfl.ch/teaching/ICG2019/icg_lectures/2019_project_instructions/</p>
 <h2 id="minimal-requirements">Minimal requirements</h2>
-<p>A movable camera (with arrow keys) that allows to move around the world that is generated proceduraly and resembles a mountain-like landscape.</p>
+<p>A movable camera (with arrow keys) that allows to move around the world that is generated procedurally and resembles a mountain-like landscape. As a minimal requirement, no textures will be applied on the landscape but colours according to the altitude.</p>
 <h2 id="optional-extensions">Optional extensions</h2>
 <ul>
+<li><p>Replace colours according to altitude with more realistic textures</p></li>
 <li><p>More complex lighting model (Phong)</p></li>
 <li><p>Water with reflections (or only specular component) on it</p></li>
-<li><p>Virtual clouds which create shadows on the ground, no volumetric clouds, simply a monoscale texture that blocks or lets light through. Maybe with a basic skybox(?)</p></li>
+<li><p>Virtual clouds which create shadows on the ground; no volumetric clouds, simply a monoscale texture that blocks or lets light through.</p></li>
 </ul>
 <p align="center">
 <img src="images/clouds.jpg" alt="Something light this" width="300" />
@@ -39,15 +48,36 @@
 <h2 id="expected-results">Expected results</h2>
 <p>We want to be able to freely move the camera around the world in order to explore it. We should be able to see the different biomes of the mountains and the different lighting effects (reflections, shadows, specular, etc) depending on which optional extensions we will be required to implement. There should be a fixed rendering distance beyond which the world is not generated. When moving, the new parts of the world should be generated on the fly.</p>
 <h1 id="schedule">Schedule</h1>
-<p>We would prefer to specify at the begining of each week on what which team member will work. But we were thinking about the following general schedule:</p>
+<p>We would prefer to specify at the beginning of each week on what which team member will work. But we were thinking about the following general schedule:</p>
+<h2 id="week-1">Week 1:</h2>
+<h3 id="perlin-noise-function-mesh-generation-for-the-terrain-and-colors-applied-according-to-altitude">Perlin noise function, mesh generation for the terrain and colors applied according to altitude</h3>
 <ul>
-<li>Week 1: Perlin noise function and mesh generation for the terrain</li>
-<li>Week 2: Create different biomes (water, ice, rock, etc) and map textures</li>
-<li>Week 3: Add phong lighting model (ambient, diffuse, specular)</li>
-<li>Week 4: Add shadows created by clouds or multiple light sources(?)</li>
+<li>Markus: Study &amp; implement Perlin noise function</li>
+<li>Robin: Render moutain &amp; limit rendering to a certain distance</li>
+<li>Charline: Colour mountains according to altitude</li>
+</ul>
+<h2 id="week-2">Week 2:</h2>
+<h3 id="create-different-biomes-water-ice-rock-etc-and-map-textures">Create different biomes (water, ice, rock, etc) and map textures</h3>
+<ul>
+<li>Markus: Find different textures and link them to the project to be able to load and use them</li>
+<li>Robin &amp; Charline: Create different biomes</li>
+</ul>
+<h2 id="week-3">Week 3:</h2>
+<h3 id="add-phong-lighting-model-ambient-diffuse-specular">Add phong lighting model (ambient, diffuse, specular)</h3>
+<ul>
+<li>Markus: Ambient</li>
+<li>Robin: Diffuse</li>
+<li>Charline: Specular</li>
+</ul>
+<h2 id="week-4">Week 4:</h2>
+<h3 id="add-shadows-created-by-clouds-andor-multiple-light-sources">Add shadows created by clouds and/or multiple light sources</h3>
+<ul>
+<li>Markus: Shadow</li>
+<li>Robin: Clouds</li>
+<li>Charline: Join Shadows or Clouds according to difficulty</li>
 </ul>
 <h1 id="resources">Resources</h1>
-<p>OpenGL and ?</p>
+<p>OpenGL</p>
 <hr />
 <h1 id="links-à-supprimer-avant-de-submit">Links [à supprimer avant de submit]</h1>
 <ul>
