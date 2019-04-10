@@ -24,16 +24,6 @@ const vec3  sunlight = vec3(1.0, 0.941, 0.898);
 
 void main()
 {
-    /**
-    *  Implement the Phong shading model (like in the 1st exercise) by using the passed
-    *  variables and write the resulting color to `color`.
-    *  `tex` should be used as material parameter for ambient, diffuse and specular lighting.
-    * Hints:
-    * - The texture(texture, 2d_position) returns a 4-vector (rgba). You can use
-    * `texture(...).r` to get just the red component or `texture(...).rgb` to get a vec3 color
-    * value
-     */
-
     vec3 color = vec3(0.0,0.0,0.0);
 
     // Ambient
@@ -44,16 +34,17 @@ void main()
     if (dot_nl > 0.0) {
         // Diffuse
         color += dot_nl;
-        
+
         vec3 r = 2.0 * v2f_normal * dot_nl - v2f_light;
         float dot_rv = dot(r, v2f_view);
-        
+
         if (dot_rv > 0.0) {
             // Specular
             color += pow(dot_rv, shininess);
         }
     }
-    
+
+    // Since the texture is the same everywhere, do the multiplication after
     color *= sunlight * texture(tex, v2f_texcoord).rgb;
 
 

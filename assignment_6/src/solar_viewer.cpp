@@ -476,25 +476,10 @@ void Solar_viewer::draw_scene(mat4& _projection, mat4& _view)
             break;
     }
 
-    // the sun is centered at the origin and -- for lighting -- considered to be a point, so that is the light position in world coordinates
-    vec4 light = vec4(0.0, 0.0, 0.0, 1.0); //in world coordinates
-    // convert light into camera coordinates
-    light = _view * light;
-
     static float sun_animation_time = 0;
     if (timer_active_) sun_animation_time += 0.01f;
 
     render_planet(sun_,     _projection, _view, sun_animation_time, color_shader_, unit_sphere_, greyscale_, false);
-
-    /** TODO Switch from using color_shader_ to the fancier shaders you'll
-     * implement in this assignment:
-     *      mercury, venus, moon, mars, ship: phong_shader_
-     *      earth: earth_shader_
-     *      stars, sunglow: still use color_shader_
-     *  You'll need to make sure all the GLSL uniform variables are set. For
-     *  Phong shading, you need to pass in the modelview matrix, the normal transformation
-     *  matrix, and light position in addition to the color_shader_ parameters.
-     */
 
     // Render planets
     render_planet(mercury_, _projection, _view, sun_animation_time, phong_shader_, unit_sphere_, greyscale_);
