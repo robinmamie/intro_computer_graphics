@@ -112,8 +112,8 @@ void ShadowViewer::draw(const mat4 &view_matrix, const mat4 &projection_matrix) 
 
     // \todo Construct the matrices for transforming normals into eye coordinates
     //       You can paste in your solution from assignment 6.
-    mat3 plane_n_matrix   = transpose(inverse(mat3(plane_mv_matrix));
-    mat3 mesh_n_matrix    = transpose(inverse(mat3(mesh_mv_matrix));
+    mat3 plane_n_matrix   = transpose(inverse(mat3(plane_mv_matrix)));
+    mat3 mesh_n_matrix    = transpose(inverse(mat3(mesh_mv_matrix)));
 
     vec3 ambient_light(0.2, 0.2, 0.2),
         plane_diffuse (0.5, 0.5, 0.7), // used as ambient color too
