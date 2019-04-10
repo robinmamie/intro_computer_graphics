@@ -4,13 +4,16 @@
 
 To get a pleasing result, first we need to display the billhoard, which is done using the color shader, the texture and the draw function as explained in the provided comments.
 
-To obtain a progressive transparency, Pythagore's theorem has been used. Indeed,  the further from the origin the current pixel is, the stronger the transparency. Also, inside the sun, no colour is rendered because it is not needed.
+To obtain a progressive transparency, Pythagore's theorem has been used to compute the distance. Indeed,  the further from the origin the current pixel is, the stronger the transparency. We have simply done a linear interpolation of the alpha values. Also, inside the sun, no colour is rendered because it is not needed (we used start drawing the glow at 0.9\*radius of the sun because if we started at the radius exactly, we would have some small graphic artifacts due to rounding errors).
+
+For all the comparisons and distance computations, we did not compute the square roots (so it is not the full pythagoras theorem) in order to optimize the compuattion costs. So all of our distances are in fact squared distances but as they all are, it does not create any problems.
 
 Additional offsets and custom values have been added to have a nice result that looks like the provided pictures in the provided pdf.
 
-To achieve the the billboard to constantly face the camera, we used trigonometry to find rotation angles.
+To achieve that the billboard constantly faces the camera, we used basic trigonometry to compute the rotation angles (so the angles between our vector between the camera and the billboard position and the x and y axis).
+As we are using a normalized vector, its norm (so the hypotenuse if we draw the triangles between our vector and the two axis) equals 1 so we could simply omit it in the arcsin function (because multiplying by 1 does not change anything).
 
-One last thing had to be done : since arcsin(x) function maps to [- π/2, + π/2] but we need the following output interval: [0, 2π] to be able to turn the camera fully. To solve this problem, we took account of the sign of the z coordinate.
+One last thing had to be done : since the arcsin(x) function maps to [- π/2, + π/2] but we need the following output interval: [0, 2π] to be able to turn the camera fully around the sun (or any other planet). In order to solve this issue, we took into account the sign of the z coordinate in our x-angle computation.
 
 ## Phong lighting model
 
