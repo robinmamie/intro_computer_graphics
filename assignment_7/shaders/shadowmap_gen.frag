@@ -14,6 +14,6 @@ void main() {
     /** \todo
     * Compute the distance from the light to the scene intersection represented
     * by this fragment.
-    **/
-    dist = 0.0f;
+    **/  
+    dist = length(v2f_lc_vertex);
 }
