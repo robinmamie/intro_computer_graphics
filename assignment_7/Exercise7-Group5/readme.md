@@ -2,7 +2,7 @@
 
 ## Building View and Projection Matrices for a Cube Face
 
-To implement the function m_constructLightProjectionMatrix, we used the perspective function, replacing field of view y with 90 (degrees), the ratio with 1 as the cube is centered and symmetric, and the distance with 0.1 and 6 as provided.
+To implement the function m_constructLightProjectionMatrix, we used the perspective function, with, as the field of view y value: 90 (degrees), the ratio : 1 as the cube is centered and symmetric, and the distance with 0.1 and 6 as provided.
 
 For the m_constructLightViewMatrix function, each face of the cube had to be processed in a separate case; the function look-at has been used, and an eye, center and up vector have been computed according to each face.
 
