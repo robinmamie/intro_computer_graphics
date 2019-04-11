@@ -174,6 +174,8 @@ void ShadowViewer::draw(const mat4 &view_matrix, const mat4 &projection_matrix) 
         * output by our shader to the colors already in the framebuffer.
         * Hint: read the documentation for glBlendFunc
         **/
+        glEnable(GL_BLEND);
+		glBlendFunc(GL_ONE, GL_ONE);
 
         m_phong_shader.use();
         m_shadowMap->bind();
