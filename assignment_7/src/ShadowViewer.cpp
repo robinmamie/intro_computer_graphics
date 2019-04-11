@@ -44,23 +44,38 @@ mat4 ShadowViewer::m_constructLightViewMatrix(size_t li, size_t cube_face) const
     * defined by scene_view_matrix.
     * Hint: use mat4::look_at
     **/
-    
+    vec4 eye = scene_view_matrix * m_light[li].position();
+	vec4 center;
+	vec4 up;
     switch(cube_face) {
-    case 1:
+    case 0:
+    center = vec4(1, 0, 0, 1);
+		up = vec4(0, 1, 0, 0);
             break; 
+    case 1:
+    center = vec4(-1, 0, 0, 1);
+		up = vec4(0, 1, 0, 0);
+            break;
     case 2:
+    center = vec4(0, 1, 0, 1);
+		up = vec4(0, 0, -1, 0);
             break;
     case 3:
+    center = vec4(0, -1, 0, 1);
+		up = vec4(0, 0, 1, 0);
             break;
     case 4:
+    center = vec4(0, 0, 1, 1);
+		up = vec4(0, 1, 0, 0);
             break;
     case 5:
-            break;
-    case 6:
+    center = vec4(0, 0, -1, 1);
+        up = vec4(0, 1, 0, 0);
             break;
 
-}
-    return mat4::identity() * scene_view_matrix;
+}	
+	center += eye;
+    return mat4::look_at(vec3(eye), vec3(center), vec3(up)) * scene_view_matrix;
 }
 
 mat4 ShadowViewer::m_constructLightProjectionMatrix() const {
