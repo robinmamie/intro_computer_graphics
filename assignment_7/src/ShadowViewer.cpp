@@ -47,31 +47,32 @@ mat4 ShadowViewer::m_constructLightViewMatrix(size_t li, size_t cube_face) const
     vec4 eye = scene_view_matrix * m_light[li].position();
 	vec4 center;
 	vec4 up;
+	
     switch(cube_face) {
     case 0:
-    center = vec4(1, 0, 0, 1);
-		up = vec4(0, 1, 0, 0);
-            break; 
+		center = vec4(1, 0, 0, 1);
+		up     = vec4(0, 1, 0, 0);
+        break; 
     case 1:
-    center = vec4(-1, 0, 0, 1);
-		up = vec4(0, 1, 0, 0);
-            break;
+		center = vec4(-1, 0, 0, 1);
+		up 	   = vec4(0, 1, 0, 0);
+        break;
     case 2:
-    center = vec4(0, 1, 0, 1);
-		up = vec4(0, 0, -1, 0);
-            break;
+		center = vec4(0, 1, 0, 1);
+		up     = vec4(0, 0, -1, 0);
+        break;
     case 3:
-    center = vec4(0, -1, 0, 1);
-		up = vec4(0, 0, 1, 0);
-            break;
+		center = vec4(0, -1, 0, 1);
+		up     = vec4(0, 0, 1, 0);
+        break;
     case 4:
-    center = vec4(0, 0, 1, 1);
-		up = vec4(0, 1, 0, 0);
-            break;
+		center = vec4(0, 0, 1, 1);
+		up     = vec4(0, 1, 0, 0);
+        break;
     case 5:
-    center = vec4(0, 0, -1, 1);
-        up = vec4(0, 1, 0, 0);
-            break;
+		center = vec4(0, 0, -1, 1);
+        up     = vec4(0, 1, 0, 0);
+        break;
 
 }	
 	center += eye;
