@@ -175,7 +175,7 @@ void ShadowViewer::draw(const mat4 &view_matrix, const mat4 &projection_matrix) 
         * Hint: read the documentation for glBlendFunc
         **/
         glEnable(GL_BLEND);
-		glBlendFunc(GL_ONE, GL_ONE);
+	    glBlendFunc(GL_ONE, GL_ZERO);
 
         m_phong_shader.use();
         m_shadowMap->bind();
@@ -189,6 +189,16 @@ void ShadowViewer::draw(const mat4 &view_matrix, const mat4 &projection_matrix) 
          * You'll need to pass in the light position ***in eye coordinates** as
          * well as the proper material and transformation matrices.
          **/
+        m_phong_shader.set_uniform("modelview_projection_matrix", mesh_mvp_matrix);
+        m_phong_shader.set_uniform("modelview_matrix", mesh_mv_matrix);
+
+        m_phong_shader.set_uniform("light_position", view_matrix * vec3(m_light[li].position()));
+        m_phong_shader.set_uniform("light_color", m_light[li].color);
+        m_phong_shader.set_uniform("normal_matrix", mesh_n_matrix);
+        m_phong_shader.set_uniform("diffuse_color", mesh_diffuse);
+        m_phong_shader.set_uniform("specular_color", mesh_specular);
+        //m_quad.draw();
+        m_mesh->draw();
         m_shadowMap->unbind();
 
         // All other shaders should overwrite the framebuffer color, not add to it...

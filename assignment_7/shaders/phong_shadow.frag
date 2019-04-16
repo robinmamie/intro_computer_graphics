@@ -43,39 +43,31 @@ void main()
     * tolerance on the distance comparison. It's recommended to use a *multiplicative*
     * instead of additive tolerance: compare the fragment's distance to 1.01x the
     * distance from the shadow map.
-    ***/    
+    ***/
     vec3 color = vec3(0.0,0.0,0.0);
 
- /*todo TO ADAPT : PHONG FROM PREVIOUS ASSIGNMENT 
-    // Ambient
-    color += 0.2;
+    vec3 light = light_position - v2f_ec_vertex;
+    vec3 v2f_light = normalize(light);
+    float light_distance = sqrt(dot(light, light));
+    float distance = texture(shadow_map, v2f_light).r;
 
-    float dot_nl = dot(v2f_normal, v2f_light);
+    float dot_nl = dot(N, v2f_light);
 
-    if (dot_nl > 0.0) {
+    if (light_distance < distance * 1.01 && dot_nl > 0.0) {
         // Diffuse
-        color += dot_nl;
+        color += dot_nl * diffuse_color;
 
-        vec3 r = 2.0 * v2f_normal * dot_nl - v2f_light;
-        float dot_rv = dot(r, v2f_view);
+        vec3 r = 2.0 * N * dot_nl - v2f_light;
+        float dot_rv = dot(r, normalize(-v2f_ec_vertex));
 
         if (dot_rv > 0.0) {
             // Specular
-            color += pow(dot_rv, shininess);
+            color += specular_color * pow(dot_rv, shininess);
         }
     }
 
-    // Since the texture is the same everywhere, do the multiplication after
-    color *= sunlight * texture(tex, v2f_texcoord).rgb;
-
-    // convert RGB color to YUV color and use only the luminance
-    if (greyscale) color = vec3(0.299*color.r+0.587*color.g+0.114*color.b);
-
-    // add required alpha value
-    f_color = vec4(color, 1.0);
+    color *= light_color;
 
     // append the required alpha value
     f_light_contribution = vec4(color, 1.0);
-    */
-    
 }
