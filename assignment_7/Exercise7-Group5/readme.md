@@ -1,4 +1,4 @@
-# Assignment 6
+# Assignment 7
 
 ## Building View and Projection Matrices for a Cube Face
 
@@ -14,10 +14,12 @@ About the file phong_shadow.frag, [TO COMPLETE]
 
 # Setting the Blend Function
 
-[TO COMPLETE; JE L'AI FAIT JUSTE CAR JE ME SUIS RENSEIGNEE MAIS JE NE SAIS PAS EN QUOI C'EST JUSTE HELAS]
+As can be seen in the [documentation](https://www.khronos.org/registry/OpenGL-Refpages/es2.0/xhtml/glBlendFunc.xml) for the `glBlendFunc()` function, its two parameters are the scaling methods for the source and destination RGBA values. As we do not want to do anything other than adding the specular and diffuse contributions, we are using the constant `GL_ONE` for both parameters.
+
+And of course, we need to enable the blending property with the line `glEnable(GL_BLEND);` as it is disabled by default.
 
 ## Contributions
 
-Ding Markus 31%
-Mamie Robin 31%
+Ding Markus 25%
+Mamie Robin 37%
 Montial Charline 38%
