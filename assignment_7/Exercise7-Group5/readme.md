@@ -10,7 +10,7 @@ For the m_constructLightViewMatrix function, each face of the cube had to be pro
 
 In the file shadowmap_gen.frag, the ray intersection distances is simply the length of the vector since, in eye coordinate, the light is at the origin.
 
-About the file phong_shadow.frag, [TO COMPLETE]
+About the file phong_shadow.frag, as said in the assignment description, the phong lighting model was taken as is from assignment 6 and slightly modified. Setting up the main cpp file was also similar (i.e. uniform variables setting). Nothing of note was unexpected or different from what was asked.
 
 # Setting the Blend Function
 
