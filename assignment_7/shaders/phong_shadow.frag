@@ -47,10 +47,10 @@ void main()
     vec3 color = vec3(0.0,0.0,0.0);
 
     vec3 light = light_position - v2f_ec_vertex;
+
     vec3 v2f_light = normalize(light);
     float light_distance = sqrt(dot(light, light));
-    float distance = texture(shadow_map, v2f_light).r;
-
+    float distance = texture(shadow_map, -v2f_light).r;
     float dot_nl = dot(N, v2f_light);
 
     if (light_distance < distance * 1.01 && dot_nl > 0.0) {
