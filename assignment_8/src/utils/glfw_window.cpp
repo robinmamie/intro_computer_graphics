@@ -35,7 +35,7 @@ GLFW_window::GLFW_window(const char* _title, int _width, int _height, bool visib
 	if(!visible)
 	{
 	    // Use an offscreen context if we're just writing to an output path.
-		glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
+		glfwWindowHint(GLFW_VISIBLE, GL_FALSE); // initialy: GLFW_FALSE
 	}
 
     // try to create window
