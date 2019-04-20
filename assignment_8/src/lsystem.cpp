@@ -20,13 +20,11 @@ Provided utilities:
 */
 
 std::string LindenmayerSystemDeterministic::expandSymbol(unsigned char const& sym) {
-	/*============================================================
-		TODO 1.1
-		For a given symbol in the sequence, what should it be replaced with after expansion?
-		The rules are in this->rules, see lsystem.h for details.
-	*/
-	// that is a dummy implementation to be replaced
-	return {char(sym)}; // this constructs string from char 
+	auto map = this->rules;
+	auto searchResult = map.find(sym); // first is the key, second is the value
+
+	// if no rule found, return char (for +, -, etc) otherwise return rule
+	return searchResult == map.end()? std::string(1, sym) : searchResult->second;
 
 	/*
 	You may find useful:
@@ -37,24 +35,19 @@ std::string LindenmayerSystemDeterministic::expandSymbol(unsigned char const& sy
 }
 
 std::string LindenmayerSystem::expandOnce(std::string const& symbol_sequence) {
-	/*============================================================
-		TODO 1.2
-		Perform one iteration of grammar expansion on `symbol_sequence`.
-		Use the expandSymbol method
-	*/
-	return "";
-
-	//============================================================
+	std::string result = "";
+	for(size_t i=0; i<symbol_sequence.size(); i++){
+		result += expandSymbol(symbol_sequence[i]);
+	}
+	return result;
 }
 
 std::string LindenmayerSystem::expand(std::string const& initial, uint32_t num_iters) {
-	/*============================================================
-		TODO 1.3
-		Perform `num_iters` iterations of grammar expansion (use expandOnce)
-	*/
-	return "";
-
-	//============================================================
+	std::string result = initial;
+	for(size_t i=0; i<num_iters; i++){
+		result = expandOnce(result);
+	}
+	return result;
 }
 
 std::vector<Segment> LindenmayerSystem::draw(std::string const& symbols) {
