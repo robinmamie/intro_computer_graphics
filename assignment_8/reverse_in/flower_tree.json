@@ -3,8 +3,9 @@
 	"stochastic": false,
 	"initial": "T",
 	"angle_deg": 120.0,
-	"num_iters": 1,
+	"num_iters": 7,
 	"rules": {
-		"T": "T[-T][+T]"//not correct, iteration 6 is false
+		"X":"XX",
+		"T": "X[-T][+T]"
 	}
 }
