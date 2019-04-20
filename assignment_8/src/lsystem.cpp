@@ -21,17 +21,10 @@ Provided utilities:
 
 std::string LindenmayerSystemDeterministic::expandSymbol(unsigned char const& sym) {
 	auto map = this->rules;
-	auto searchResult = map.find(sym); // first is the key, second is the value
+	auto charExpansion = map.find(sym); // first is the key, second is the value
 
-	// if no rule found, return char (for +, -, etc) otherwise return rule
-	return searchResult == map.end()? std::string(1, sym) : searchResult->second;
-
-	/*
-	You may find useful:
-		map.find: Iterator to an element with key equivalent to key. If no such element is found, past-the-end (see end()) iterator is returned.
-		http://en.cppreference.com/w/cpp/container/unordered_map/find
-	============================================================
-	*/
+	// if no rule found, return char (for '+', '-', etc) otherwise return rule
+	return charExpansion == map.end()? std::string(1, sym) : charExpansion->second;
 }
 
 std::string LindenmayerSystem::expandOnce(std::string const& symbol_sequence) {
@@ -119,7 +112,7 @@ std::vector<Segment> LindenmayerSystem::draw(std::string const& symbols) {
 			case '[': // new branch, save (position, direction)
 				createNewBranch(&branches, position, direction);
 				break;
-			case ']': // end of branch, restore previous state (position, direction)
+			case ']': // end of branch, restore previous branch's state (position, direction)
 				resolveBranch(&branches, &segmentsToDraw);
 				break;
 			case 'F': // "for F or any other symbol"
@@ -136,15 +129,21 @@ std::vector<Segment> LindenmayerSystem::draw(std::string const& symbols) {
 }
 
 std::string LindenmayerSystemStochastic::expandSymbol(unsigned char const& sym) {
-	/*============================================================
-		TODO 4.1
-		For a given symbol in the sequence, what should it be replaced with after expansion?
-		(stochastic case)
-		The rules are in this->rules, but now these are stochastic rules because this method belongs to the LindenmayerSystemStochastic class, see lsystem.h for details.
-	*/
-	return {char(sym)};
+	auto map = this->rules;
+	auto rulesForChar = map.find(sym); // first is the key [char], second is the value [vector<StochasticRule>]
 
-	//============================================================
+
+	double randomNb = dice.roll();
+	double probability = 0;
+
+	for(size_t i=0; rulesForChar != map.end() && i<rulesForChar->second.size(); i++){ // if rulesForChar == map.end() -> do not loop because there is nothing to loop on
+		auto rule = rulesForChar->second[i];
+		probability+= rule.probability;
+		if(randomNb <= probability)
+			return rule.expansion;
+	}
+
+	return std::string(1, sym); // no rule found, return char itself (eg for '+', '-', etc)
 }
 
 void LindenmayerSystemDeterministic::addRuleDeterministic(unsigned char sym, std::string const& expansion) {
