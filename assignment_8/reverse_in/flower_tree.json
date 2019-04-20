@@ -1,0 +1,10 @@
+{
+	"name": "flower_tree",
+	"stochastic": false,
+	"initial": "T",
+	"angle_deg": 120.0,
+	"num_iters": 1,
+	"rules": {
+		"T": "T[-T][+T]"//not correct, iteration 6 is false
+	}
+}
