@@ -50,16 +50,89 @@ std::string LindenmayerSystem::expand(std::string const& initial, uint32_t num_i
 	return result;
 }
 
-std::vector<Segment> LindenmayerSystem::draw(std::string const& symbols) {
-	/*============================================================
-		TODO 2.1
-		Build line segments according to the sequence of symbols
-		The initial position is (0, 0) and the initial direction is "up" (0, 1)
-		Segment is std::pair<vec2, vec2>
-	*/
-	return {};
+#define ANGLE this->rotation_angle_deg*M_PI/180 // in radians
+
+void createNewBranch(std::stack<std::vector<Segment>>* branches, vec2 initialPosition, vec2 initialDirection){
+	std::vector<Segment> newBranch;
+	newBranch.push_back(Segment(initialPosition, initialDirection));
+	branches->push(newBranch);
+}
+
+void resolveBranch(std::stack<std::vector<Segment>>* branches, std::vector<Segment>* segmentsToDraw){
+	std::vector<Segment> branchToResolve = branches->top();
 	
-	//============================================================
+	// copy all segments except the first one which is the initial pair (position, direction) for the branch
+	for(size_t i=1; i<branchToResolve.size(); i++){
+		segmentsToDraw->push_back(branchToResolve[i]);
+	}
+
+	// remove and delete elements of resolved branch
+	branches->pop();
+}
+
+void changeAngle(double angle, std::vector<Segment>* currentBranch){
+	vec2 position = currentBranch->begin()->first;
+	vec2 direction = currentBranch->begin()->second;
+	double x = direction.x;
+	double y = direction.y;
+	double sin_ = std::sin(angle);
+	double cos_ = std::cos(angle);
+
+	// Rotating a 2d vector by applying the Rotation matrix: https://en.wikipedia.org/wiki/Rotation_matrix
+	vec2 newDirection = vec2(x*cos_-y*sin_, x*sin_ + y*cos_);
+
+	// update the info for the branch
+	currentBranch->at(0) = Segment(position, newDirection);
+}
+
+void addSegment(vec2 origin, vec2 destination, std::vector<Segment>* currentBranch){
+	vec2 direction = currentBranch->begin()->second;
+
+	// Add segment to branch
+	currentBranch->push_back(Segment(origin, destination));
+
+	// Update position vector
+	currentBranch->at(0) = Segment(destination, direction);
+}
+
+
+std::vector<Segment> LindenmayerSystem::draw(std::string const& symbols) {
+	std::vector<Segment> segmentsToDraw;
+	std::stack<std::vector<Segment>> branches;
+	// the first element of each branch is the pair (position, direction) after that, we have the segments that compose it
+
+	// create first branch with intitial position(0,0) and initial direction(0, 1)
+	createNewBranch(&branches, vec2(0,0), vec2(0,1));
+
+	for(size_t i=0; i<symbols.size(); i++){
+		std::vector<Segment>* currentBranch = &(branches.top());
+		vec2 position = currentBranch->begin()->first;
+		vec2 direction = currentBranch->begin()->second;
+
+		switch(symbols[i]){
+			case '+': // rotate direction by δ counter-clockwise
+				changeAngle(ANGLE, currentBranch);
+				break;
+			case '-': // rotate direction by δ clockwise
+				changeAngle(-ANGLE, currentBranch);
+				break;
+			case '[': // new branch, save (position, direction)
+				createNewBranch(&branches, position, direction);
+				break;
+			case ']': // end of branch, restore previous state (position, direction)
+				resolveBranch(&branches, &segmentsToDraw);
+				break;
+			case 'F': // "for F or any other symbol"
+			default: // draw line of length 1 (according to direction)
+				addSegment(position, position + direction, currentBranch);
+				break;
+		}
+	}
+
+	// resolve initial branch
+	resolveBranch(&branches, &segmentsToDraw);
+
+	return segmentsToDraw;
 }
 
 std::string LindenmayerSystemStochastic::expandSymbol(unsigned char const& sym) {
