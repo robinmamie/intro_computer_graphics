@@ -57,7 +57,7 @@ We would prefer to specify at the beginning of each week on what which team memb
 
 ## Week 4:
 ### Add shadows created by clouds and/or multiple light sources
-- Markus: Shadow
+- Markus: Shadows
 - Robin: Volumetric clouds
 - Charline: Join Shadows or Clouds according to difficulty
 
