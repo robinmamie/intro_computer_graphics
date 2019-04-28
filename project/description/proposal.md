@@ -40,24 +40,24 @@ There should be a fixed rendering distance beyond which the world is not generat
 
 We would prefer to specify at the beginning of each week on what which team member will work. But we were thinking about the following general schedule:
 
-## Week 1:
+## Week 1
 ### Perlin noise function, mesh generation for the terrain and realistic textures
 - Markus, Robin & Charline: Complete assignment 9, i.e. Perlin noise function : mesh generation
 - Markus: Find different textures and link them to the project to be able to load and use them
 - Robin & Charline: Create different biomes with the realistic textures
 
-## Week 2:
+## Week 2
 ### Screen-space reflection and refraction to the water
 - Markus: Reflection and screen-space reflection
 - Robin & Charline: Refraction
 
-## Week 3:
+## Week 3
 ### Add phong lighting model (ambient, diffuse, specular)
 - Markus: Ambient & diffuse
 - Robin: Specular
 - Charline: Begin with volumetric clouds
 
-## Week 4:
+## Week 4
 ### Add shadows created by clouds and/or multiple light sources and/or GPU utilization for optimization
 - Markus: Shadows
 - Robin: Volumetric clouds
