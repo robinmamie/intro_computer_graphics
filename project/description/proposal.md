@@ -16,6 +16,7 @@ Voir: https://lgg.epfl.ch/teaching/ICG2019/icg_lectures/2019_project_instruction
 
 A movable camera (with arrow keys) that allows to move around the world that is generated procedurally and resembles a mountain-like landscape.
 As a minimal requirement, no textures will be applied on the landscape but colours according to the altitude.
+We will implement screen-space reflections to the water in our procedurally generated terrain
 
 ## Optional extensions
 
@@ -27,7 +28,7 @@ As a minimal requirement, no textures will be applied on the landscape but colou
 
 - Virtual clouds which create shadows on the ground; no volumetric clouds, simply a monoscale texture that blocks or lets light through.
 
-<p align="center"> ![Something light this](images/clouds.jpg){width="300px"} </p>
+<p align="center"> ![Something like this](images/clouds.jpg){width="300px"} </p>
 
 - Multiple light sources: the sun high above and maybe some smaller and less intense light sources on the map itself.
 
