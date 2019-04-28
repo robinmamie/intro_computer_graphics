@@ -47,13 +47,13 @@ We would prefer to specify at the beginning of each week on what which team memb
 ## Week 2:
 ### Screen-space reflection and refraction to the water
 - Markus: Reflection and screen-space reflection
-- Robin & Charline: refraction
+- Robin & Charline: Refraction
 
 ## Week 3:
 ### Add phong lighting model (ambient, diffuse, specular)
 - Markus: Ambient & diffuse
 - Robin: Specular
-- Charline: begin with volumetric clouds
+- Charline: Begin with volumetric clouds
 
 ## Week 4:
 ### Add shadows created by clouds and/or multiple light sources
