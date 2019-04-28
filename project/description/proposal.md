@@ -29,6 +29,8 @@ As a minimal requirement, textures will be applied according to altitude as well
 
 <p align="center"> ![Example of additional lights (the lamps)](images/light.jpg){width="300px"} </p>
 
+- Exploit the GPU to render the scene, not only the CPU, for better performances
+
 ## Expected results
 
 We want to be able to freely move the camera around the world in order to explore it. We should be able to see the different biomes of the mountains and the different lighting effects (reflection, refraction, clouds, shadows, specular, etc) depending on which optional extensions we will be required to implement.
@@ -56,10 +58,10 @@ We would prefer to specify at the beginning of each week on what which team memb
 - Charline: Begin with volumetric clouds
 
 ## Week 4:
-### Add shadows created by clouds and/or multiple light sources
+### Add shadows created by clouds and/or multiple light sources and/or GPU utilization for optimization
 - Markus: Shadows
 - Robin: Volumetric clouds
-- Charline: Join Shadows or Clouds according to difficulty
+- Charline: Join Shadows or Clouds according to difficulty and/or do another bonus, such as multiple light sources and/or GPU utilization.
 
 # Resources
 
