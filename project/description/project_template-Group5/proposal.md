@@ -15,55 +15,55 @@ Voir: https://lgg.epfl.ch/teaching/ICG2019/icg_lectures/2019_project_instruction
 ## Minimal requirements
 
 A movable camera (with arrow keys) that allows to move around the world that is generated procedurally and resembles a mountain-like landscape.
-As a minimal requirement, no textures will be applied on the landscape but colours according to the altitude.
+As a minimal requirement, textures will be applied according to altitude as well as screen-space reflection and refraction to the water in our procedurally generated terrain.
 
 ## Optional extensions
 
-- Replace colours according to altitude with more realistic textures
-
 - More complex lighting model (Phong)
 
-- Water with reflections (or only specular component) on it
+- Volumetric clouds which create shadows on the ground
 
-- Virtual clouds which create shadows on the ground; no volumetric clouds, simply a monoscale texture that blocks or lets light through.
-
-<p align="center"> ![Something light this](images/clouds.jpg){width="300px"} </p>
+<p align="center"> ![Something like this](images/clouds.jpg){width="300px"} </p>
 
 - Multiple light sources: the sun high above and maybe some smaller and less intense light sources on the map itself.
 
 <p align="center"> ![Example of additional lights (the lamps)](images/light.jpg){width="300px"} </p>
 
+- Exploit the GPU to render the scene, not only the CPU, for better performances
+
+- Add a blue wonderful sky
+
 ## Expected results
 
-We want to be able to freely move the camera around the world in order to explore it. We should be able to see the different biomes of the mountains and the different lighting effects (reflections, shadows, specular, etc) depending on which optional extensions we will be required to implement.
+We want to be able to freely move the camera around the world in order to explore it. We should be able to see the different biomes of the mountains and the different lighting effects (reflection, refraction, clouds, shadows, specular, etc) depending on which optional extensions we will be required to implement.
 There should be a fixed rendering distance beyond which the world is not generated. When moving, the new parts of the world should be generated on the fly.
 
 # Schedule
 
 We would prefer to specify at the beginning of each week on what which team member will work. But we were thinking about the following general schedule:
 
-## Week 1:
-### Perlin noise function, mesh generation for the terrain and colors applied according to altitude
-- Markus: Study & implement Perlin noise function
-- Robin: Render moutain & limit rendering to a certain distance
-- Charline: Colour mountains according to altitude
-
-## Week 2:
-### Create different biomes (water, ice, rock, etc) and map textures
+## Week 1
+### Perlin noise function, mesh generation for the terrain and realistic textures
+- Markus, Robin & Charline: Complete assignment 9, i.e. Perlin noise function : mesh generation
 - Markus: Find different textures and link them to the project to be able to load and use them
-- Robin & Charline: Create different biomes
+- Robin & Charline: Create different biomes with the realistic textures
 
-## Week 3:
+## Week 2
+### Screen-space reflection and refraction to the water
+- Markus: Reflection and screen-space reflection
+- Robin & Charline: Refraction
+
+## Week 3
 ### Add phong lighting model (ambient, diffuse, specular)
-- Markus: Ambient
-- Robin: Diffuse
-- Charline: Specular
+- Markus: Ambient & diffuse
+- Robin: Specular
+- Charline: Begin with volumetric clouds
 
-## Week 4:
-### Add shadows created by clouds and/or multiple light sources
-- Markus: Shadow
-- Robin: Clouds
-- Charline: Join Shadows or Clouds according to difficulty
+## Week 4
+### Add shadows created by clouds and/or multiple light sources and/or GPU utilization for optimization
+- Markus: Shadows
+- Robin: Volumetric clouds
+- Charline: Join Shadows or Clouds according to difficulty and/or do another bonus, such as multiple light sources and/or GPU utilization and/or sky.
 
 # Resources
 
