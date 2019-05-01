@@ -29,15 +29,15 @@ void main()
 	float height = v2f_height;
     vec3 N = normalize(v2f_normal) * -sign(dot(v2f_normal, v2f_ec_vertex));
 
-    vec3 material = height < terrain_water_level
+    vec3 material = height <= terrain_water_level
                         ? terrain_color_water
                         : mix(terrain_color_grass,
                             terrain_color_mountain,
-                            height - terrain_water_level);
-	float shininess = height < terrain_water_level ? 8.0f : 0.5f;
+                            (height - terrain_water_level) * 2);
+	float shininess = height <= terrain_water_level ? 8.0f : 0.5f;
 
     // Ambient
-    vec3 color = vec3(0.0,0.0,0.0);
+    vec3 color = vec3(0.2);
 
     vec3 light = normalize(light_position - v2f_ec_vertex);
     float dot_nl = dot(N, light);
@@ -46,7 +46,7 @@ void main()
         // Diffuse
         color += dot_nl;
 
-        vec3 r = -reflect(light, N);
+        vec3 r = reflect(-light, N);
         float dot_rv = dot(r, normalize(-v2f_ec_vertex));
 
         if (dot_rv > 0.0) {
@@ -55,6 +55,7 @@ void main()
         }
     }
 
-    color *= sunlight * material;
+    color *= material * sunlight;
+
 	f_color = vec4(color, 1.0);
 }
