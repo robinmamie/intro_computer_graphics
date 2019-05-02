@@ -55,15 +55,17 @@ void main()
     vec3 color = vec3(0.2);
 
     vec3 N = normalize(v2f_normal) * -sign(dot(v2f_normal, v2f_ec_vertex));
-    vec3 light = normalize(light_position - v2f_ec_vertex);
+    vec3 light   = normalize(light_position - v2f_ec_vertex);
     float dot_nl = dot(N, light);
+    vec3 view    = normalize(-v2f_ec_vertex);
+    float dot_vn = dot(view, N);
 
-    if (dot_nl > 0.0) {
+    if (dot_vn > 0.0 && dot_nl > 0.0) {
         // Diffuse
         color += dot_nl;
 
         vec3 r = reflect(-light, N);
-        float dot_rv = dot(r, normalize(-v2f_ec_vertex));
+        float dot_rv = dot(r, view);
 
         if (dot_rv > 0.0) {
             // Specular
