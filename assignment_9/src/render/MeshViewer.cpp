@@ -146,8 +146,7 @@ void MeshViewer::draw_scene(mat4& _projection, mat4& _view)
 	mat4 m_matrix = actor->model_matrix;
 	mat4 mv_matrix  = _view * m_matrix;
 	mat4 mvp_matrix = _projection * mv_matrix;
-	// \todo Construct the matrix for transforming normals into eye coordinates
-	//       You can paste in your solution from assignment 6.
+
 	mat3 n_matrix    = transpose(inverse(mv_matrix));
 
 	phong_shader_.use();

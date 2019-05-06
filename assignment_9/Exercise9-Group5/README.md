@@ -1,14 +1,7 @@
 # Assignment 9
 
-## Perlin Noise in 1D
-
-## Fractional Brownian Motion
-
-## Perlin Noise in 2D
-
-## Textures
-
-## Terrain
+The assignment was made without encountering any problem.
+The instructions were well written and very clear, so we simply had to implement what was instructed.
 
 ## Contributions
 

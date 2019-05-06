@@ -170,7 +170,6 @@ void Mesh::compute_normals()
         v.normal = vec3(0,0,0);
     }
 
-    // \todo Paste your assignment 3 vertex normal computation solution here.
     for (const Triangle t: triangles_)
     {
         double w0, w1, w2;
