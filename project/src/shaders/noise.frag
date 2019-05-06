@@ -47,71 +47,6 @@ const float freq_multiplier = 2.17;
 const float ampl_multiplier = 0.5;
 const int num_octaves = 4;
 
-// ==============================================================
-// 1D Perlin noise evaluation and plotting
-
-float perlin_noise_1d(float x) {
-    float c0     = floor(x);
-    float phi[2];
-    for (int i = 0; i < 2; ++i) {
-        float t    = c0 + i;
-        float grad = gradients[hash_func(vec2(t, 0.0f)) % NUM_GRADIENTS].x;
-        phi[i]     = grad * (x - t);
-    }
-    return mix(phi[0], phi[1], blending_weight_poly(x - c0));
-}
-
-float perlin_fbm_1d(float x) {
-    float fbm = 0.0f;
-    float am  = 1.0f;
-    float fm  = 1.0f;
-    for (int i = 0; i < num_octaves; ++i) {
-        fbm += am * perlin_noise_1d(x * fm);
-        am  *= ampl_multiplier;
-        fm  *= freq_multiplier;
-    }
-	return fbm;
-}
-
-// ----- plotting -----
-
-const vec3 plot_foreground = vec3(0.5, 0.8, 0.5);
-const vec3 plot_background = vec3(0.2, 0.2, 0.2);
-
-vec3 plot_value(float func_value, float coord_within_plot) {
-	return (func_value < ((coord_within_plot - 0.5)*2.0)) ? plot_foreground : plot_background;
-}
-
-vec3 plots(vec2 point) {
-	// Press D (or right arrow) to scroll
-
-	if(point.y < 0 || point.y > 1.0) {
-		return vec3(255, 0, 0);
-	}
-
-	float y_inv = 1-point.y;
-	float y_rel = y_inv / 0.2;
-	int which_plot = int(floor(y_rel));
-	float coord_within_plot = fract(y_rel);
-
-	vec3 result;
-	if(which_plot < 4) {
-		result = plot_value(
- 			perlin_noise_1d(point.x * pow(freq_multiplier, which_plot)),
-			coord_within_plot
-		);
-	} else {
-		result = plot_value(
-			perlin_fbm_1d(point.x) * 1.5,
-			coord_within_plot
-		);
-	}
-
-	return result;
-}
-
-// ==============================================================
-// 2D Perlin noise evaluation
 #define N_CORNERS 4
 
 float perlin_noise(vec2 point) {
@@ -136,8 +71,6 @@ float perlin_noise(vec2 point) {
 
 }
 
-// ==============================================================
-// 2D Fractional Brownian Motion
 
 float perlin_fbm(vec2 point) {
     float fbm = 0.0f;
@@ -149,61 +82,5 @@ float perlin_fbm(vec2 point) {
         fm  *= freq_multiplier;
     }
 	return fbm;
-}
-
-// ==============================================================
-// 2D turbulence
-
-float turbulence(vec2 point) {
-    float fbm = 0.0f;
-    float am  = 1.0f;
-    float fm  = 1.0f;
-    for (int i = 0; i < num_octaves; ++i) {
-        fbm += am * abs(perlin_noise(point * fm));
-        am  *= ampl_multiplier;
-        fm  *= freq_multiplier;
-    }
-	return fbm;
-}
-
-// ==============================================================
-// Procedural "map" texture
-
-const float terrain_water_level = -0.075;
-const vec3 terrain_color_water = vec3(0.29, 0.51, 0.62);
-const vec3 terrain_color_grass = vec3(0.43, 0.53, 0.23);
-const vec3 terrain_color_mountain = vec3(0.8, 0.7, 0.7);
-
-vec3 tex_map(vec2 point) {
-    float s = perlin_fbm(point);
-    return s < terrain_water_level
-            ? terrain_color_water
-            : mix(terrain_color_grass,
-                  terrain_color_mountain,
-                  s - terrain_water_level);
-}
-
-// ==============================================================
-// Procedural "wood" texture
-
-const vec3 brown_dark 	= vec3(0.48, 0.29, 0.00);
-const vec3 brown_light 	= vec3(0.90, 0.82, 0.62);
-
-vec3 tex_wood(vec2 point) {
-    float t    = turbulence(point);
-    float alph = (1.0f + sin(100.0f * (length(point) + 0.15f*t))) / 2.0f;
-    return mix(brown_dark, brown_light, alph);
-}
-
-
-// ==============================================================
-// Procedural "marble" texture
-
-const vec3 white 			= vec3(0.95, 0.95, 0.95);
-
-vec3 tex_marble(vec2 point) {
-    vec2  q    = vec2(perlin_fbm(point), perlin_fbm(point + vec2(1.7f, 4.6f)));
-    float alph = (1.0f + perlin_fbm(point + 4 * q)) / 2.0f;
-	return mix(white, brown_dark, alph);
 }
 
