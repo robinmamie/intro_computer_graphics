@@ -77,10 +77,30 @@ float perlin_fbm(vec2 point) {
     float am  = 1.0f;
     float fm  = 1.0f;
     for (int i = 0; i < num_octaves; ++i) {
-        fbm += am * perlin_noise(point * fm);
+        fbm += am * perlin_noise(1.25*point * fm);
         am  *= ampl_multiplier;
         fm  *= freq_multiplier;
     }
 	return fbm;
+}
+
+// constants for water
+const float freq_multiplier_water = 11;
+const float ampl_multiplier_water = 0.3;
+
+float perlin_water(vec2 point) {
+    float water = 0.0f;
+    float am  = 0.05f;
+    float fm  = 0.5f;
+    for (int i = 0; i < num_octaves; ++i) {
+        water += am * perlin_noise(point * fm);
+        am  *= ampl_multiplier_water;
+        fm  *= freq_multiplier_water;
+    }
+
+    while(water>0.05){
+        water = 0.25*water;
+    }
+	return water;
 }
 
