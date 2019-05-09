@@ -112,6 +112,7 @@ void MeshViewer::initialize()
 
 	// setup shaders
 	phong_shader_.load(SHADER_PATH "/terrain.vert", SHADER_PATH "/terrain.frag");
+	reflection_shader_.load(SHADER_PATH "/reflection.vert", SHADER_PATH "/reflection.frag");
 }
 //-----------------------------------------------------------------------------
 
@@ -158,6 +159,13 @@ void MeshViewer::draw_scene(mat4& _projection, mat4& _view)
 	actor->draw();
 
 	phong_shader_.disable();
+
+	reflection_shader_.use();
+	reflection_shader_.set_uniform();
+
+	actor->draw();
+	reflection_shader_.disable();
+
 
 	// check for OpenGL errors
 	glCheckError("MeshViewer::draw_scene");

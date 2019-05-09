@@ -48,6 +48,8 @@ protected:
 private:
 	Shader phong_shader_;
 
+	Shader reflection_shader_;
+
 	/// the field of view for the camera
 	float fovy_;
 	/// the near plane for the virtual camera

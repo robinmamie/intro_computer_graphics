@@ -64,8 +64,8 @@ private:
 
 	/// current viewport dimension
 	uint32_t  width_, height_;
-	
-	// movement
+
+    // movement
 	bool should_redraw;
 
 	vec2 viewer_position;

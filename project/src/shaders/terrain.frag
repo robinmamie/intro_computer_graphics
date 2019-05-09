@@ -20,7 +20,6 @@ out vec4 f_color;
 const vec3  sunlight = vec3(1.0, 0.941, 0.898);
 // Small perturbation to prevent "z-fighting" on the water on some machines...
 const float terrain_water_level    = -0.03125 + 1e-6;
-const vec3  terrain_color_water    = vec3(0.29, 0.51, 0.62);
 const vec3  terrain_color_mountain = vec3(0.8, 0.5, 0.4);
 const vec3  terrain_color_grass    = vec3(0.33, 0.43, 0.18);
 
@@ -28,12 +27,15 @@ void main()
 {
 	float height = v2f_height;
 
-    vec3 material = height <= terrain_water_level
-                        ? terrain_color_water
-                        : mix(terrain_color_grass,
-                            terrain_color_mountain,
-                            (height - terrain_water_level) * 2);
-	float shininess = height <= terrain_water_level ? 8.0f : 0.5f;
+	if (height <= terrain_water_level) {
+		f_color = vec4(1.0);
+		return;
+	}
+
+    vec3 material = mix(terrain_color_grass,
+                        terrain_color_mountain,
+                        (height - terrain_water_level) * 2);
+	float shininess = 0.5f;
 
     // Ambient
     vec3 color = vec3(0.2);
