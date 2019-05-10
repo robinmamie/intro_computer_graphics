@@ -1,11 +1,51 @@
-#version 400 core
+#version 140
+#extension GL_ARB_explicit_attrib_location : enable
 
-uniform sampler2D gFinalImage;
-uniform sampler2D gPosition;
-uniform sampler2D gNormal;
-uniform sampler2D gExtraComponents;
-uniform sampler2D ColorBuffer;
+uniform sampler2D depth_map;
+uniform sampler2D color_map;
 
+uniform vec3 light_position;
+
+in vec3  v2f_ec_vertex;
+in float v2f_height;
+
+out vec4 f_color;
+
+const float terrain_water_level    = -0.03125 + 1e-6;
+
+
+vec4 reflection() {
+    
+    vec3 ray = normalize(v2f_ec_vertex);
+    
+    // Reflections are only on the water, so the normal is simply up.
+    // TODO add jitter
+    vec3 normal = vec3(0.0f, 1.0f, 0.0);
+    vec3 reflected = reflect(normal, ray);
+    
+    // Use algorithm to go pixel by pixel UNTIL behind or outside screen
+    
+    // If behind -> give color of this point
+    
+    // If outside -> light blue color for the sky
+    
+    
+    
+}
+
+
+void main()
+{
+    float height = v2f_height;
+    
+    f_color = height > terrain_water_level ?
+                texture(color_map, v2f_ec_vertex) :
+                reflection();
+    
+    
+}
+
+/*
 uniform mat4 invView;
 uniform mat4 projection;
 uniform mat4 invprojection;
@@ -181,3 +221,4 @@ vec3 hash(vec3 a)
     a += dot(a, a.yxz + K);
     return fract((a.xxy + a.yxx)*a.zyx);
 }
+*/
