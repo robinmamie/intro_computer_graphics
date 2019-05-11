@@ -110,6 +110,42 @@ void MeshViewer::initialize()
 	glClearColor(1,1,1,0);
 	glEnable(GL_DEPTH_TEST);
 
+    // setup buffers
+    // color
+    glGenTextures(1, &color_);
+    glBindTexture(GL_TEXTURE_2D, color_);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width_, height_, 0,
+                 GL_RGB, GL_FLOAT, NULL);
+    // depth
+    glGenTextures(1, &depth_);
+    glBindTexture(GL_TEXTURE_2D, depth_);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width_, height_, 0,
+                 GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, NULL);
+
+    // frame buffer
+    glGenFramebuffers(1, &frame_buffer_);
+    glBindFramebuffer(GL_FRAMEBUFFER, frame_buffer_);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+                           GL_TEXTURE_2D, color_, 0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
+                           GL_TEXTURE_2D, depth_, 0);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) !=
+            GL_FRAMEBUFFER_COMPLETE) {
+        throw std::runtime_error("ERROR: Framebuffer not complete");
+    }
+
 	// setup shaders
 	phong_shader_.load(SHADER_PATH "/terrain.vert", SHADER_PATH "/terrain.frag");
 	reflection_shader_.load(SHADER_PATH "/reflection.vert", SHADER_PATH "/reflection.frag");
@@ -137,7 +173,7 @@ void MeshViewer::paint()
 
 void MeshViewer::draw_scene(mat4& _projection, mat4& _view)
 {
-	if(!phong_shader_.is_valid()) {
+    if(!phong_shader_.is_valid()) {
 		return;
 	}
 
@@ -150,23 +186,49 @@ void MeshViewer::draw_scene(mat4& _projection, mat4& _view)
 
 	mat3 n_matrix    = transpose(inverse(mv_matrix));
 
+
 	phong_shader_.use();
 	phong_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
 	phong_shader_.set_uniform("modelview_matrix", mv_matrix);
 	phong_shader_.set_uniform("normal_matrix", n_matrix);
 	phong_shader_.set_uniform("light_position", vec3(light));
 
-	actor->draw();
+    glViewport(0, 0, width_, height_);
+    glBindFramebuffer(GL_FRAMEBUFFER, frame_buffer_);
+    const GLenum buffers[] = {GL_COLOR_ATTACHMENT0};
+    glDrawBuffers(1, buffers);
 
-	phong_shader_.disable();
+    glClearColor(100.0f, 100.0f, 100.f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    actor->draw();
+
+    // Render on the screen
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glViewport(0, 0, width_, height_);
+
+    phong_shader_.disable();
 
 	reflection_shader_.use();
-	reflection_shader_.set_uniform();
+    glActiveTexture(GL_RGB);
+    glBindTexture(GL_TEXTURE_2D, color_);
+    glActiveTexture(GL_DEPTH_COMPONENT);
+    glBindTexture(GL_TEXTURE_2D, depth_);
 
+    
+	//reflection_shader_.set_uniform();
 	actor->draw();
 	reflection_shader_.disable();
 
 
 	// check for OpenGL errors
 	glCheckError("MeshViewer::draw_scene");
+}
+
+MeshViewer::~MeshViewer()
+{
+    glDeleteTextures(1, &color_);
+    glDeleteTextures(1, &depth_);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glDeleteFramebuffers(1, &frame_buffer_);
 }

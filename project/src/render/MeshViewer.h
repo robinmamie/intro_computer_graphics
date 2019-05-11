@@ -20,6 +20,7 @@ public:
 	/// \_width the window's width
 	/// \_height the window's height
 	MeshViewer(std::string const& _title = "Mesh Viewer", int _width=1920, int _height=1080);
+    ~MeshViewer();
 
 	void setMesh(std::shared_ptr<Mesh> new_mesh);
 	
@@ -66,7 +67,9 @@ private:
 
 	/// current viewport dimension
 	int  width_, height_;
-	
+
+    GLuint frame_buffer_, color_, depth_;
+
 	std::shared_ptr<Mesh> mesh;
 	std::shared_ptr<StaticMeshActor> actor;
 };
