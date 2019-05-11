@@ -56,6 +56,9 @@ public: //------------------------------------------------------ public methods
 	/// must overload: handle window resizing
 	virtual void resize(int width, int height) = 0;
 
+	// moves the mesh to simulate water movement
+	virtual void update_water(double dt) {}
+
 protected: //----------------------------------- callbacks as member functions
 
 	/// must overload: initialize all OpenGL states

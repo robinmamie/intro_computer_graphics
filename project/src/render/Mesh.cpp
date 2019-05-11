@@ -72,6 +72,65 @@ void Mesh::set(std::vector<vec3> const& new_pts,  std::vector<Face> const& new_f
     m_generate_vao();
 }
 
+#define WAVE_AMOUNT 17
+#define WAVE_SCALING 0.0001
+#define WATER_LEVEL 0
+
+void Mesh::move(double dt){
+    // update vertices
+    time += dt;
+    for(Vertex& v: vertices_){
+        if(v.position.z < WATER_LEVEL){
+            v.position.z -= WAVE_SCALING*std::sin(time + WAVE_AMOUNT*(v.position.x+1)/(v.position.y+1)); // x and y are in [-1, 1] so we remap in order to avoir a division by 0
+            //v.position.z -= WAVE_SCALING*std::sin(5*v.position.x/(v.position.y+1e-6) + time);
+        }
+    }
+
+    // Recompute normals
+    compute_normals();
+
+    // update buffers
+    m_reduced_vao();
+}
+
+// update the buffers of the normals and vertices without recreating them
+void Mesh::m_reduced_vao() {
+    // Pack the vertex coordinates into an array that we can pass to OpenGL
+    const size_t nv = vertices_.size(),
+                 nt = triangles_.size();
+    std::vector<float> coords(nv * 3);
+    for (size_t i = 0; i < nv; ++i) {
+        coords[3 * i + 0] = vertices_[i].position[0];
+        coords[3 * i + 1] = vertices_[i].position[1];
+        coords[3 * i + 2] = vertices_[i].position[2];
+    }
+
+    // Allocate and fill buffer holding mesh vertex coordinates
+    glBindBuffer(GL_ARRAY_BUFFER, bufferObjects[VTX_BUFFER]);
+    glBufferData(GL_ARRAY_BUFFER, // (re)allocate buffer to hold the mesh's vertex positions
+                 sizeof(float) * coords.size(),
+                 coords.data(),
+                 GL_STATIC_DRAW);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(0);
+
+    // Pack the normal components into an array that we can pass to OpenGL
+    for (size_t i = 0; i < nv; ++i) {
+        coords[3 * i + 0] = vertices_[i].normal[0];
+        coords[3 * i + 1] = vertices_[i].normal[1];
+        coords[3 * i + 2] = vertices_[i].normal[2];
+    }
+
+    // Allocate and fill buffer holding mesh vertex normals
+    glBindBuffer(GL_ARRAY_BUFFER, bufferObjects[NORMAL_BUFFER]);
+    glBufferData(GL_ARRAY_BUFFER, // (re)allocate buffer to hold the mesh's vertex positions
+                 sizeof(float) * coords.size(),
+                 coords.data(),
+                 GL_STATIC_DRAW);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(1);
+}
+
 // Copy this mesh's data to the GPU; must be done after OpenGL has been initialized!
 void Mesh::m_generate_vao() {
     clean();

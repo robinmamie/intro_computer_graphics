@@ -131,10 +131,11 @@ int GLFW_window::run(std::function<bool()> func_after_init)
 		while (!glfwWindowShouldClose(window_))
 		{
 			// call timer function
-
 			double dt = glfwGetTime();
 			timer(dt);
 			glfwSetTime(0);
+
+			update_water(dt);
 
 			// draw scene
 			paint();

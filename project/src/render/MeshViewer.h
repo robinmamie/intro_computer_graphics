@@ -22,6 +22,8 @@ public:
 	MeshViewer(std::string const& _title = "Mesh Viewer", int _width=1920, int _height=1080);
 
 	void setMesh(std::shared_ptr<Mesh> new_mesh);
+
+	virtual void update_water(double dt) override;
 	
 protected:
 

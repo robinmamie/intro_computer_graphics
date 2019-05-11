@@ -67,6 +67,8 @@ public:
 
     void set(std::vector<vec3> const& new_pts,  std::vector<Face> const& new_faces);
 
+    void move(double dt);
+
     void clean() {
         for (GLuint &b : bufferObjects) {
             if(b) glDeleteBuffers(1, &b);
@@ -102,12 +104,14 @@ public:
 
 private:
     // OpenGL buffers
+    double time = 0;
     enum { VTX_BUFFER = 0, NORMAL_BUFFER = 1, INDEX_BUFFER = 2 };
     GLuint vao = 0;
     size_t n_indices;
     std::array<GLuint, 3> bufferObjects{{0, 0, 0}};
 
     void m_generate_vao();
+    void m_reduced_vao();
 
 public:
     /// Read mesh from an OFF file

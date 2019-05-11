@@ -36,6 +36,10 @@ void MeshViewer::setMesh(std::shared_ptr<Mesh> new_mesh)
 	actor->mesh = new_mesh;
 }
 
+void MeshViewer::update_water(double dt){
+	actor->mesh->move(dt);
+}
+
 //-----------------------------------------------------------------------------
 
 void MeshViewer::scroll_wheel(double xoffset, double yoffset)

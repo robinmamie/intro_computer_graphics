@@ -30,7 +30,7 @@ Array2D<float> calculate_fbm(std::pair<size_t, size_t> const& size) {
 }
 
 Array2D<float> calculate_water(std::pair<size_t, size_t> const& size) {
-	ShaderViewer shvi("fBm", size.first, size.second);
+	ShaderViewer shvi("water", size.first, size.second);
 	std::vector<std::string>  vtxShaders = { SHADER_PATH "/display.vert" };
 	std::vector<std::string> fragShaders = { SHADER_PATH "/noise.frag",
 											 SHADER_PATH "/display_water.frag" };
