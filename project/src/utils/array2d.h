@@ -71,7 +71,6 @@ public:
 		}
 		return *this;
 	}
-	
 
 private:
 	size2d shape;
