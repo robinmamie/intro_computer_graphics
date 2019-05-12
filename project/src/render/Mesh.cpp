@@ -79,12 +79,11 @@ void Mesh::set(std::vector<vec3> const& new_pts,  std::vector<Face> const& new_f
 void Mesh::move(double dt){
     // update vertices
     time += dt;
-    for(Vertex& v: vertices_){
-        if(v.position.z < WATER_LEVEL){
-            v.position.z -= WAVE_SCALING*std::sin(time + WAVE_AMOUNT*(v.position.x+1)/(v.position.y+1)); // x and y are in [-1, 1] so we remap in order to avoir a division by 0
-            //v.position.z -= WAVE_SCALING*std::sin(5*v.position.x/(v.position.y+1e-6) + time);
-        }
-    }
+	for(int x = 0; x <96; ++x){
+		for(int y = 0; y< 96; ++y){
+			//water_values.storage[96*x + y] = water_values.storage[(96*(x+1) + y+1) % 96];
+        }	
+		}
 
     // Recompute normals
     compute_normals();

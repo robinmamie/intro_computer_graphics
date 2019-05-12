@@ -73,8 +73,7 @@ std::shared_ptr<Mesh> build_terrain_mesh(Array2D<float> const& height_map, Array
             float x = gx / (float) grid_size.first  - 0.5f;
             float y = gy / (float) grid_size.second - 0.5f;
             float z = height_map(gx, gy);
-            z = z < WATER_LEVEL ? WATER_LEVEL-water_map(gx, gy) : z;
-
+            z = z < WATER_LEVEL ? WATER_LEVEL - water_map(gx, gy) : z;
 			vertices[idx] = vec3(x, y, z);
 		}
 	}
@@ -109,6 +108,7 @@ int main(int arg_count, char *arg_values[]) {
 
 	MeshViewer mvi;
 	auto mesh = build_terrain_mesh(fbm_values, water_values);
+	mesh.water_values = water_values;
 
 
 	mesh->print_info();
