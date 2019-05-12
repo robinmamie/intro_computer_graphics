@@ -72,7 +72,6 @@ public:
 		return *this;
 	}
 	
-	protected:
 	//TODO: NOT GOOD !! SHOULD BE PRIVATE. JUST TO TEST IF MY IDEA WORKS. TEMPORARY.
 	std::vector<T> storage;
 
