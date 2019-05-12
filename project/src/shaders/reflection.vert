@@ -3,11 +3,9 @@
 
 layout (location = 0) in vec4 v_position;
 layout (location = 1) in vec3 v_normal;
-layout (location = 2) in vec2 v_texcoord;
 
 // Vertex shader computes eye-space vertex position and normals + world-space height
 out vec3  v2f_ec_vertex;
-out vec2  v2f_texcoord;
 out vec3  v2f_normal;
 out float v2f_height;
 
@@ -19,8 +17,6 @@ void main()
 {
     // vertex & light in eye coordinates
     v2f_ec_vertex = (modelview_matrix * v_position).xyz;
-
-    v2f_texcoord  = v_texcoord;
 
     // transform normal to eye coordinates, pass to fragment shader
     v2f_normal = normal_matrix * v_normal;

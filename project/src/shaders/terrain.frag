@@ -9,6 +9,7 @@
 
 #version 140
 #extension GL_ARB_explicit_attrib_location : enable
+#extension GL_ARB_enhanced_layouts : enable
 
 uniform vec3 light_position; // Eye-space light position
 
@@ -64,6 +65,6 @@ void main()
 
     color *= material * sunlight;
 
-	f_color = vec4(color, 1.0);
+	f_color = vec4(color, 1.0f);
     f_depth = length(v2f_ec_vertex);
 }

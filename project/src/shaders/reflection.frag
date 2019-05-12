@@ -2,7 +2,6 @@
 #extension GL_ARB_explicit_attrib_location : enable
 
 in vec3  v2f_ec_vertex;
-in vec2  v2f_texcoord;
 in vec3  v2f_normal;
 in float v2f_height;
 
@@ -10,6 +9,7 @@ out vec4 f_color;
 
 uniform sampler2D color_map;
 uniform sampler2D depth_map;
+uniform vec2 resolution;
 
 const float terrain_water_level = -0.03125 + 1e-6;
 
@@ -24,7 +24,7 @@ float intersection(vec3 a, vec3 b, vec3 a_dir, vec3 b_dir)
             (a_dir.y * b_dir.x - a_dir.x * b_dir.y);
 }
 
-vec4 reflection()
+vec4 reflection(vec2 position)
 {
     vec2 screen_size          = textureSize(color_map, 0);
     float width               = screen_size.x;
@@ -42,8 +42,8 @@ vec4 reflection()
     vec3 t_max = t_del * 0.5f;
     vec3 average;
 
-    int pixel_x = int(v2f_texcoord.x);
-    int pixel_y = int(v2f_texcoord.y);
+    int pixel_x = int(position.x);
+    int pixel_y = int(position.y);
     int step_x  = reflected.x > 0 ? 1 : -1;
     int step_y  = reflected.y > 0 ? 1 : -1;
     float depth_travelled;
@@ -65,8 +65,8 @@ vec4 reflection()
         average = reflected * (t1 + t2) * 0.5f;
         t1 = t2;
 
-        float u = (v2f_texcoord.x + 0.5f + average.x) / width - 0.5f;
-        float v = (v2f_texcoord.y + 0.5f + average.y) / height - 0.5f;
+        float u = (position.x + 0.5f + average.x) / width - 0.5f;
+        float v = (position.y + 0.5f + average.y) / height - 0.5f;
         vec3 cam_ray = vec3(u, v * aspect, -ratio);
 
         float depth_travelled = intersection(v2f_ec_vertex, vec3(0.0f), reflected, cam_ray);
@@ -92,10 +92,10 @@ vec4 reflection()
 void main()
 {
     float height = v2f_height;
-
+    vec2 position = ( gl_FragCoord.xy / resolution.xy );
     f_color = height > terrain_water_level ?
-                texture(color_map, v2f_texcoord) :
-                reflection();
+                texture(color_map, position) :
+                reflection(position);
 
 }
 
