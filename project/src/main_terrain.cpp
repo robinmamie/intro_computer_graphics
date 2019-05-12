@@ -108,7 +108,7 @@ int main(int arg_count, char *arg_values[]) {
 
 	MeshViewer mvi;
 	auto mesh = build_terrain_mesh(fbm_values, water_values);
-	mesh.water_values = water_values;
+	mesh->water_values = &water_values;
 
 
 	mesh->print_info();

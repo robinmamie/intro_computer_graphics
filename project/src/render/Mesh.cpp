@@ -81,7 +81,8 @@ void Mesh::move(double dt){
     time += dt;
 	for(int x = 0; x <96; ++x){
 		for(int y = 0; y< 96; ++y){
-			//water_values.storage[96*x + y] = water_values.storage[(96*(x+1) + y+1) % 96];
+            if (vertices_[x*96+y].position.z < WATER_LEVEL)
+			    vertices_[x*96+y].position.z = (*water_values)(((size_t)(x+10*time))%96, ((size_t)(y+10*time))%96);
         }	
 		}
 

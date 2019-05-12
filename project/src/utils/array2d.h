@@ -72,12 +72,10 @@ public:
 		return *this;
 	}
 	
-	protected:
-	//TODO: NOT GOOD !! SHOULD BE PRIVATE. JUST TO TEST IF MY IDEA WORKS. TEMPORARY.
-	std::vector<T> storage;
 
 private:
 	size2d shape;
+	std::vector<T> storage;
 
 
 	inline size_t index(size_t const row, size_t const col) const {

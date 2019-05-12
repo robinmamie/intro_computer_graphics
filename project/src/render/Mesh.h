@@ -20,7 +20,7 @@
 #include <limits>
 #include "gl.h"
 #include "../utils/vec.h"
-#include "../render/ShaderViewer.h"
+#include "../utils/array2d.h"
 
 
 //== CLASS DEFINITION =========================================================
@@ -105,9 +105,6 @@ public:
     ~Mesh() { clean(); }
 
 private:
-	//water values that allows to shift the perlin water
-	Array2D<float> water_values;
-
     // OpenGL buffers
     double time = 0;
     enum { VTX_BUFFER = 0, NORMAL_BUFFER = 1, INDEX_BUFFER = 2 };
@@ -119,6 +116,9 @@ private:
     void m_reduced_vao();
 
 public:
+    //water values that allows to shift the perlin water
+	Array2D<float>* water_values = nullptr;
+
     /// Read mesh from an OFF file
     void read(const std::string &_filename);
 
