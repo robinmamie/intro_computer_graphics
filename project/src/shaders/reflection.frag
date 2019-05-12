@@ -10,12 +10,15 @@ out vec4 f_color;
 uniform sampler2D color_map;
 uniform sampler2D depth_map;
 uniform vec2 resolution;
+uniform float focal_length;
 
 const float terrain_water_level = -0.03125 + 1e-6;
+const vec4 sky_color = vec4(0.8f, 1.0f, 1.0f, 1.0f);
+const vec3 camera_view = vec3(0.0f, 0.0f, -1.0f);
 
-bool is_inside_screen(vec2 screen_size, int x, int y) {
-    return 0 <= x && x < screen_size.x
-        && 0 <= y && y < screen_size.y;
+bool is_inside_screen(int x, int y) {
+    return 0 <= x && x < resolution.x
+        && 0 <= y && y < resolution.y;
 }
 
 float intersection(vec3 a, vec3 b, vec3 a_dir, vec3 b_dir)
@@ -26,16 +29,14 @@ float intersection(vec3 a, vec3 b, vec3 a_dir, vec3 b_dir)
 
 vec4 reflection(vec2 position)
 {
-    vec2 screen_size          = textureSize(color_map, 0);
-    float width               = screen_size.x;
-    float height              = screen_size.y;
+    float width               = resolution.x;
+    float height              = resolution.y;
     float aspect              = width / height;
-    float ratio               = height / width; // FIXME is that right??
 
     vec3 ray = normalize(v2f_ec_vertex);
-
     vec3 normal = normalize(v2f_normal) * -sign(dot(v2f_normal, v2f_ec_vertex));
     vec3 reflected = reflect(normal, ray);
+
 
     // Use algorithm to go pixel by pixel UNTIL behind or outside screen.
     vec3 t_del = abs(1.0f / reflected);
@@ -67,21 +68,20 @@ vec4 reflection(vec2 position)
 
         float u = (position.x + 0.5f + average.x) / width - 0.5f;
         float v = (position.y + 0.5f + average.y) / height - 0.5f;
-        vec3 cam_ray = vec3(u, v * aspect, -ratio);
+        vec3 cam_ray = vec3(u, v * aspect, -focal_length);
 
         float depth_travelled = intersection(v2f_ec_vertex, vec3(0.0f), reflected, cam_ray);
         ray_depth = v2f_ec_vertex.z + depth_travelled * reflected.z;
 
-        depth = textureLod(depth_map, vec2(pixel_x, pixel_y), 2).z;
+        depth = texture(depth_map, vec2(pixel_x, pixel_y)).r;
 
     // Not sure for 2nd condition, could be reversed?
-    } while (is_inside_screen(screen_size, pixel_x, pixel_y) && (ray_depth < depth));
-
+    } while (is_inside_screen(pixel_x, pixel_y) && (ray_depth >= depth));
 
 
     // If outside -> light blue color for the sky
-    if (!is_inside_screen(screen_size, pixel_x, pixel_y)) {
-        return vec4(0.5f, 1.0f, 1.0f, 1.0f);
+    if (!is_inside_screen(pixel_x, pixel_y)) {
+        return sky_color;
     }
 
     // Otherwise, give color of pixel hit

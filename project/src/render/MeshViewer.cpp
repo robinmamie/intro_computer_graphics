@@ -148,6 +148,7 @@ void MeshViewer::draw_scene(mat4& _projection, mat4& _view)
 
     glClearColor(100.0f, 100.0f, 100.f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glEnable(GL_DEPTH_TEST);
 
     phong_shader_.use();
     phong_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
@@ -170,6 +171,7 @@ void MeshViewer::draw_scene(mat4& _projection, mat4& _view)
     reflection_shader_.set_uniform("modelview_matrix", mv_matrix, true);
     reflection_shader_.set_uniform("normal_matrix", n_matrix, true);
     reflection_shader_.set_uniform("resolution", vec2(width_, height_));
+    reflection_shader_.set_uniform("focal_length", camera_distance);
 
     fb.bind();
 
