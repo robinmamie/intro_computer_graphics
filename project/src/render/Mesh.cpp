@@ -77,30 +77,18 @@ void Mesh::set(std::vector<vec3> const& new_pts,  std::vector<Face> const& new_f
 #define WATER_LEVEL 0
 
 
-#define POSITION_Z vertices_[x*96 + y].position.z
+#define POSITION_Z vertices_[x*96+y].position.z
 #define SPEED 10
 
 void Mesh::move(double dt){
     // update vertices
     time += dt;
-	for(int x = 0; x < 96; ++x){
-		for(int y = 0; y < 96; ++y){
-            if (POSITION_Z < WATER_LEVEL){
-				size_t x_idx = ((size_t)(x - SPEED * time)) % 96;
-				int idx_mod = x_idx % 96;
-				if(idx_mod == 0){
-					POSITION_Z = -(((*water_values)(x_idx + 2, y) +
-									(*water_values)(x_idx - 2, y) +
-									(*water_values)(x_idx + 4, y) +
-									(*water_values)(x_idx - 4, y) +
-									(*water_values)(x_idx + 6, y) +
-									(*water_values)(x_idx - 6, y))/ 6);
-				} else {
-					POSITION_Z = -(*water_values)(x_idx, y);
-				}
-			}	
+	for(int x = 0; x <96; ++x){
+		for(int y = 0; y< 96; ++y){
+            if (POSITION_Z < WATER_LEVEL)
+			    POSITION_Z = -(*water_values)(((size_t)(x-SPEED*time))%96, y);
+        }	
 		}
-	}
 
     // Recompute normals
     compute_normals();
