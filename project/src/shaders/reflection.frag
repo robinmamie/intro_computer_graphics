@@ -1,7 +1,6 @@
 #version 140
 #extension GL_ARB_explicit_attrib_location : enable
 
-
 in vec3  v2f_ec_vertex;
 in vec2  v2f_texcoord;
 in vec3  v2f_normal;

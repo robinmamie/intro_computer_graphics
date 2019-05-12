@@ -12,6 +12,7 @@
 #include <stdlib.h>     /* srand, rand */
 #include <time.h>       /* time */
 #include <array>
+#include "FrameBuffer.h"
 
 //=============================================================================
 
@@ -103,44 +104,6 @@ void MeshViewer::initialize()
     glClearColor(1,1,1,0);
     glEnable(GL_DEPTH_TEST);
 
-    // setup buffers
-    // color
-    // TODO modularize the width/height
-    glGenTextures(1, &color_);
-    glBindTexture(GL_TEXTURE_2D, color_);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1920, 1080, 0,
-                 GL_RGBA, GL_FLOAT, NULL);
-    // depth
-    glGenTextures(1, &depth_);
-    glBindTexture(GL_TEXTURE_2D, depth_);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, 1920, 1080, 0,
-                 GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, NULL);
-
-    // frame buffer
-    glGenFramebuffers(1, &frame_buffer_);
-    glBindFramebuffer(GL_FRAMEBUFFER, frame_buffer_);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
-                           GL_TEXTURE_2D, color_, 0);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
-                           GL_TEXTURE_2D, depth_, 0);
-
-    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) !=
-        GL_FRAMEBUFFER_COMPLETE) {
-        throw std::runtime_error("ERROR: Framebuffer not complete");
-    }
-
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    glBindTexture(GL_TEXTURE_2D, 0);
-
-
     // setup shaders
     phong_shader_.load(SHADER_PATH "/terrain.vert", SHADER_PATH "/terrain.frag");
     reflection_shader_.load(SHADER_PATH "/reflection.vert", SHADER_PATH "/reflection.frag");
@@ -180,9 +143,8 @@ void MeshViewer::draw_scene(mat4& _projection, mat4& _view)
     mat4 mvp_matrix  = _projection * mv_matrix;
     mat3 n_matrix    = transpose(inverse(mv_matrix));
 
-    glBindFramebuffer(GL_FRAMEBUFFER, frame_buffer_);
-    glDrawBuffer(GL_COLOR_ATTACHMENT0);
-    glViewport(0, 0, width_, height_);
+    FrameBuffer fb = FrameBuffer(width_, height_);
+    fb.select_as_render_target();
 
     glClearColor(100.0f, 100.0f, 100.f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -199,24 +161,22 @@ void MeshViewer::draw_scene(mat4& _projection, mat4& _view)
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glViewport(0, 0, width_, height_);
 
-    glActiveTexture(GL_COLOR_ATTACHMENT0);
-    glBindTexture(GL_TEXTURE_2D, color_);
-    glActiveTexture(GL_DEPTH_ATTACHMENT);
-    glBindTexture(GL_TEXTURE_2D, depth_);
+    glClearColor(100.0f, 100.0f, 100.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glEnable(GL_DEPTH_TEST);
 
     reflection_shader_.use();
-    reflection_shader_.set_uniform("color_map", 0);
-    reflection_shader_.set_uniform("depth_map", 1);
-
     reflection_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
     reflection_shader_.set_uniform("modelview_matrix", mv_matrix);
     reflection_shader_.set_uniform("normal_matrix", n_matrix);
 
+    fb.bind();
 
+    reflection_shader_.set_uniform("color_map", 0);
+    reflection_shader_.set_uniform("depth_map", 1);
     actor->draw();
-
     reflection_shader_.disable();
-
+    fb.unbind();
 
     // check for OpenGL errors
     glCheckError("MeshViewer::draw_scene");
