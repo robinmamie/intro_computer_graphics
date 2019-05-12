@@ -76,13 +76,17 @@ void Mesh::set(std::vector<vec3> const& new_pts,  std::vector<Face> const& new_f
 #define WAVE_SCALING 0.0001
 #define WATER_LEVEL 0
 
+
+#define POSITION_Z vertices_[x*96+y].position.z
+#define SPEED 10
+
 void Mesh::move(double dt){
     // update vertices
     time += dt;
 	for(int x = 0; x <96; ++x){
 		for(int y = 0; y< 96; ++y){
-            if (vertices_[x*96+y].position.z < WATER_LEVEL)
-			    vertices_[x*96+y].position.z = -(*water_values)(((size_t)(x+10*time))%96, ((size_t)(y+10*time))%96);
+            if (POSITION_Z < WATER_LEVEL)
+			    POSITION_Z = -(*water_values)(((size_t)(x+SPEED*time))%96, ((size_t)(y+SPEED*time))%96);
         }	
 		}
 
