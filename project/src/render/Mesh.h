@@ -20,6 +20,8 @@
 #include <limits>
 #include "gl.h"
 #include "../utils/vec.h"
+#include "../utils/array2d.h"
+
 
 //== CLASS DEFINITION =========================================================
 
@@ -114,6 +116,9 @@ private:
     void m_reduced_vao();
 
 public:
+    //water values that allows to shift the perlin water
+	Array2D<float>* water_values = nullptr;
+
     /// Read mesh from an OFF file
     void read(const std::string &_filename);
 

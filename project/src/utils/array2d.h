@@ -76,6 +76,7 @@ private:
 	size2d shape;
 	std::vector<T> storage;
 
+
 	inline size_t index(size_t const row, size_t const col) const {
 		return row + col * shape.first;
 	}
