@@ -20,7 +20,7 @@
 #include <limits>
 #include "gl.h"
 #include "../utils/vec.h"
-#include "../render/ShaderViewer.h"
+#include "../utils/array2d.h"
 
 
 //== CLASS DEFINITION =========================================================
