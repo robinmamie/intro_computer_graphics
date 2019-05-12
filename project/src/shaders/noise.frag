@@ -90,7 +90,7 @@ const float ampl_multiplier_water = 0.3;
 
 float perlin_water(vec2 point) {
     float water = 0.0f;
-    float am  = 0.03f;
+    float am  = 0.04f;
     float fm  = 0.5f;
     for (int i = 0; i < num_octaves; ++i) {
         water += am * perlin_noise(point * fm);
@@ -98,8 +98,8 @@ float perlin_water(vec2 point) {
         fm  *= freq_multiplier_water;
     }
 
-    while(water>0.05){
-        water = 0.25*water;
+    while(water > 0.5){
+        water = 0.25 * water;
     }
 	return water;
 }
