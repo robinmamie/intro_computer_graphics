@@ -17,76 +17,69 @@
 
 
 MeshViewer::MeshViewer(std::string const& _title, int _width, int _height)
-	: GLFW_window(_title.c_str(), _width, _height)
-	, fovy_(90)
-	, near_(0.01)
-	, far_(1024)
-	, x_angle_(50)
-	, z_angle_(180)
-	, camera_distance(0.85)
-	, mesh(new Mesh)
-	, actor(new StaticMeshActor(mesh))
+    : GLFW_window(_title.c_str(), _width, _height)
+    , fovy_(90)
+    , near_(0.01)
+    , far_(1024)
+    , x_angle_(50)
+    , z_angle_(180)
+    , camera_distance(0.85)
+    , mesh(new Mesh)
+    , actor(new StaticMeshActor(mesh))
 {
-	;
+    ;
 }
 
 void MeshViewer::setMesh(std::shared_ptr<Mesh> new_mesh)
 {
-	mesh = new_mesh;
-	actor->mesh = new_mesh;
+    mesh = new_mesh;
+    actor->mesh = new_mesh;
 }
 
 //-----------------------------------------------------------------------------
 
 void MeshViewer::scroll_wheel(double xoffset, double yoffset)
 {
-	float const scroll_amount = -yoffset * 0.1;
-	camera_distance = std::min(std::max(camera_distance + scroll_amount, 0.1f), 30.0f);
+    float const scroll_amount = -yoffset * 0.1;
+    camera_distance = std::min(std::max(camera_distance + scroll_amount, 0.1f), 30.0f);
 }
 
 void MeshViewer::keyboard(int key, int scancode, int action, int mods)
 {
-	if (action == GLFW_PRESS || action == GLFW_REPEAT)
-	{
-		// Change view between the various bodies with keys 1..6
-		switch (key)
-		{
-			case GLFW_KEY_LEFT:
-			case GLFW_KEY_A:
-			{
-				z_angle_ -= 10.0;
-				break;
-			}
+    if (action == GLFW_PRESS || action == GLFW_REPEAT) {
+        // Change view between the various bodies with keys 1..6
+        switch (key) {
+        case GLFW_KEY_LEFT:
+        case GLFW_KEY_A: {
+            z_angle_ -= 10.0;
+            break;
+        }
 
-			case GLFW_KEY_RIGHT:
-			case GLFW_KEY_D:
-			{
-				z_angle_ += 10.0;
-				break;
-			}
+        case GLFW_KEY_RIGHT:
+        case GLFW_KEY_D: {
+            z_angle_ += 10.0;
+            break;
+        }
 
-			case GLFW_KEY_DOWN:
-			case GLFW_KEY_S:
-			{
-				x_angle_ += 10.0;
-				break;
-			}
+        case GLFW_KEY_DOWN:
+        case GLFW_KEY_S: {
+            x_angle_ += 10.0;
+            break;
+        }
 
-			case GLFW_KEY_UP:
-			case GLFW_KEY_W:
-			{
-				x_angle_ -= 10.0;
-				break;
-			}
+        case GLFW_KEY_UP:
+        case GLFW_KEY_W: {
+            x_angle_ -= 10.0;
+            break;
+        }
 
-			case GLFW_KEY_ESCAPE:
-			case GLFW_KEY_Q:
-			{
-				glfwSetWindowShouldClose(window_, GL_TRUE);
-				break;
-			}
-		}
-	}
+        case GLFW_KEY_ESCAPE:
+        case GLFW_KEY_Q: {
+            glfwSetWindowShouldClose(window_, GL_TRUE);
+            break;
+        }
+        }
+    }
 }
 
 
@@ -95,9 +88,9 @@ void MeshViewer::keyboard(int key, int scancode, int action, int mods)
 
 void MeshViewer::resize(int _width, int _height)
 {
-	width_  = _width;
-	height_ = _height;
-	glViewport(0, 0, _width, _height);
+    width_  = _width;
+    height_ = _height;
+    glViewport(0, 0, _width, _height);
 }
 
 
@@ -106,19 +99,20 @@ void MeshViewer::resize(int _width, int _height)
 
 void MeshViewer::initialize()
 {
-	// set initial state
-	glClearColor(1,1,1,0);
-	glEnable(GL_DEPTH_TEST);
+    // set initial state
+    glClearColor(1,1,1,0);
+    glEnable(GL_DEPTH_TEST);
 
     // setup buffers
     // color
+    // TODO modularize the width/height
     glGenTextures(1, &color_);
     glBindTexture(GL_TEXTURE_2D, color_);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width_, height_, 0,
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1920, 1080, 0,
                  GL_RGB, GL_FLOAT, NULL);
     // depth
     glGenTextures(1, &depth_);
@@ -127,7 +121,7 @@ void MeshViewer::initialize()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width_, height_, 0,
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, 1920, 1080, 0,
                  GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, NULL);
 
     // frame buffer
@@ -138,34 +132,37 @@ void MeshViewer::initialize()
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
                            GL_TEXTURE_2D, depth_, 0);
 
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    glBindTexture(GL_TEXTURE_2D, 0);
-
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) !=
-            GL_FRAMEBUFFER_COMPLETE) {
+        GL_FRAMEBUFFER_COMPLETE) {
+        std::cout << glCheckFramebufferStatus(GL_FRAMEBUFFER) << std::endl;
+        std::cout << width_ << std::endl;
         throw std::runtime_error("ERROR: Framebuffer not complete");
     }
 
-	// setup shaders
-	phong_shader_.load(SHADER_PATH "/terrain.vert", SHADER_PATH "/terrain.frag");
-	reflection_shader_.load(SHADER_PATH "/reflection.vert", SHADER_PATH "/reflection.frag");
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+
+    // setup shaders
+    phong_shader_.load(SHADER_PATH "/terrain.vert", SHADER_PATH "/terrain.frag");
+    reflection_shader_.load(SHADER_PATH "/reflection.vert", SHADER_PATH "/reflection.frag");
 }
 //-----------------------------------------------------------------------------
 
 
 void MeshViewer::paint()
 {
-	// clear framebuffer and depth buffer first
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    // clear framebuffer and depth buffer first
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	vec4  center(0, 0, 0, 1);
-	mat4     rot = mat4::rotate_z(z_angle_) * mat4::rotate_x(x_angle_);
-	vec4     eye = center + rot * vec4(0, 0, camera_distance, 0);
-	vec4      up = rot * vec4(0, 1, 0, 0);
-	mat4    view = mat4::look_at(vec3(eye), vec3(center), vec3(up));
+    vec4  center(0, 0, 0, 1);
+    mat4     rot = mat4::rotate_z(z_angle_) * mat4::rotate_x(x_angle_);
+    vec4     eye = center + rot * vec4(0, 0, camera_distance, 0);
+    vec4      up = rot * vec4(0, 1, 0, 0);
+    mat4    view = mat4::look_at(vec3(eye), vec3(center), vec3(up));
 
-	mat4 projection = mat4::perspective(fovy_, (float)width_/(float)height_, near_, far_);
-	draw_scene(projection, view);
+    mat4 projection = mat4::perspective(fovy_, (float)width_/(float)height_, near_, far_);
+    draw_scene(projection, view);
 }
 
 //-----------------------------------------------------------------------------
@@ -173,33 +170,32 @@ void MeshViewer::paint()
 
 void MeshViewer::draw_scene(mat4& _projection, mat4& _view)
 {
-    if(!phong_shader_.is_valid()) {
-		return;
-	}
+    if (!phong_shader_.is_valid() || !reflection_shader_.is_valid()) {
+        return;
+    }
 
-	vec4 light = vec4(0.6, 0.4, 2., 1.0); //in world coordinates
-	light = _view * light;
+    vec4 light = vec4(0.6, 0.4, 2., 1.0); //in world coordinates
+    light = _view * light;
 
-	mat4 m_matrix = actor->model_matrix;
-	mat4 mv_matrix  = _view * m_matrix;
-	mat4 mvp_matrix = _projection * mv_matrix;
+    mat4 m_matrix    = actor->model_matrix;
+    mat4 mv_matrix   = _view * m_matrix;
+    mat4 mvp_matrix  = _projection * mv_matrix;
+    mat3 n_matrix    = transpose(inverse(mv_matrix));
 
-	mat3 n_matrix    = transpose(inverse(mv_matrix));
-
-
-	phong_shader_.use();
-	phong_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
-	phong_shader_.set_uniform("modelview_matrix", mv_matrix);
-	phong_shader_.set_uniform("normal_matrix", n_matrix);
-	phong_shader_.set_uniform("light_position", vec3(light));
-
-    glViewport(0, 0, width_, height_);
     glBindFramebuffer(GL_FRAMEBUFFER, frame_buffer_);
-    const GLenum buffers[] = {GL_COLOR_ATTACHMENT0};
-    glDrawBuffers(1, buffers);
+    glDrawBuffer(GL_COLOR_ATTACHMENT0);
+    glViewport(0, 0, width_, height_);
 
     glClearColor(100.0f, 100.0f, 100.f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    phong_shader_.use();
+    phong_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
+    phong_shader_.set_uniform("modelview_matrix", mv_matrix);
+    phong_shader_.set_uniform("normal_matrix", n_matrix);
+    phong_shader_.set_uniform("light_position", vec3(light));
+
+
 
     actor->draw();
 
@@ -207,22 +203,31 @@ void MeshViewer::draw_scene(mat4& _projection, mat4& _view)
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glViewport(0, 0, width_, height_);
 
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
     phong_shader_.disable();
 
-	reflection_shader_.use();
-    glActiveTexture(GL_RGB);
+    glActiveTexture(GL_COLOR_ATTACHMENT0);
     glBindTexture(GL_TEXTURE_2D, color_);
-    glActiveTexture(GL_DEPTH_COMPONENT);
+    glActiveTexture(GL_DEPTH_ATTACHMENT);
     glBindTexture(GL_TEXTURE_2D, depth_);
 
-    
-	//reflection_shader_.set_uniform();
-	actor->draw();
-	reflection_shader_.disable();
+    reflection_shader_.use();
+    reflection_shader_.set_uniform("color_map", 0);
+    reflection_shader_.set_uniform("depth_map", 1);
+
+    reflection_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
+    reflection_shader_.set_uniform("modelview_matrix", mv_matrix);
+    reflection_shader_.set_uniform("normal_matrix", n_matrix);
 
 
-	// check for OpenGL errors
-	glCheckError("MeshViewer::draw_scene");
+    actor->draw();
+
+    reflection_shader_.disable();
+
+
+    // check for OpenGL errors
+    glCheckError("MeshViewer::draw_scene");
 }
 
 MeshViewer::~MeshViewer()

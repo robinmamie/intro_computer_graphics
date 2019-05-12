@@ -1,10 +1,6 @@
 #version 140
 #extension GL_ARB_explicit_attrib_location : enable
 
-uniform sampler2D depth_map;
-uniform sampler2D color_map;
-
-uniform vec3 light_position;
 
 in vec3  v2f_ec_vertex;
 in vec2  v2f_texcoord;
@@ -12,6 +8,9 @@ in vec3  v2f_normal;
 in float v2f_height;
 
 out vec4 f_color;
+
+uniform sampler2D color_map;
+uniform sampler2D depth_map;
 
 const float terrain_water_level = -0.03125 + 1e-6;
 
@@ -83,7 +82,7 @@ vec4 reflection()
 
     // If outside -> light blue color for the sky
     if (!is_inside_screen(screen_size, pixel_x, pixel_y)) {
-        return vec4(0.0f, 1.0f, 1.0f, 1.0f);
+        return vec4(0.5f, 1.0f, 1.0f, 1.0f);
     }
 
     // Otherwise, give color of pixel hit
@@ -97,7 +96,7 @@ void main()
 
     f_color = height > terrain_water_level ?
                 texture(color_map, v2f_texcoord) :
-                reflection();
+                //reflection();
 
 }
 

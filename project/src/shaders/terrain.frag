@@ -15,6 +15,7 @@ in vec3  v2f_ec_vertex;
 in vec3  v2f_normal;
 in float v2f_height;
 
+// TODO specify location?
 out vec4 f_color;
 out float dist;
 
