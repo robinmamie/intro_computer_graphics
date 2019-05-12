@@ -112,8 +112,8 @@ void MeshViewer::initialize()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1920, 1080, 0,
-                 GL_RGB, GL_FLOAT, NULL);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1920, 1080, 0,
+                 GL_RGBA, GL_FLOAT, NULL);
     // depth
     glGenTextures(1, &depth_);
     glBindTexture(GL_TEXTURE_2D, depth_);
@@ -134,8 +134,6 @@ void MeshViewer::initialize()
 
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) !=
         GL_FRAMEBUFFER_COMPLETE) {
-        std::cout << glCheckFramebufferStatus(GL_FRAMEBUFFER) << std::endl;
-        std::cout << width_ << std::endl;
         throw std::runtime_error("ERROR: Framebuffer not complete");
     }
 
@@ -194,18 +192,12 @@ void MeshViewer::draw_scene(mat4& _projection, mat4& _view)
     phong_shader_.set_uniform("modelview_matrix", mv_matrix);
     phong_shader_.set_uniform("normal_matrix", n_matrix);
     phong_shader_.set_uniform("light_position", vec3(light));
-
-
-
     actor->draw();
+    phong_shader_.disable();
 
     // Render on the screen
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glViewport(0, 0, width_, height_);
-
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    phong_shader_.disable();
 
     glActiveTexture(GL_COLOR_ATTACHMENT0);
     glBindTexture(GL_TEXTURE_2D, color_);

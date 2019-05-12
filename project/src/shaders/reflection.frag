@@ -96,7 +96,7 @@ void main()
 
     f_color = height > terrain_water_level ?
                 texture(color_map, v2f_texcoord) :
-                //reflection();
+                reflection();
 
 }
 
