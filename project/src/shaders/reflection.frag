@@ -59,10 +59,9 @@ vec4 reflection()
 
 void main()
 {
-    vec2 position = gl_FragCoord.xy / resolution.xy;
+    vec2 position = gl_FragCoord.xy / resolution;
     f_color = v2f_height > terrain_water_level ?
                 texture(color_map, position) :
                 reflection();
-
 }
 
