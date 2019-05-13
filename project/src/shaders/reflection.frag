@@ -23,19 +23,13 @@ bool is_inside_screen(vec2 pixel)
            0 <= pixel.y || pixel.y < resolution.y;
 }
 
-vec4 reflection(vec2 position)
+vec4 reflection()
 {
-    float width    = resolution.x;
-    float height   = resolution.y;
-    float aspect   = width / height;
-    float ratio    = height / width;
-
     vec3 ray       = v2f_ec_vertex;
     vec3 normal    = normalize(v2f_normal) * -sign(dot(v2f_normal, v2f_ec_vertex));
     vec3 reflected = normalize(reflect(ray, normal));
 
     vec3 step_size = 0.1f * reflected;
-    vec2 pixel     = vec2(position);
 
     for (int i = 0; i < 1000; ++i) {
         ray += step_size;
@@ -44,7 +38,13 @@ vec4 reflection(vec2 position)
         pixelA /= pixelA.w;
         vec2 pixel = vec2(pixelA + 1.0f) / 2.0f;
 
-        if (-ray.z / 5.0f >= texture(depth_map, pixel).r) {
+        float depth = texture(depth_map, pixel).r;
+
+        if (depth >= 1.0f) {
+            return sky_color;
+        }
+
+        if (-ray.z / 5.0f >= depth) {
             vec4 color = texture(color_map, pixel);
             if (color == vec4(1.0f, 1.0f, 1.0f, 1.0f) || !is_inside_screen(pixel)) {
                 return sky_color;
@@ -59,11 +59,10 @@ vec4 reflection(vec2 position)
 
 void main()
 {
-    float height = v2f_height;
-    vec2 position = ( gl_FragCoord.xy / resolution.xy );
-    f_color = height > terrain_water_level ?
+    vec2 position = gl_FragCoord.xy / resolution.xy;
+    f_color = v2f_height > terrain_water_level ?
                 texture(color_map, position) :
-                reflection(position);
+                reflection();
 
 }
 
