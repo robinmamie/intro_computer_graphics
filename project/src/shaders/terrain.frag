@@ -66,6 +66,6 @@ void main()
     color *= material * sunlight;
 
 	f_color = vec4(color, 1.0f);
-    f_depth = vec4(vec3(-v2f_ec_vertex.z / 3.0f), 1.0f);//gl_FragCoord.z), 1.0f);
+    f_depth = vec4(vec3(-v2f_ec_vertex.z / 5.0f), 1.0f);//gl_FragCoord.z), 1.0f);
     //f_depth = vec4(vec3(-v2f_ec_vertex.z), 1.0f);//vec4(vec3(length(v2f_ec_vertex)), 1.0f);
 }

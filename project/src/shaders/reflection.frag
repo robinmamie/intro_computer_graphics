@@ -34,7 +34,7 @@ vec4 reflection(vec2 position)
     vec3 normal    = normalize(v2f_normal) * -sign(dot(v2f_normal, v2f_ec_vertex));
     vec3 reflected = normalize(reflect(ray, normal));
 
-    vec3 step_size = 0.07f * reflected;
+    vec3 step_size = 0.1f * reflected;
     vec2 pixel     = vec2(position);
 
     for (int i = 0; i < 1000; ++i) {
@@ -44,7 +44,7 @@ vec4 reflection(vec2 position)
         pixelA /= pixelA.w;
         vec2 pixel = vec2(pixelA + 1.0f) / 2.0f;
 
-        if (-ray.z / 3.0f > texture(depth_map, pixel).r) {
+        if (-ray.z / 5.0f >= texture(depth_map, pixel).r) {
             vec4 color = texture(color_map, pixel);
             if (color == vec4(1.0f, 1.0f, 1.0f, 1.0f) || !is_inside_screen(pixel)) {
                 return sky_color;

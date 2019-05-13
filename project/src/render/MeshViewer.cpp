@@ -176,7 +176,7 @@ void MeshViewer::draw_scene(mat4& _projection, mat4& _view)
     fb.bind();
 
     reflection_shader_.set_uniform("color_map", 0);
-    reflection_shader_.set_uniform("depth_map", 1, true);
+    reflection_shader_.set_uniform("depth_map", 1);
     actor->draw();
     reflection_shader_.disable();
     fb.unbind();
