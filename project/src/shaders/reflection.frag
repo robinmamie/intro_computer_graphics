@@ -19,17 +19,18 @@ const vec3 camera_view = vec3(0.0f, 0.0f, -1.0f);
 
 bool is_inside_screen(vec2 pixel)
 {
-    return 0 <= pixel.x || pixel.x < resolution.x ||
-           0 <= pixel.y || pixel.y < resolution.y;
+    return 0 <= pixel.x || pixel.x < 1.0f ||//resolution.x ||
+           0 <= pixel.y || pixel.y < 1.0f;//resolution.y;
 }
 
 vec4 reflection()
 {
     vec3 ray       = v2f_ec_vertex;
     vec3 normal    = normalize(v2f_normal) * -sign(dot(v2f_normal, v2f_ec_vertex));
-    vec3 reflected = normalize(reflect(ray, normal));
+    vec3 reflected = normalize(reflect(normalize(ray), normal));
 
-    vec3 step_size = 0.1f * reflected;
+    vec3 step_size = 0.001f * reflected;
+
 
     for (int i = 0; i < 1000; ++i) {
         ray += step_size;
@@ -44,12 +45,15 @@ vec4 reflection()
             return sky_color;
         }
 
-        if (-ray.z / 5.0f >= depth) {
+        if (-ray.z > depth) {
             vec4 color = texture(color_map, pixel);
-            if (color == vec4(1.0f, 1.0f, 1.0f, 1.0f) || !is_inside_screen(pixel)) {
+            if (color == sky_color) {
+                continue;
+            }
+            if (!is_inside_screen(pixel)) {
                 return sky_color;
             }
-            return color;
+            return color;//vec4(vec3(i/10.0f), 1.0f);//color;
         }
     }
 

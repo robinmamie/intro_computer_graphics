@@ -26,13 +26,14 @@ const vec3  sunlight = vec3(1.0, 0.941, 0.898);
 const float terrain_water_level    = -0.03125 + 1e-6;
 const vec3  terrain_color_mountain = vec3(0.8, 0.5, 0.4);
 const vec3  terrain_color_grass    = vec3(0.33, 0.43, 0.18);
+const vec4 sky_color = vec4(0.8f, 1.0f, 1.0f, 1.0f);
 
 void main()
 {
 	float height = v2f_height;
 
 	if (height <= terrain_water_level) {
-		f_color = vec4(1.0);
+		f_color = sky_color;
 		return;
 	}
 
@@ -66,6 +67,6 @@ void main()
     color *= material * sunlight;
 
 	f_color = vec4(color, 1.0f);
-    f_depth = vec4(vec3(-v2f_ec_vertex.z / 5.0f), 1.0f);//gl_FragCoord.z), 1.0f);
+    f_depth = vec4(vec3(-v2f_ec_vertex.z), 1.0f);//gl_FragCoord.z), 1.0f);
     //f_depth = vec4(vec3(-v2f_ec_vertex.z), 1.0f);//vec4(vec3(length(v2f_ec_vertex)), 1.0f);
 }
