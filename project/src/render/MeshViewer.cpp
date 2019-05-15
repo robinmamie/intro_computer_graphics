@@ -31,14 +31,17 @@ MeshViewer::MeshViewer(std::string const& _title, int _width, int _height)
 }
 
 void MeshViewer::setMesh(std::shared_ptr<Mesh> new_mesh)
-{
-	mesh = new_mesh;
-	actor->mesh = new_mesh;
+{	for (auto const &mesh : meshes) {
+		mesh = new_mesh;
+		actor->mesh = new_mesh;
+	}
 }
 
 void MeshViewer::update_water(double dt){
-	if(actor->mesh->isDynamic){
-	actor->mesh->move(dt);
+	for (auto const &actor : actors) {
+		if(actor->mesh->isDynamic){
+			actor->mesh->move(dt);
+		}
 	}
 }
 
@@ -160,8 +163,10 @@ void MeshViewer::draw_scene(mat4& _projection, mat4& _view)
 	phong_shader_.set_uniform("modelview_matrix", mv_matrix);
 	phong_shader_.set_uniform("normal_matrix", n_matrix);
 	phong_shader_.set_uniform("light_position", vec3(light));
-
-	actor->draw();
+	
+	for (auto const &actor: actors) {
+		actor->draw();
+	}
 
 	phong_shader_.disable();
 

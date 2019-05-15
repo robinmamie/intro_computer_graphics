@@ -67,8 +67,8 @@ private:
 	/// current viewport dimension
 	int  width_, height_;
 	
-	std::shared_ptr<Mesh> mesh;
-	std::shared_ptr<StaticMeshActor> actor;
+	std::list<std::shared_ptr<Mesh>> meshes;
+	std::list<std::shared_ptr<StaticMeshActor>> actors;
 };
 
 
