@@ -109,13 +109,11 @@ int main(int arg_count, char *arg_values[]) {
 	MeshViewer mvi;
 	auto meshLand = build_terrain_mesh(fbm_values, false);
 	auto meshWater = build_terrain_mesh(water_values, true);
-	meshLand->isDynamic = false;
-	meshWater->isDynamic = true;
 	meshWater->water_values = &water_values;
 
 
 	meshLand->print_info();
-	mvi.setMesh(meshWater);
 	meshWater->print_info();
+	mvi.setMesh(meshLand, meshWater);
 	return mvi.run();
 }

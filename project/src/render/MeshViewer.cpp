@@ -24,22 +24,24 @@ MeshViewer::MeshViewer(std::string const& _title, int _width, int _height)
 	, x_angle_(50)
 	, z_angle_(180)
 	, camera_distance(0.85)
-	, mesh(new Mesh)
-	, actor(new StaticMeshActor(mesh))
+	, landMesh(new Mesh)
+	, landActor(new StaticMeshActor(landMesh))
+	, waterMesh(new Mesh)
+	, waterActor(new StaticMeshActor(waterMesh))
 {
 	;
 }
 
-void MeshViewer::setMesh(std::shared_ptr<Mesh> new_mesh)
+void MeshViewer::setMesh(std::shared_ptr<Mesh> new_landMesh, std::shared_ptr<Mesh> new_waterMesh)
 {
-	mesh = new_mesh;
-	actor->mesh = new_mesh;
+	landMesh = new_landMesh;
+	landActor->mesh = new_landMesh;
+	waterMesh = new_waterMesh;
+	waterActor->mesh = new_waterMesh;
 }
 
 void MeshViewer::update_water(double dt){
-	if(actor->mesh->isDynamic){
-	actor->mesh->move(dt);
-	}
+	waterActor->mesh->move(dt);
 }
 
 //-----------------------------------------------------------------------------
@@ -149,7 +151,8 @@ void MeshViewer::draw_scene(mat4& _projection, mat4& _view)
 	vec4 light = vec4(0.6, 0.4, 2., 1.0); //in world coordinates
 	light = _view * light;
 
-	mat4 m_matrix = actor->model_matrix;
+	/// Draw land
+	mat4 m_matrix = landActor->model_matrix;
 	mat4 mv_matrix  = _view * m_matrix;
 	mat4 mvp_matrix = _projection * mv_matrix;
 
@@ -161,7 +164,22 @@ void MeshViewer::draw_scene(mat4& _projection, mat4& _view)
 	phong_shader_.set_uniform("normal_matrix", n_matrix);
 	phong_shader_.set_uniform("light_position", vec3(light));
 
-	actor->draw();
+	landActor->draw();
+	
+	/// Draw water
+	m_matrix = waterActor->model_matrix;
+	mv_matrix  = _view * m_matrix;
+	mvp_matrix = _projection * mv_matrix;
+
+	n_matrix    = transpose(inverse(mv_matrix));
+
+	phong_shader_.use();
+	phong_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
+	phong_shader_.set_uniform("modelview_matrix", mv_matrix);
+	phong_shader_.set_uniform("normal_matrix", n_matrix);
+	phong_shader_.set_uniform("light_position", vec3(light));
+
+	waterActor->draw();
 
 	phong_shader_.disable();
 
