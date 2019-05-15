@@ -53,7 +53,7 @@ constexpr float WATER_LEVEL = 0; //-0.03125;
 // Procedurally generate a triangle mesh of the terrain from the 2D array of height values.
 // This triangle mesh is a uniform grid in the (x, y) plane that is displaced in the z
 // direction by the height values.
-std::shared_ptr<Mesh> build_terrain_mesh(Array2D<float> const& height_map, Array2D<float> const& water_map) {
+std::shared_ptr<Mesh> build_terrain_mesh(Array2D<float> const& height_map, bool isWater) {
 	std::pair<size_t, size_t> const grid_size = height_map.size();
 
 	std::vector<vec3> vertices(grid_size.first * grid_size.second);
@@ -73,7 +73,7 @@ std::shared_ptr<Mesh> build_terrain_mesh(Array2D<float> const& height_map, Array
             float x = gx / (float) grid_size.first  - 0.5f;
             float y = gy / (float) grid_size.second - 0.5f;
             float z = height_map(gx, gy);
-            z = z < WATER_LEVEL ? WATER_LEVEL - water_map(gx, gy) : z;
+            z = isWater ? WATER_LEVEL - height_map(gx, gy) : z;
 			vertices[idx] = vec3(x, y, z);
 		}
 	}
@@ -101,17 +101,21 @@ int main(int arg_count, char *arg_values[]) {
 
 	// If we try to build meshes when no window is created (GLFW is not loaded)
 	// calls to OpenGL will crash randomly
+	Array2D<float> water_values = calculate_water(grid_size);
 	Array2D<float> fbm_values = calculate_fbm(grid_size);
 	fbm_values *= 0.5;
 
-	Array2D<float> water_values = calculate_water(grid_size);
 
 	MeshViewer mvi;
-	auto mesh = build_terrain_mesh(fbm_values, water_values);
-	mesh->water_values = &water_values;
+	auto meshLand = build_terrain_mesh(fbm_values, false);
+	auto meshWater = build_terrain_mesh(water_values, true);
+	meshLand->isDynamic = false;
+	meshWater->isDynamic = true;
+	meshWater->water_values = &water_values;
 
 
-	mesh->print_info();
-	mvi.setMesh(mesh);
+	meshLand->print_info();
+	mvi.setMesh(meshWater);
+	meshWater->print_info();
 	return mvi.run();
 }

@@ -116,9 +116,12 @@ private:
     void m_reduced_vao();
 
 public:
-    //water values that allows to shift the perlin water
+    /// Water values that allows to shift the perlin water
 	Array2D<float>* water_values = nullptr;
-
+	
+	/// Is the mesh dynamic?
+	bool isDynamic;
+	
     /// Read mesh from an OFF file
     void read(const std::string &_filename);
 

@@ -83,12 +83,12 @@ void Mesh::set(std::vector<vec3> const& new_pts,  std::vector<Face> const& new_f
 void Mesh::move(double dt){
     // update vertices
     time += dt;
-	for(int x = 0; x <96; ++x){
-		for(int y = 0; y< 96; ++y){
+	for(int x = 0; x < 96; ++x){
+		for(int y = 0; y<  96; ++y){
             if (POSITION_Z < WATER_LEVEL)
 			    POSITION_Z = -(*water_values)(((size_t)(x-SPEED*time))%96, y);
         }	
-		}
+	}
 
     // Recompute normals
     compute_normals();

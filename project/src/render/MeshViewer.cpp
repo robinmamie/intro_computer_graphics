@@ -37,7 +37,9 @@ void MeshViewer::setMesh(std::shared_ptr<Mesh> new_mesh)
 }
 
 void MeshViewer::update_water(double dt){
+	if(actor->mesh->isDynamic){
 	actor->mesh->move(dt);
+	}
 }
 
 //-----------------------------------------------------------------------------
