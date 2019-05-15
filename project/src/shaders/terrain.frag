@@ -26,14 +26,14 @@ const vec3  sunlight = vec3(1.0, 0.941, 0.898);
 const float terrain_water_level    = -0.03125 + 1e-6;
 const vec3  terrain_color_mountain = vec3(0.8, 0.5, 0.4);
 const vec3  terrain_color_grass    = vec3(0.33, 0.43, 0.18);
-const vec4 sky_color = vec4(0.8f, 1.0f, 1.0f, 1.0f);
+const vec3 sky_color = vec3(0.6f, 1.0f, 1.0f);
 
 void main()
 {
 	float height = v2f_height;
 
 	if (height <= terrain_water_level) {
-		f_color = sky_color;
+		f_color = vec4(sky_color, 1.0f);
 		return;
 	}
 

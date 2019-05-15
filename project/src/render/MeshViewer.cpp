@@ -172,6 +172,7 @@ void MeshViewer::draw_scene(mat4& _projection, mat4& _view)
     reflection_shader_.set_uniform("normal_matrix", n_matrix);
     reflection_shader_.set_uniform("projection_matrix", _projection);
     reflection_shader_.set_uniform("resolution", vec2(width_, height_));
+    reflection_shader_.set_uniform("light_position", vec3(light));
 
     fb.bind();
 
