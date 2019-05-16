@@ -112,8 +112,6 @@ void MeshViewer::initialize()
     // set initial state
     glClearColor(1,1,1,0);
     glEnable(GL_DEPTH_TEST);
-    glEnable(GL_CULL_FACE);
-    glCullFace(GL_BACK);
 
     // setup shaders
     phong_shader_.load(SHADER_PATH "/terrain.vert", SHADER_PATH "/terrain.frag");
