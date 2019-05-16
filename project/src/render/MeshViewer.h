@@ -20,6 +20,7 @@ public:
 	/// \_width the window's width
 	/// \_height the window's height
 	MeshViewer(std::string const& _title = "Mesh Viewer", int _width=1920, int _height=1080);
+    ~MeshViewer();
 
 	void setMesh(std::shared_ptr<Mesh> new_landMesh, std::shared_ptr<Mesh> new_waterMesh);
 
@@ -50,6 +51,8 @@ protected:
 private:
 	Shader phong_shader_;
 
+	Shader reflection_shader_;
+
 	/// the field of view for the camera
 	float fovy_;
 	/// the near plane for the virtual camera
@@ -66,11 +69,14 @@ private:
 
 	/// current viewport dimension
 	int  width_, height_;
-	
+
 	std::shared_ptr<Mesh> landMesh;
 	std::shared_ptr<Mesh> waterMesh;
 	std::shared_ptr<StaticMeshActor> waterActor;
 	std::shared_ptr<StaticMeshActor> landActor;
+
+    GLuint frame_buffer_, color_, depth_;
+
 };
 
 
