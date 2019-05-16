@@ -10,11 +10,11 @@ out vec4 f_color;
 uniform sampler2D color_map;
 uniform sampler2D depth_map;
 uniform mat4 projection_matrix;
-uniform vec2 resolution;
+//uniform vec2 resolution;
 uniform vec3 light_position;
 
 const float terrain_water_level = -0.03125 + 1e-6;
-const vec3 sky_color = vec3(0.6f, 1.0f, 1.0f);
+const vec3 sky_color = vec3(0.4f, 0.4f, 0.7f);
 const vec3 camera_view = vec3(0.0f, 0.0f, -1.0f);
 const float shininess = 8.0f;
 
@@ -81,14 +81,16 @@ vec4 water_color()
             factor += pow(dot_rv, shininess);
         }
     }
-    return vec4(vec3(color * factor), 1.0f);
+    return vec4(vec3(color * factor), 0.8f);
 }
 
 void main()
 {
-    vec2 position = gl_FragCoord.xy / resolution;
-    if (v2f_height < terrain_water_level) {
-        f_color = water_color();
-    }
+    //vec2 position = gl_FragCoord.xy / resolution;
+    //float height_terrain = texture(height_map, position).r * 2.0f - 1.0f;
+    f_color = water_color();
+    //f_color = height_terrain > v2f_height && height_terrain >= 1.0f ?
+    //            vec4(1.0f) :
+    //            water_color();
 }
 

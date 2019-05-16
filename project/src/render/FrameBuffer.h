@@ -20,6 +20,7 @@ private:
     GLuint fbo = 0;
     GLuint color_tex = 0;
     GLuint depth_tex = 0;
+    GLuint height_tex = 0;
     GLuint depth_buf = 0;
 };
 

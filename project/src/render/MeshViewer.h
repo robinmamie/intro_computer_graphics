@@ -53,6 +53,8 @@ private:
 
 	Shader reflection_shader_;
 
+	Shader color_shader_;
+
 	/// the field of view for the camera
 	float fovy_;
 	/// the near plane for the virtual camera

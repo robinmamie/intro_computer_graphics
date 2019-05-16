@@ -20,6 +20,7 @@ in float v2f_height;
 // TODO specify location?
 layout(location = 0) out vec4 f_color;
 layout(location = 1) out vec4 f_depth;
+layout(location = 2) out vec4 f_height;
 
 const vec3  sunlight = vec3(1.0, 0.941, 0.898);
 // Small perturbation to prevent "z-fighting" on the water on some machines...
@@ -32,11 +33,6 @@ const vec3 sky_color = vec3(0.6f, 1.0f, 1.0f);
 void main()
 {
 	float height = v2f_height;
-
-	if (height <= terrain_water_level) {
-		f_color = vec4(sky_color, 1.0f);
-		return;
-	}
 
     vec3 material = mix(terrain_color_grass,
                         terrain_color_mountain,
@@ -69,5 +65,6 @@ void main()
 
 	f_color = vec4(color, 1.0f);
     f_depth = vec4(vec3(-v2f_ec_vertex.z), 1.0f);//gl_FragCoord.z), 1.0f);
+    f_height = vec4(vec3((v2f_height + 1.0) / 2.0f), 1.0f);
     //f_depth = vec4(vec3(-v2f_ec_vertex.z), 1.0f);//vec4(vec3(length(v2f_ec_vertex)), 1.0f);
 }

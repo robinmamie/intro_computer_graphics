@@ -115,6 +115,7 @@ void MeshViewer::initialize()
     // setup shaders
     phong_shader_.load(SHADER_PATH "/terrain.vert", SHADER_PATH "/terrain.frag");
     reflection_shader_.load(SHADER_PATH "/reflection.vert", SHADER_PATH "/reflection.frag");
+    color_shader_.load(SHADER_PATH "/paint_color.vert", SHADER_PATH "/paint_color.frag");
 }
 //-----------------------------------------------------------------------------
 
@@ -178,25 +179,38 @@ void MeshViewer::draw_scene(mat4& _projection, mat4& _view)
     glEnable(GL_DEPTH_TEST);
 
 	/// Draw water
+    fb.bind();
+
+    color_shader_.use();
+    color_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
+    color_shader_.set_uniform("resolution", vec2(width_, height_));
+    color_shader_.set_uniform("color_map", 0);
+	landActor->draw();
+    color_shader_.disable();
+
 	m_matrix = waterActor->model_matrix;
 	mv_matrix  = _view * m_matrix;
 	mvp_matrix = _projection * mv_matrix;
 	n_matrix    = transpose(inverse(mv_matrix));
 
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_DEPTH_TEST);
     reflection_shader_.use();
     reflection_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
     reflection_shader_.set_uniform("modelview_matrix", mv_matrix);
     reflection_shader_.set_uniform("normal_matrix", n_matrix);
     reflection_shader_.set_uniform("projection_matrix", _projection);
-    reflection_shader_.set_uniform("resolution", vec2(width_, height_));
+    //reflection_shader_.set_uniform("resolution", vec2(width_, height_));
     reflection_shader_.set_uniform("light_position", vec3(light));
 
-    fb.bind();
 
     reflection_shader_.set_uniform("color_map", 0);
     reflection_shader_.set_uniform("depth_map", 1);
     waterActor->draw();
     reflection_shader_.disable();
+    glDisable(GL_BLEND);
+
     fb.unbind();
 
     // check for OpenGL errors
