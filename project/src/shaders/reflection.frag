@@ -10,7 +10,7 @@ out vec4 f_color;
 uniform sampler2D color_map;
 uniform sampler2D depth_map;
 uniform mat4 projection_matrix;
-//uniform vec2 resolution;
+uniform vec2 resolution;
 uniform vec3 light_position;
 
 const float terrain_water_level = -0.03125 + 1e-6;
@@ -22,8 +22,8 @@ const float float_one_comp = 1.0f - 1e-6;
 
 bool is_inside_screen(vec2 pixel)
 {
-    return 1e-6 <= pixel.x && pixel.x < float_one_comp &&
-           1e-6 <= pixel.y && pixel.y < float_one_comp;
+    return 1e-6 < pixel.x && pixel.x < float_one_comp &&
+           1e-6 < pixel.y && pixel.y < float_one_comp;
 }
 
 vec2 from_ray_to_pixel(vec3 ray)
@@ -85,7 +85,7 @@ vec4 water_color()
 void main()
 {
     //vec2 position = gl_FragCoord.xy / resolution;
-    //float height_terrain = texture(height_map, position).r * 2.0f - 1.0f;
+    //vec4 color_terrain = texture(color_map, position);
     f_color = water_color();
     //f_color = height_terrain > v2f_height && height_terrain >= 1.0f ?
     //            vec4(1.0f) :

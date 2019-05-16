@@ -12,7 +12,6 @@
 #include <stdlib.h>     /* srand, rand */
 #include <time.h>       /* time */
 #include <array>
-#include "FrameBuffer.h"
 
 //=============================================================================
 
@@ -25,6 +24,7 @@ MeshViewer::MeshViewer(std::string const& _title, int _width, int _height)
 	, x_angle_(50)
 	, z_angle_(180)
 	, camera_distance(0.85)
+    , fb(new FrameBuffer(_width, _height))
 	, landMesh(new Mesh)
 	, landActor(new StaticMeshActor(landMesh))
 	, waterMesh(new Mesh)
@@ -100,6 +100,7 @@ void MeshViewer::resize(int _width, int _height)
     width_  = _width;
     height_ = _height;
     glViewport(0, 0, _width, _height);
+    fb.reset(new FrameBuffer(_width, _height));
 }
 
 
@@ -154,8 +155,7 @@ void MeshViewer::draw_scene(mat4& _projection, mat4& _view)
 
 	mat3 n_matrix    = transpose(inverse(mv_matrix));
 
-    FrameBuffer fb = FrameBuffer(width_, height_);
-    fb.select_as_render_target();
+    fb->select_as_render_target();
 
     glClearColor(100.0f, 100.0f, 100.f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -179,7 +179,7 @@ void MeshViewer::draw_scene(mat4& _projection, mat4& _view)
     glEnable(GL_DEPTH_TEST);
 
 	/// Draw water
-    fb.bind();
+    fb->bind();
 
     color_shader_.use();
     color_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
@@ -211,7 +211,7 @@ void MeshViewer::draw_scene(mat4& _projection, mat4& _view)
     reflection_shader_.disable();
     glDisable(GL_BLEND);
 
-    fb.unbind();
+    fb->unbind();
 
     // check for OpenGL errors
     glCheckError("MeshViewer::draw_scene");
