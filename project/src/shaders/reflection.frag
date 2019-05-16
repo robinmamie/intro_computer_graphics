@@ -18,18 +18,26 @@ const vec3 sky_color = vec3(0.4f, 0.4f, 0.7f);
 const vec3 camera_view = vec3(0.0f, 0.0f, -1.0f);
 const float shininess = 8.0f;
 
+const float float_one_comp = 1.0f - 1e-6;
 
 bool is_inside_screen(vec2 pixel)
 {
-    return 0 <= pixel.x || pixel.x < 1.0f ||
-           0 <= pixel.y || pixel.y < 1.0f;
+    return 1e-6 <= pixel.x && pixel.x < float_one_comp &&
+           1e-6 <= pixel.y && pixel.y < float_one_comp;
 }
 
-vec4 reflection()
+vec2 from_ray_to_pixel(vec3 ray)
+{
+    vec4 pixelA = projection_matrix * vec4(ray, 1.0);
+    pixelA /= pixelA.w;
+    return vec2(pixelA + 1.0f) / 2.0f;
+}
+
+vec3 reflection()
 {
     vec3 ray       = v2f_ec_vertex;
     vec3 normal    = normalize(v2f_normal) * -sign(dot(v2f_normal, v2f_ec_vertex));
-    vec3 reflected = normalize(reflect(normalize(ray), normal));
+    vec3 reflected = normalize(reflect(ray, normal));
 
     vec3 step_size = 0.001f * reflected;
 
@@ -37,25 +45,15 @@ vec4 reflection()
     for (int i = 0; i < 1000; ++i) {
         ray += step_size;
 
-        vec4 pixelA = projection_matrix * vec4(ray, 1.0);
-        pixelA /= pixelA.w;
-        vec2 pixel = vec2(pixelA + 1.0f) / 2.0f;
+        vec2 pixel = from_ray_to_pixel(ray);
 
         float depth = texture(depth_map, pixel).r;
-
-        if (depth >= 1.0f) {
+        if (!is_inside_screen(pixel) || depth >= 1.0f) {
             return sky_color;
         }
 
         if (-ray.z > depth) {
-            vec3 color = vec3(texture(color_map, pixel));
-            if (color == sky_color) {
-                continue;
-            }
-            if (!is_inside_screen(pixel)) {
-                return sky_color;
-            }
-            return color;//vec4(vec3(i/10.0f), 1.0f);//color;
+            return vec3(texture(color_map, pixel));
         }
     }
 
@@ -64,7 +62,7 @@ vec4 reflection()
 
 vec4 water_color()
 {
-    vec4 color     = reflection();
+    vec3 color     = reflection();
     vec3 light     = normalize(light_position - v2f_ec_vertex);
     vec3 normal    = normalize(v2f_normal) * -sign(dot(v2f_normal, v2f_ec_vertex));
     float dot_nl   = dot(normal, light);
@@ -81,7 +79,7 @@ vec4 water_color()
             factor += pow(dot_rv, shininess);
         }
     }
-    return vec4(vec3(color * factor), 0.8f);
+    return vec4(color * factor, 0.8f);
 }
 
 void main()
