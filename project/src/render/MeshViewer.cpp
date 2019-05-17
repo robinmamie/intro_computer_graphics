@@ -145,7 +145,7 @@ void MeshViewer::draw_scene(mat4& _projection, mat4& _view)
         return;
     }
 
-	vec4 light = vec4(0.6, 0.4, 2., 1.0); //in world coordinates
+	vec4 light = vec4(0., 0., 3., 1.0); //in world coordinates
 	light = _view * light;
 
 	/// Draw land

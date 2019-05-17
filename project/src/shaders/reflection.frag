@@ -33,11 +33,18 @@ vec2 from_ray_to_pixel(vec3 ray)
     return vec2(pixelA + 1.0f) / 2.0f;
 }
 
+vec3 sky(vec3 reflected, vec3 light)
+{
+    float dot_rl = dot(reflected, light);
+    return sky_color;//dot_rl > 0.7 ? vec3(1,1,1) : sky_color;
+}
+
 vec3 reflection()
 {
     vec3 ray       = v2f_ec_vertex;
     vec3 normal    = normalize(v2f_normal) * -sign(dot(v2f_normal, v2f_ec_vertex));
     vec3 reflected = normalize(reflect(ray, normal));
+    vec3 light     = normalize(light_position - v2f_ec_vertex);
 
     vec3 step_size = 0.001f * reflected;
 
@@ -49,15 +56,15 @@ vec3 reflection()
 
         float depth = texture(depth_map, pixel).r;
         if (!is_inside_screen(pixel) || depth >= 1.0f) {
-            return sky_color;
+            return sky(reflected, light);
         }
 
         if (-ray.z > depth) {
-            return vec3(texture(color_map, pixel));
+            return mix(vec3(texture(color_map, pixel)), sky(reflected, light), i/1000.0);
         }
     }
 
-    return sky_color;
+    return sky(reflected, light);
 }
 
 vec4 water_color()
