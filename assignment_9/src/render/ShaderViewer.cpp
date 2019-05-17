@@ -25,6 +25,7 @@ ShaderViewer::ShaderViewer(std::string const& _title, int _width, int _height)
 	, viewer_velocity(0)
 	, viewer_scale(1.0)
 	, should_redraw(true)
+    , time_3d(0.0)
 {
 }
 
@@ -95,6 +96,18 @@ void ShaderViewer::keyboard(int key, int scancode, int action, int mods)
 			case GLFW_KEY_W:
 			{
 				viewer_velocity.y += change;
+				break;
+			}
+			case GLFW_KEY_E:
+			{
+				time_3d += 1e-2;
+	            should_redraw = true;
+				break;
+			}
+			case GLFW_KEY_R:
+			{
+				time_3d -= 1e-2;
+	            should_redraw = true;
 				break;
 			}
 		}
@@ -222,6 +235,8 @@ void ShaderViewer::paint_shader_to_texture()
 	shader_to_display.use();
 	shader_to_display.set_uniform("viewer_position", viewer_position);
 	shader_to_display.set_uniform("viewer_scale", viewer_scale * aspect_ratio);
+    shader_to_display.set_uniform("time", time_3d);
+    std::cout << "Time: " << time_3d << std::endl;
 
 	fullscreen_quad.draw();
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);

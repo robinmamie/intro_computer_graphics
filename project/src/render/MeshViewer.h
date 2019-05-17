@@ -3,6 +3,7 @@
 #include "gl.h"
 #include "glfw_window.h"
 
+#include "FrameBuffer.h"
 #include "shader.h"
 #include "StaticMeshActor.h"
 #include <memory>
@@ -25,7 +26,7 @@ public:
 	void setMesh(std::shared_ptr<Mesh> new_landMesh, std::shared_ptr<Mesh> new_waterMesh);
 
 	virtual void update_water(double dt) override;
-	
+
 protected:
 
 	/// function that is called on the creation of the widget for the initialisation of OpenGL
@@ -54,6 +55,8 @@ private:
 	Shader reflection_shader_;
 
 	Shader color_shader_;
+
+    std::unique_ptr<FrameBuffer> fb;
 
 	/// the field of view for the camera
 	float fovy_;
