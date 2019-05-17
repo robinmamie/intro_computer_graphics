@@ -71,6 +71,7 @@ private:
 	vec2 viewer_position;
 	vec2 viewer_velocity;
 	float viewer_scale;
+    float time_3d;
 };
 
 
