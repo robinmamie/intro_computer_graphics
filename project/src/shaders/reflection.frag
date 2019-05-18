@@ -22,7 +22,11 @@ const float float_one_comp = 1.0f - 1e-6;
 
 bool is_inside_screen(vec2 pixel)
 {
-    return 1e-6 < pixel.x && pixel.x < float_one_comp &&
+    // Trick to avoid reflection holes on the side: ignore if the ray
+    // exits the screen, it clips to the nearest valid value.
+    // This is viable because of the continuity of the terrain, giving it a
+    // natural look.
+    return //1e-6 < pixel.x && pixel.x < float_one_comp &&
            1e-6 < pixel.y && pixel.y < float_one_comp;
 }
 
