@@ -32,7 +32,7 @@
 class Mesh
 {
 public:
-    #define NB_WATER_ITERATIONS 100
+    #define NB_WATER_ITERATIONS 500
 
     /// a vertex consists of a position and a normal
     struct Vertex {
