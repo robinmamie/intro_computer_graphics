@@ -125,6 +125,47 @@ std::shared_ptr<Mesh> build_terrain_mesh(Array2D<float> const& height_map, bool 
 	return std::make_shared<Mesh>(vertices, faces);
 }
 
+std::shared_ptr<Mesh> build_filler_mesh(Array2D<float> const& height_map) {
+	std::pair<size_t, size_t> const grid_size = height_map.size();
+
+	std::vector<vec3> vertices(grid_size.first * grid_size.second);
+	std::vector<Mesh::Face> faces;
+
+	// Map a 2D grid index (x, y) into a 1D index into the output vertex array.
+	auto const xy_to_v_index = [&](int x, int y) {
+		return x + y*grid_size.first;
+	};
+
+	// First, generate the displaced vertices of the grid.
+	// (iterate over y first then over x to use CPU cache better)
+	for(int gy = 0; gy < grid_size.second; gy++) {
+		for(int gx = 0; gx < grid_size.first; gx++) {
+			int const idx = xy_to_v_index(gx, gy);
+
+            float x = gx / (float) grid_size.first  - 0.5f;
+            float z = gy / (float) grid_size.second - 0.5f;
+            float y = height_map(x, y);
+			vertices[idx] = vec3(x, y, z);
+		}
+	}
+
+	// Second, connect the grid vertices with triangles to triangulate the terrain.
+	for(int gy = 0; gy < grid_size.second-1; gy++) {
+		for(int gx = 0; gx < grid_size.first-1; gx++) {
+			long unsigned int const idx[4] = {
+                xy_to_v_index(gx  , gy),
+                xy_to_v_index(gx+1, gy),
+                xy_to_v_index(gx  , gy+1),
+                xy_to_v_index(gx+1, gy+1)
+            };
+            faces.push_back(Mesh::Triangle(idx[0], idx[1], idx[2]));
+            faces.push_back(Mesh::Triangle(idx[1], idx[3], idx[2]));
+		}
+	}
+
+	return std::make_shared<Mesh>(vertices, faces);
+}
+
 
 int main(int arg_count, char *arg_values[]) {
 	std::pair<size_t, size_t> grid_size(96, 96);
@@ -137,15 +178,16 @@ int main(int arg_count, char *arg_values[]) {
 	Array2D<float> fbm_values = calculate_fbm(grid_size);
 	fbm_values *= 0.5;
 
-
 	MeshViewer mvi;
 	auto meshLand = build_terrain_mesh(fbm_values, false);
+	auto meshFiller = build_filler_mesh(fbm_values);
 	auto meshWater = build_terrain_mesh(water_values[0], true);
 	meshWater->water_values = water_values; // save the values for animation
 
 
 	meshLand->print_info();
 	meshWater->print_info();
-	mvi.setMesh(meshLand, meshWater);
+	meshFiller->print_info();
+	mvi.setMesh(meshLand, meshWater, meshFiller);
 	return mvi.run();
 }

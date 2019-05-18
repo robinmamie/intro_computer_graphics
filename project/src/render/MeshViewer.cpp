@@ -29,16 +29,20 @@ MeshViewer::MeshViewer(std::string const& _title, int _width, int _height)
 	, landActor(new StaticMeshActor(landMesh))
 	, waterMesh(new Mesh)
 	, waterActor(new StaticMeshActor(waterMesh))
+	, fillerMesh(new Mesh)
+	, fillerActor(new StaticMeshActor(fillerMesh))
 {
     ;
 }
 
-void MeshViewer::setMesh(std::shared_ptr<Mesh> new_landMesh, std::shared_ptr<Mesh> new_waterMesh)
+void MeshViewer::setMesh(std::shared_ptr<Mesh> new_landMesh, std::shared_ptr<Mesh> new_waterMesh,  std::shared_ptr<Mesh> new_fillerMesh)
 {
 	landMesh = new_landMesh;
 	landActor->mesh = new_landMesh;
 	waterMesh = new_waterMesh;
 	waterActor->mesh = new_waterMesh;
+	fillerMesh = new_fillerMesh;
+	fillerActor->mesh = new_fillerMesh;
 }
 
 void MeshViewer::update_water(double dt){
@@ -179,7 +183,6 @@ void MeshViewer::draw_scene(mat4& _projection, mat4& _view)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glEnable(GL_DEPTH_TEST);
 
-	/// Draw water
     fb->bind();
 
     color_shader_.use();
@@ -188,7 +191,25 @@ void MeshViewer::draw_scene(mat4& _projection, mat4& _view)
     color_shader_.set_uniform("color_map", 0);
 	landActor->draw();
     color_shader_.disable();
+    
+    /// Draw filler
+	m_matrix = fillerActor->model_matrix;
+	mv_matrix  = _view * m_matrix;
+	mvp_matrix = _projection * mv_matrix;
 
+	n_matrix    = transpose(inverse(mv_matrix));
+
+	phong_shader_.use();
+	phong_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
+	phong_shader_.set_uniform("modelview_matrix", mv_matrix);
+	phong_shader_.set_uniform("normal_matrix", n_matrix);
+	phong_shader_.set_uniform("light_position", vec3(light));
+
+	fillerActor->draw();
+    phong_shader_.disable();
+
+
+	/// Draw water
 	m_matrix = waterActor->model_matrix;
 	mv_matrix  = _view * m_matrix;
 	mvp_matrix = _projection * mv_matrix;
