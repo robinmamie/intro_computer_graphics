@@ -33,6 +33,8 @@ public:
 
 	/// resize function - called when the window size is changed
 	virtual void resize(int width, int height) override;
+
+	void set_time(float time);
 	
 protected:
 	/// function that is called on the creation of the widget for the initialisation of OpenGL
@@ -55,6 +57,7 @@ protected:
 private:
 	Shader texture_shader;
 	Shader shader_to_display;
+	float time_;
 
 	Quad fullscreen_quad;
 
