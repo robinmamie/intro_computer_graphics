@@ -193,7 +193,7 @@ float perlin_fbm_3d(vec3 point) {
 }
 
 float perlin_water_3d(vec3 point) {
-    float water = 0.0f;
+    float water = -0.065f; //base level
     float am  = 0.05f;
     float fm  = 0.25f;
     for (int i = 0; i < num_octaves; ++i) {
