@@ -220,6 +220,7 @@ void ShaderViewer::paint_shader_to_texture()
 	aspect_ratio *= std::sqrt(2.0f) / norm(aspect_ratio);
 
 	shader_to_display.use();
+	shader_to_display.set_uniform("time_", time_);
 	shader_to_display.set_uniform("viewer_position", viewer_position);
 	shader_to_display.set_uniform("viewer_scale", viewer_scale * aspect_ratio);
 
@@ -229,6 +230,11 @@ void ShaderViewer::paint_shader_to_texture()
 	glCheckError("ShaderViewer::paint_shader_to_texture");
 
 	should_redraw = false; // we have just redrawn, waiting for new changes
+}
+
+void ShaderViewer::set_time(float time){
+	time_ = time;
+	should_redraw = true;
 }
 
 void ShaderViewer::paint()

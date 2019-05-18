@@ -32,6 +32,8 @@
 class Mesh
 {
 public:
+    #define NB_WATER_ITERATIONS 100
+
     /// a vertex consists of a position and a normal
     struct Vertex {
 
@@ -117,7 +119,7 @@ private:
 
 public:
     /// Water values that allows to shift the perlin water
-	Array2D<float>* water_values = nullptr;
+	std::vector<Array2D<float>> water_values;
 	
     /// Read mesh from an OFF file
     void read(const std::string &_filename);

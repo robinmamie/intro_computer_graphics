@@ -42,7 +42,8 @@ void MeshViewer::setMesh(std::shared_ptr<Mesh> new_landMesh, std::shared_ptr<Mes
 }
 
 void MeshViewer::update_water(double dt){
-	waterActor->mesh->move(dt);
+	//TODO: change mesh or waterActor
+    waterActor->mesh->move(dt);
 }
 
 //-----------------------------------------------------------------------------
