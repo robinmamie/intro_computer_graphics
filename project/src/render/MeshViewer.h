@@ -77,10 +77,10 @@ private:
 
 	std::shared_ptr<Mesh> landMesh;
 	std::shared_ptr<Mesh> waterMesh;
-	std::shared_ptr<Mesh> fillerMesh;
+	std::shared_ptr<Mesh> fillerMesh1;
 	std::shared_ptr<StaticMeshActor> landActor;
 	std::shared_ptr<StaticMeshActor> waterActor;
-	std::shared_ptr<StaticMeshActor> fillerActor;
+	std::shared_ptr<StaticMeshActor> fillerActor1;
 
 
     GLuint frame_buffer_, color_, depth_;

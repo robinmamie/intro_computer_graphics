@@ -127,7 +127,6 @@ std::shared_ptr<Mesh> build_terrain_mesh(Array2D<float> const& height_map, bool 
 
 std::shared_ptr<Mesh> build_filler_mesh(Array2D<float> const& height_map) {
 	std::pair<size_t, size_t> const grid_size = height_map.size();
-
 	std::vector<vec3> vertices(grid_size.first * grid_size.second);
 	std::vector<Mesh::Face> faces;
 
@@ -143,8 +142,11 @@ std::shared_ptr<Mesh> build_filler_mesh(Array2D<float> const& height_map) {
 			int const idx = xy_to_v_index(gx, gy);
 
             float x = gx / (float) grid_size.first  - 0.5f;
-            float z = gy / (float) grid_size.second - 0.5f;
-            float y = height_map(x, y);
+            float t_y = gy / (float) grid_size.second  - 0.5f;
+            float z = t_y;
+            float y = height_map(x, y) + 0.45f;
+            //0.46 bon
+            z = z > height_map(gx, gy) ? height_map(gx, gy) : z;
 			vertices[idx] = vec3(x, y, z);
 		}
 	}
@@ -180,14 +182,14 @@ int main(int arg_count, char *arg_values[]) {
 
 	MeshViewer mvi;
 	auto meshLand = build_terrain_mesh(fbm_values, false);
-	auto meshFiller = build_filler_mesh(fbm_values);
+	auto meshFiller1 = build_filler_mesh(fbm_values);
 	auto meshWater = build_terrain_mesh(water_values[0], true);
 	meshWater->water_values = water_values; // save the values for animation
 
 
 	meshLand->print_info();
 	meshWater->print_info();
-	meshFiller->print_info();
-	mvi.setMesh(meshLand, meshWater, meshFiller);
+	meshFiller1->print_info();
+	mvi.setMesh(meshLand, meshWater, meshFiller1);
 	return mvi.run();
 }
