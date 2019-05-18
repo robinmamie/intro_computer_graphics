@@ -73,7 +73,7 @@ void Mesh::set(std::vector<vec3> const& new_pts,  std::vector<Face> const& new_f
 }
 
 #define POSITION_Z vertices_[x*96+y].position.z
-#define ANIMATION_SPEED 7
+#define ANIMATION_SPEED 10
 
 void Mesh::move(double dt){
     time += ANIMATION_SPEED*dt;

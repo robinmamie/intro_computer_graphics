@@ -194,16 +194,16 @@ float perlin_fbm_3d(vec3 point) {
 
 float perlin_water_3d(vec3 point) {
     float water = 0.0f;
-    float am  = 0.03f;
-    float fm  = 0.5f;
+    float am  = 0.05f;
+    float fm  = 0.25f;
     for (int i = 0; i < num_octaves; ++i) {
         water += am * perlin_noise_3d(point * fm);
         am  *= ampl_multiplier_water;
         fm  *= freq_multiplier_water;
     }
 
-    while(water>0.05){
+    /*while(water>0.05){
         water = 0.25*water;
-    }
+    }*/
 	return water;
 }

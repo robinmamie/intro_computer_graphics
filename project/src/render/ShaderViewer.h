@@ -57,7 +57,7 @@ protected:
 private:
 	Shader texture_shader;
 	Shader shader_to_display;
-	float time_;
+	float time_ = 0.0f;
 
 	Quad fullscreen_quad;
 
