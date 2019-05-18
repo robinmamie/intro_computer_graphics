@@ -136,33 +136,33 @@ std::shared_ptr<Mesh> build_filler_mesh(Array2D<float> const& height_map) {
 	};
 
 	// First, generate the displaced vertices of the grid.
-	// (iterate over y first then over x to use CPU cache better)
-	for(int gy = 0; gy < grid_size.second; gy++) {
-		for(int gx = 0; gx < grid_size.first; gx++) {
+	// (iterate over y first then over x to use CPU
+
+	for(int gx = 0; gx < grid_size.first; gx++) {
+			int gy = 0;
 			int const idx = xy_to_v_index(gx, gy);
 
             float x = gx / (float) grid_size.first  - 0.5f;
-            float t_y = gy / (float) grid_size.second  - 0.5f;
-            float z = t_y;
-            float y = height_map(x, y) + 0.45f;
-            //0.46 bon
-            z = z > height_map(gx, gy) ? height_map(gx, gy) : z;
+            float y = gy / (float) grid_size.second - 0.5f;
+            float z ;
+            z = (gx % 2 == 0) ? height_map(gx, gy) :-0.5;
 			vertices[idx] = vec3(x, y, z);
-		}
+
 	}
+	
 
 	// Second, connect the grid vertices with triangles to triangulate the terrain.
-	for(int gy = 0; gy < grid_size.second-1; gy++) {
-		for(int gx = 0; gx < grid_size.first-1; gx++) {
+	for(int gx = 0; gx < grid_size.first-3; gx++) {
+		int gy = 0;
 			long unsigned int const idx[4] = {
                 xy_to_v_index(gx  , gy),
                 xy_to_v_index(gx+1, gy),
-                xy_to_v_index(gx  , gy+1),
-                xy_to_v_index(gx+1, gy+1)
+                xy_to_v_index(gx+2  , gy),
+                xy_to_v_index(gx+3, gy)
             };
             faces.push_back(Mesh::Triangle(idx[0], idx[1], idx[2]));
             faces.push_back(Mesh::Triangle(idx[1], idx[3], idx[2]));
-		}
+		
 	}
 
 	return std::make_shared<Mesh>(vertices, faces);
@@ -182,14 +182,14 @@ int main(int arg_count, char *arg_values[]) {
 
 	MeshViewer mvi;
 	auto meshLand = build_terrain_mesh(fbm_values, false);
-	auto meshFiller1 = build_filler_mesh(fbm_values);
+	auto meshFiller = build_filler_mesh(fbm_values);
 	auto meshWater = build_terrain_mesh(water_values[0], true);
 	meshWater->water_values = water_values; // save the values for animation
 
 
 	meshLand->print_info();
 	meshWater->print_info();
-	meshFiller1->print_info();
-	mvi.setMesh(meshLand, meshWater, meshFiller1);
+	meshFiller->print_info();
+	mvi.setMesh(meshLand, meshWater, meshFiller);
 	return mvi.run();
 }
