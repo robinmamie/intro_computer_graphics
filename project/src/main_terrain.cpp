@@ -192,7 +192,7 @@ std::shared_ptr<Mesh> build_filler_mesh(Array2D<float> const& height_map) {
 			float x = gx / (float) grid_size.first  - 0.5f;
 			float y = gy / (float) grid_size.second - 0.5f;
 			float z ;
-			z = (gx % 2 == 0) ? height_map(gx, gy) : -0.5;
+			z = (gy % 2 == 0) ? height_map(gx, gy) : -0.5;
 			vertices[idx] = vec3(x, y, z);
 	}
 	
@@ -216,7 +216,7 @@ std::shared_ptr<Mesh> build_filler_mesh(Array2D<float> const& height_map) {
 			float x = gx / (float) grid_size.first  - 0.5f;
 			float y = gy / (float) grid_size.second - 0.5f;
 			float z ;
-			z = (gx % 2 == 0) ? height_map(gx, gy) : -0.5;
+			z = (gy % 2 == 0) ? height_map(gx, gy) : -0.5;
 			vertices[idx] = vec3(x, y, z);
 
 	}
