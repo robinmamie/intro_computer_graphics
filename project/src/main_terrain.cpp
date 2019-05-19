@@ -210,7 +210,7 @@ std::shared_ptr<Mesh> build_filler_mesh(Array2D<float> const& height_map) {
 	
 	///Fourth wall
 	for(int gy = 0; gy < grid_size.second; gy++) {
-			int gx = 0;
+			int gx = grid_size.first - 1;
 			int const idx = xy_to_v_index(gx, gy);
 
 			float x = gx / (float) grid_size.first  - 0.5f;
@@ -222,7 +222,7 @@ std::shared_ptr<Mesh> build_filler_mesh(Array2D<float> const& height_map) {
 	}
 	
 	for(int gy = 0; gy < grid_size.second - 3; gy++) {
-		int gx = 0;
+		int gx = grid_size.first - 1;
 		long unsigned int const idx[4] = {
 			xy_to_v_index(gx, gy),
             xy_to_v_index(gx, gy+1),
