@@ -209,6 +209,14 @@ void MeshViewer::draw_scene(mat4& _projection, mat4& _view)
 	fillerActor->draw();
     phong_shader_.disable();
 
+    color_shader_.use();
+    color_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
+    color_shader_.set_uniform("resolution", vec2(width_, height_));
+    color_shader_.set_uniform("color_map", 0);
+    
+	fillerActor->draw();
+    color_shader_.disable();
+
 
 	/// Draw water
 	m_matrix = waterActor->model_matrix;
