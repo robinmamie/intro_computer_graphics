@@ -135,9 +135,7 @@ std::shared_ptr<Mesh> build_filler_mesh(Array2D<float> const& height_map) {
 		return x + y*grid_size.first;
 	};
 
-	// First, generate the displaced vertices of the grid.
-	// (iterate over y first then over x to use CPU
-
+	///First wall
 	for(int gx = 0; gx < grid_size.first; gx++) {
 			int gy = 0;
 			int const idx = xy_to_v_index(gx, gy);
@@ -145,24 +143,94 @@ std::shared_ptr<Mesh> build_filler_mesh(Array2D<float> const& height_map) {
             float x = gx / (float) grid_size.first  - 0.5f;
             float y = gy / (float) grid_size.second - 0.5f;
             float z ;
-            z = (gx % 2 == 0) ? height_map(gx, gy) :-0.5;
+            z = (gx % 2 == 0) ? height_map(gx, gy) : -0.5;
 			vertices[idx] = vec3(x, y, z);
 
 	}
 	
-
-	// Second, connect the grid vertices with triangles to triangulate the terrain.
-	for(int gx = 0; gx < grid_size.first-3; gx++) {
-		int gy = 0;
+	for(int gx = 0; gx < grid_size.first - 3; gx++) {
+			int gy = 0;
 			long unsigned int const idx[4] = {
                 xy_to_v_index(gx  , gy),
                 xy_to_v_index(gx+1, gy),
-                xy_to_v_index(gx+2  , gy),
+                xy_to_v_index(gx+2, gy),
                 xy_to_v_index(gx+3, gy)
             };
             faces.push_back(Mesh::Triangle(idx[0], idx[1], idx[2]));
-            faces.push_back(Mesh::Triangle(idx[1], idx[3], idx[2]));
-		
+            faces.push_back(Mesh::Triangle(idx[1], idx[3], idx[2]));	
+	}
+	
+	///Second wall
+	for(int gx = 0; gx < grid_size.first; gx++) {
+			int gy = grid_size.second - 1;
+			int const idx = xy_to_v_index(gx, gy);
+
+            float x = gx / (float) grid_size.first  - 0.5f;
+            float y = gy / (float) grid_size.second - 0.5f;
+            float z ;
+            z = (gx % 2 == 0) ? height_map(gx, gy) : -0.5;
+			vertices[idx] = vec3(x, y, z);
+	}
+	
+	for(int gx = 0; gx < grid_size.first - 3; gx++) {
+			int gy = grid_size.second - 1;
+			long unsigned int const idx[4] = {
+                xy_to_v_index(gx  , gy),
+                xy_to_v_index(gx+1, gy),
+                xy_to_v_index(gx+2, gy),
+                xy_to_v_index(gx+3, gy)
+            };
+            faces.push_back(Mesh::Triangle(idx[0], idx[1], idx[2]));
+            faces.push_back(Mesh::Triangle(idx[1], idx[3], idx[2]));	
+	}
+	
+	///Third wall	
+	for(int gy = 0; gy < grid_size.second; gy++) {
+			int gx = 0;
+			int const idx = xy_to_v_index(gx, gy);
+
+			float x = gx / (float) grid_size.first  - 0.5f;
+			float y = gy / (float) grid_size.second - 0.5f;
+			float z ;
+			z = (gx % 2 == 0) ? height_map(gx, gy) : -0.5;
+			vertices[idx] = vec3(x, y, z);
+	}
+	
+	for(int gy = 0; gy < grid_size.second - 3; gy++) {
+			int gx = 0;
+			long unsigned int const idx[4] = {
+                xy_to_v_index(gx, gy),
+                xy_to_v_index(gx, gy+1),
+                xy_to_v_index(gx, gy+2),
+                xy_to_v_index(gx, gy+3)
+            };
+            faces.push_back(Mesh::Triangle(idx[0], idx[1], idx[2]));
+            faces.push_back(Mesh::Triangle(idx[1], idx[3], idx[2]));	
+	}
+	
+	///Fourth wall
+	for(int gy = 0; gy < grid_size.second; gy++) {
+			int gx = 0;
+			int const idx = xy_to_v_index(gx, gy);
+
+			float x = gx / (float) grid_size.first  - 0.5f;
+			float y = gy / (float) grid_size.second - 0.5f;
+			float z ;
+			z = (gx % 2 == 0) ? height_map(gx, gy) : -0.5;
+			vertices[idx] = vec3(x, y, z);
+
+	}
+	
+	for(int gy = 0; gy < grid_size.second - 3; gy++) {
+		int gx = 0;
+		long unsigned int const idx[4] = {
+			xy_to_v_index(gx, gy),
+            xy_to_v_index(gx, gy+1),
+            xy_to_v_index(gx, gy+2),
+            xy_to_v_index(gx, gy+3)
+		};
+       faces.push_back(Mesh::Triangle(idx[0], idx[1], idx[2]));
+	   faces.push_back(Mesh::Triangle(idx[1], idx[3], idx[2]));	
 	}
 
 	return std::make_shared<Mesh>(vertices, faces);
