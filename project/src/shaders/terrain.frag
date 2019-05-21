@@ -12,6 +12,7 @@
 #extension GL_ARB_enhanced_layouts : enable
 
 uniform vec3 light_position; // Eye-space light position
+uniform bool mat;
 
 in vec3  v2f_ec_vertex;
 in vec3  v2f_normal;
@@ -27,14 +28,20 @@ const float terrain_water_level    = 0 + 1e-6;
 const vec3  terrain_color_water    = vec3(0.2, 0.2, 0.8);
 const vec3  terrain_color_mountain = vec3(0.8, 0.5, 0.4);
 const vec3  terrain_color_grass    = vec3(0.33, 0.43, 0.18);
-const vec3 sky_color = vec3(0.6f, 1.0f, 1.0f);
+const vec3  sky_color = vec3(0.6f, 1.0f, 1.0f);
 
 void main()
 {
 	float height = v2f_height;
 
-    vec3 material = (height < terrain_water_level)? mix(terrain_color_grass, terrain_color_water, (-height*3 + terrain_water_level) * 2):
+    vec3 material = (height < terrain_water_level)? mix(terrain_color_grass, terrain_color_water, (-height*2 + terrain_water_level) * 2):
                                                    mix(terrain_color_grass, terrain_color_mountain, (height - terrain_water_level) * 2);
+
+    if (mat) {
+        f_color = vec4(material, 1.0f);
+        return;
+    }
+
 	float shininess = 0.5f;
 
     // Ambient

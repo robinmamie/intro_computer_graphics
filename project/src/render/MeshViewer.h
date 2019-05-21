@@ -23,7 +23,7 @@ public:
 	MeshViewer(std::string const& _title = "Mesh Viewer", int _width=1920, int _height=1080);
     ~MeshViewer();
 
-	void setMesh(std::shared_ptr<Mesh> new_landMesh, std::shared_ptr<Mesh> new_waterMesh);
+	void setMesh(std::shared_ptr<Mesh> new_landMesh, std::shared_ptr<Mesh> new_waterMesh, std::shared_ptr<Mesh> new_fillerMesh);
 
 	virtual void update_water(double dt) override;
 
@@ -77,8 +77,11 @@ private:
 
 	std::shared_ptr<Mesh> landMesh;
 	std::shared_ptr<Mesh> waterMesh;
-	std::shared_ptr<StaticMeshActor> waterActor;
+	std::shared_ptr<Mesh> fillerMesh;
 	std::shared_ptr<StaticMeshActor> landActor;
+	std::shared_ptr<StaticMeshActor> waterActor;
+	std::shared_ptr<StaticMeshActor> fillerActor;
+
 
     GLuint frame_buffer_, color_, depth_;
 

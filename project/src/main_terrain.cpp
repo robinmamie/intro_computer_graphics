@@ -1,4 +1,3 @@
-
 #include "render/ShaderViewer.h"
 #include <vector>
 #include <string>
@@ -126,6 +125,114 @@ std::shared_ptr<Mesh> build_terrain_mesh(Array2D<float> const& height_map, bool 
 }
 
 
+
+/// Aquarium effect
+std::shared_ptr<Mesh> build_filler_mesh(Array2D<float> const& height_map) {
+	std::pair<size_t, size_t> const grid_size = height_map.size();
+
+	std::vector<vec3> vertices((4*grid_size.first) + (4*grid_size.second));
+	std::vector<Mesh::Face> faces;
+
+	long unsigned int index = 0;
+
+	float z_low = -0.35;
+
+	// First wall
+	float x = -0.5f;
+	float y = -0.5f;
+	float z = height_map(0,0);
+	vertices[index] = vec3(x,y,z_low);
+	vertices[index + 1] = vec3(x,y,z);
+
+	for(int gx = 1; gx < grid_size.first; gx++) {
+
+        x = gx / (float) (grid_size.first)  - 0.5f;
+        z = height_map(gx, 0);
+
+		vertices[index + 2] = vec3(x,y,z_low);
+		vertices[index + 3] = vec3(x,y,z);
+		
+		faces.push_back(Mesh::Triangle(index + 1,index,index + 2));
+		faces.push_back(Mesh::Triangle(index + 1,index + 2,index + 3));
+		index += 2;
+	}
+	index += 2;
+	// Second wall
+	x = -0.5f;
+	y = 0.5f - 1.0f / grid_size.second;
+	z = height_map(0,grid_size.second - 1);
+	vertices[index] = vec3(x,y,z_low);
+	vertices[index + 1] = vec3(x,y,z);
+
+	for(int gx = 1; gx < grid_size.first; gx++) {
+
+        x = gx / (float) (grid_size.first)  - 0.5f;
+        z = height_map(gx, grid_size.second - 1);
+		
+		vertices[index + 2] = vec3(x,y,z_low);
+		vertices[index + 3] = vec3(x,y,z);
+		
+		faces.push_back(Mesh::Triangle(index + 1,index,index + 2));
+		faces.push_back(Mesh::Triangle(index + 1,index + 2,index + 3));
+		index += 2;
+	}
+
+	index += 2;
+	// Third wall
+	x = -0.5f;
+	y = -0.5f;
+	z = height_map(0,0);
+	vertices[index] = vec3(x,y,z_low);
+	vertices[index + 1] = vec3(x,y,z);
+
+	for(int gy = 1; gy < grid_size.second; gy++) {
+
+        y = gy / (float) (grid_size.second)  - 0.5f;
+        z = height_map(0, gy);
+
+		vertices[index + 2] = vec3(x,y,z_low);
+		vertices[index + 3] = vec3(x,y,z);
+		
+		faces.push_back(Mesh::Triangle(index + 1,index,index + 2));
+		faces.push_back(Mesh::Triangle(index + 1,index + 2,index + 3));
+		index += 2;
+	}
+
+	index += 2;
+	// Fourth wall
+	x = 0.5f - 1.0f / grid_size.first;
+	y = -0.5f;
+	z = height_map(grid_size.first-1,0);
+	vertices[index] = vec3(x,y,z_low);
+	vertices[index + 1] = vec3(x,y,z);
+
+	for(int gy = 1; gy < grid_size.second; gy++) {
+
+        y = gy / (float) (grid_size.second)  - 0.5f;
+        z = height_map(grid_size.first-1, gy);
+
+		vertices[index + 2] = vec3(x,y,z_low);
+		vertices[index + 3] = vec3(x,y,z);
+		
+		faces.push_back(Mesh::Triangle(index + 1,index,index + 2));
+		faces.push_back(Mesh::Triangle(index + 1,index + 2,index + 3));
+		index += 2;
+	}
+
+	// Ground
+	for (int i = 2; i < 2*grid_size.first; i += 2) {
+		long unsigned int i00 = i - 2;
+		long unsigned int i10 = i;
+		long unsigned int i01 = 2*grid_size.first + i - 2;
+		long unsigned int i11 = 2*grid_size.first + i;
+		faces.push_back(Mesh::Triangle(i00,i10,i01));
+		faces.push_back(Mesh::Triangle(i11,i01,i10));
+	}
+
+	return std::make_shared<Mesh>(vertices, faces);
+}
+
+
 int main(int arg_count, char *arg_values[]) {
 	std::pair<size_t, size_t> grid_size(96, 96);
 
@@ -137,15 +244,16 @@ int main(int arg_count, char *arg_values[]) {
 	Array2D<float> fbm_values = calculate_fbm(grid_size);
 	fbm_values *= 0.5;
 
-
 	MeshViewer mvi;
 	auto meshLand = build_terrain_mesh(fbm_values, false);
+	auto meshFiller = build_filler_mesh(fbm_values);
 	auto meshWater = build_terrain_mesh(water_values[0], true);
 	meshWater->water_values = water_values; // save the values for animation
 
 
 	meshLand->print_info();
 	meshWater->print_info();
-	mvi.setMesh(meshLand, meshWater);
+	meshFiller->print_info();
+	mvi.setMesh(meshLand, meshWater, meshFiller);
 	return mvi.run();
 }

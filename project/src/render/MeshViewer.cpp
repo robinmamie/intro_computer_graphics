@@ -29,16 +29,20 @@ MeshViewer::MeshViewer(std::string const& _title, int _width, int _height)
 	, landActor(new StaticMeshActor(landMesh))
 	, waterMesh(new Mesh)
 	, waterActor(new StaticMeshActor(waterMesh))
+	, fillerMesh(new Mesh)
+	, fillerActor(new StaticMeshActor(fillerMesh))
 {
     ;
 }
 
-void MeshViewer::setMesh(std::shared_ptr<Mesh> new_landMesh, std::shared_ptr<Mesh> new_waterMesh)
+void MeshViewer::setMesh(std::shared_ptr<Mesh> new_landMesh, std::shared_ptr<Mesh> new_waterMesh,  std::shared_ptr<Mesh> new_fillerMesh)
 {
 	landMesh = new_landMesh;
 	landActor->mesh = new_landMesh;
 	waterMesh = new_waterMesh;
 	waterActor->mesh = new_waterMesh;
+	fillerMesh = new_fillerMesh;
+	fillerActor->mesh = new_fillerMesh;
 }
 
 void MeshViewer::update_water(double dt){
@@ -56,30 +60,48 @@ void MeshViewer::scroll_wheel(double xoffset, double yoffset)
 
 void MeshViewer::keyboard(int key, int scancode, int action, int mods)
 {
+    const float debug_v = 10.0;
+    const float cinematic_v = 0.1;
     if (action == GLFW_PRESS || action == GLFW_REPEAT) {
         // Change view between the various bodies with keys 1..6
         switch (key) {
-        case GLFW_KEY_LEFT:
+        case GLFW_KEY_LEFT: {
+            z_angle_ -= debug_v;
+            break;
+        }
+
+        case GLFW_KEY_RIGHT: {
+            z_angle_ += debug_v;
+            break;
+        }
+
+        case GLFW_KEY_DOWN: {
+            x_angle_ += debug_v;
+            break;
+        }
+
+        case GLFW_KEY_UP: {
+            x_angle_ -= debug_v;
+            break;
+        }
+
         case GLFW_KEY_A: {
-            z_angle_ -= 10.0;
+            z_angle_ -= cinematic_v;
             break;
         }
 
-        case GLFW_KEY_RIGHT:
         case GLFW_KEY_D: {
-            z_angle_ += 10.0;
+            z_angle_ += cinematic_v;
             break;
         }
 
-        case GLFW_KEY_DOWN:
         case GLFW_KEY_S: {
-            x_angle_ += 10.0;
+            x_angle_ += cinematic_v;
             break;
         }
 
-        case GLFW_KEY_UP:
         case GLFW_KEY_W: {
-            x_angle_ -= 10.0;
+            x_angle_ -= cinematic_v;
             break;
         }
 
@@ -167,6 +189,7 @@ void MeshViewer::draw_scene(mat4& _projection, mat4& _view)
 	phong_shader_.set_uniform("modelview_matrix", mv_matrix);
 	phong_shader_.set_uniform("normal_matrix", n_matrix);
 	phong_shader_.set_uniform("light_position", vec3(light));
+    phong_shader_.set_uniform("mat", false);
 
 	landActor->draw();
     phong_shader_.disable();
@@ -179,16 +202,43 @@ void MeshViewer::draw_scene(mat4& _projection, mat4& _view)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glEnable(GL_DEPTH_TEST);
 
-	/// Draw water
     fb->bind();
 
     color_shader_.use();
     color_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
     color_shader_.set_uniform("resolution", vec2(width_, height_));
     color_shader_.set_uniform("color_map", 0);
+    
 	landActor->draw();
     color_shader_.disable();
+    
+    /// Draw filler
+	m_matrix = fillerActor->model_matrix;
+	mv_matrix  = _view * m_matrix;
+	mvp_matrix = _projection * mv_matrix;
 
+	n_matrix    = transpose(inverse(mv_matrix));
+
+	phong_shader_.use();
+	phong_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
+	phong_shader_.set_uniform("modelview_matrix", mv_matrix);
+	phong_shader_.set_uniform("normal_matrix", n_matrix);
+	phong_shader_.set_uniform("light_position", -vec3(light));
+    phong_shader_.set_uniform("mat", true);
+
+	fillerActor->draw();
+    phong_shader_.disable();
+
+    color_shader_.use();
+    color_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
+    color_shader_.set_uniform("resolution", vec2(width_, height_));
+    color_shader_.set_uniform("color_map", 0);
+    
+	fillerActor->draw();
+    color_shader_.disable();
+
+
+	/// Draw water
 	m_matrix = waterActor->model_matrix;
 	mv_matrix  = _view * m_matrix;
 	mvp_matrix = _projection * mv_matrix;
