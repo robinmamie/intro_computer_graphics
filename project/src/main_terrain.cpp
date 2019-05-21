@@ -1,4 +1,3 @@
-
 #include "render/ShaderViewer.h"
 #include <vector>
 #include <string>
@@ -125,114 +124,109 @@ std::shared_ptr<Mesh> build_terrain_mesh(Array2D<float> const& height_map, bool 
 	return std::make_shared<Mesh>(vertices, faces);
 }
 
+
+
 /// Aquarium effect
 std::shared_ptr<Mesh> build_filler_mesh(Array2D<float> const& height_map) {
 	std::pair<size_t, size_t> const grid_size = height_map.size();
-	std::vector<vec3> vertices((4 * grid_size.first) * (4 * grid_size.second));
+
+	std::vector<vec3> vertices((4*grid_size.first) + (4*grid_size.second));
 	std::vector<Mesh::Face> faces;
 
-	// Map a 2D grid index (x, y) into a 1D index into the output vertex array.
-	auto const xy_to_v_index = [&](int x, int y) {
-		return x + 4*y*grid_size.first;
-	};
+	long unsigned int index = 0;
 
-	///First wall
-	for(int gx = 0; gx < (2 * grid_size.first); gx++) {
-		int gy = 0;
-		int const idx = xy_to_v_index(gx, gy);
+	float z_low = -0.35;
 
-        float x = gx / (float) (2 * grid_size.first)  - 0.5f;
-        float y = - 0.5f;
-        float z;
-        z = (gx % 2 == 0) ? height_map(gx / 2, gy) : -0.5;
-					
-		vertices[idx] = vec3(x, y, z);
+	// First wall
+	float x = -0.5f;
+	float y = -0.5f;
+	float z = height_map(0,0);
+	vertices[index] = vec3(x,y,z_low);
+	vertices[index + 1] = vec3(x,y,z);
 
-	}
-	
-	for(int gx = 0; gx < (2 * grid_size.first) - 3; gx++) {
-		int gy = 0;
-		long unsigned int const idx[4] = {
-           xy_to_v_index(gx  , gy),
-           xy_to_v_index(gx+1, gy),
-           xy_to_v_index(gx+2, gy),
-           xy_to_v_index(gx+3, gy)
-        };
-            
-            faces.push_back(Mesh::Triangle(idx[0], idx[1], idx[2]));
-            faces.push_back(Mesh::Triangle(idx[1], idx[3], idx[2]));	
-	}
-	
-	///Second wall
-	for(int gx = 0; gx < (2 * grid_size.first); gx++) {
-		int gy = grid_size.second - 1;
-		int const idx = xy_to_v_index(gx, gy);
+	for(int gx = 1; gx < grid_size.first; gx++) {
 
-        float x = gx / (float) (2 * grid_size.first) - 0.5f;
-        float y = gy / (float) grid_size.second - 0.5f;
-        float z;
-        z = (gx % 2 == 0) ? height_map(gx / 2, gy) : -0.5;
-		vertices[idx] = vec3(x, y, z);
-	}
-	
-	for(int gx = 0; gx < (2 * grid_size.first ) - 3; gx++) {
-		int gy = grid_size.second - 1;
-		long unsigned int const idx[4] = {
-           xy_to_v_index(gx  , gy),
-           xy_to_v_index(gx+1, gy),
-           xy_to_v_index(gx+2, gy),
-           xy_to_v_index(gx+3, gy)
-         };
-         faces.push_back(Mesh::Triangle(idx[0], idx[1], idx[2]));
-         faces.push_back(Mesh::Triangle(idx[1], idx[3], idx[2]));	
-	}
-	
-	///Third wall	
-	for(int gy = 0; gy < (2 * grid_size.second); gy++) {
-		int gx = 0;
-		int const idx = xy_to_v_index(gx, gy);
+        x = gx / (float) (grid_size.first)  - 0.5f;
+        z = height_map(gx, 0);
 
-		float x = - 0.5f;
-		float y = gy / (float) (2 * grid_size.second) - 0.5f;
-		float z;
-		z = (gy % 2 == 0) ? height_map(gx, gy / 2) : -0.5;
-		vertices[idx] = vec3(x, y, z);
+		vertices[index + 2] = vec3(x,y,z_low);
+		vertices[index + 3] = vec3(x,y,z);
+		
+		faces.push_back(Mesh::Triangle(index + 1,index,index + 2));
+		faces.push_back(Mesh::Triangle(index + 1,index + 2,index + 3));
+		index += 2;
 	}
-	
-	for(int gy = 0; gy < (2 * grid_size.second) - 3; gy++) {
-		int gx = 0;
-		long unsigned int const idx[4] = {
-            xy_to_v_index(gx, gy),
-            xy_to_v_index(gx, gy+1),
-            xy_to_v_index(gx, gy+2),
-            xy_to_v_index(gx, gy+3)
-        };
-        faces.push_back(Mesh::Triangle(idx[0], idx[1], idx[2]));
-        faces.push_back(Mesh::Triangle(idx[1], idx[3], idx[2]));	
-	}
-	
-	///Fourth wall
-	for(int gy = 0; gy < (2 * grid_size.second); gy++) {
-		int gx = grid_size.first - 1;
-		int const idx = xy_to_v_index(gx, gy);
+	index += 2;
+	// Second wall
+	x = -0.5f;
+	y = 0.5f - 1.0f / grid_size.second;
+	z = height_map(0,grid_size.second - 1);
+	vertices[index] = vec3(x,y,z_low);
+	vertices[index + 1] = vec3(x,y,z);
 
-		float x = gx / (float) grid_size.first - 0.5f;
-		float y = gy / (float) (2 * grid_size.second) - 0.5f;
-		float z;
-		z = (gy % 2 == 0) ? height_map(gx, gy / 2) : -0.5;
-		vertices[idx] = vec3(x, y, z);
+	for(int gx = 1; gx < grid_size.first; gx++) {
+
+        x = gx / (float) (grid_size.first)  - 0.5f;
+        z = height_map(gx, grid_size.second - 1);
+		
+		vertices[index + 2] = vec3(x,y,z_low);
+		vertices[index + 3] = vec3(x,y,z);
+		
+		faces.push_back(Mesh::Triangle(index + 1,index,index + 2));
+		faces.push_back(Mesh::Triangle(index + 1,index + 2,index + 3));
+		index += 2;
 	}
-	
-	for(int gy = 0; gy < (2 * grid_size.second) - 3; gy++) {
-		int gx = grid_size.first - 1;
-		long unsigned int const idx[4] = {
-           xy_to_v_index(gx, gy),
-           xy_to_v_index(gx, gy+1),
-           xy_to_v_index(gx, gy+2),
-           xy_to_v_index(gx, gy+3)
-         };
-         faces.push_back(Mesh::Triangle(idx[0], idx[1], idx[2]));
-         faces.push_back(Mesh::Triangle(idx[1], idx[3], idx[2]));
+
+	index += 2;
+	// Third wall
+	x = -0.5f;
+	y = -0.5f;
+	z = height_map(0,0);
+	vertices[index] = vec3(x,y,z_low);
+	vertices[index + 1] = vec3(x,y,z);
+
+	for(int gy = 1; gy < grid_size.second; gy++) {
+
+        y = gy / (float) (grid_size.second)  - 0.5f;
+        z = height_map(0, gy);
+
+		vertices[index + 2] = vec3(x,y,z_low);
+		vertices[index + 3] = vec3(x,y,z);
+		
+		faces.push_back(Mesh::Triangle(index + 1,index,index + 2));
+		faces.push_back(Mesh::Triangle(index + 1,index + 2,index + 3));
+		index += 2;
+	}
+
+	index += 2;
+	// Fourth wall
+	x = 0.5f - 1.0f / grid_size.first;
+	y = -0.5f;
+	z = height_map(grid_size.first-1,0);
+	vertices[index] = vec3(x,y,z_low);
+	vertices[index + 1] = vec3(x,y,z);
+
+	for(int gy = 1; gy < grid_size.second; gy++) {
+
+        y = gy / (float) (grid_size.second)  - 0.5f;
+        z = height_map(grid_size.first-1, gy);
+
+		vertices[index + 2] = vec3(x,y,z_low);
+		vertices[index + 3] = vec3(x,y,z);
+		
+		faces.push_back(Mesh::Triangle(index + 1,index,index + 2));
+		faces.push_back(Mesh::Triangle(index + 1,index + 2,index + 3));
+		index += 2;
+	}
+
+	// Ground
+	for (int i = 2; i < 2*grid_size.first; i += 2) {
+		long unsigned int i00 = i - 2;
+		long unsigned int i10 = i;
+		long unsigned int i01 = 2*grid_size.first + i - 2;
+		long unsigned int i11 = 2*grid_size.first + i;
+		faces.push_back(Mesh::Triangle(i00,i10,i01));
+		faces.push_back(Mesh::Triangle(i11,i01,i10));
 	}
 
 	return std::make_shared<Mesh>(vertices, faces);

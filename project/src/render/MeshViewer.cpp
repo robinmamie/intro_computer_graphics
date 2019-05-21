@@ -60,30 +60,48 @@ void MeshViewer::scroll_wheel(double xoffset, double yoffset)
 
 void MeshViewer::keyboard(int key, int scancode, int action, int mods)
 {
+    const float debug_v = 10.0;
+    const float cinematic_v = 0.1;
     if (action == GLFW_PRESS || action == GLFW_REPEAT) {
         // Change view between the various bodies with keys 1..6
         switch (key) {
-        case GLFW_KEY_LEFT:
+        case GLFW_KEY_LEFT: {
+            z_angle_ -= debug_v;
+            break;
+        }
+
+        case GLFW_KEY_RIGHT: {
+            z_angle_ += debug_v;
+            break;
+        }
+
+        case GLFW_KEY_DOWN: {
+            x_angle_ += debug_v;
+            break;
+        }
+
+        case GLFW_KEY_UP: {
+            x_angle_ -= debug_v;
+            break;
+        }
+
         case GLFW_KEY_A: {
-            z_angle_ -= 10.0;
+            z_angle_ -= cinematic_v;
             break;
         }
 
-        case GLFW_KEY_RIGHT:
         case GLFW_KEY_D: {
-            z_angle_ += 10.0;
+            z_angle_ += cinematic_v;
             break;
         }
 
-        case GLFW_KEY_DOWN:
         case GLFW_KEY_S: {
-            x_angle_ += 10.0;
+            x_angle_ += cinematic_v;
             break;
         }
 
-        case GLFW_KEY_UP:
         case GLFW_KEY_W: {
-            x_angle_ -= 10.0;
+            x_angle_ -= cinematic_v;
             break;
         }
 
@@ -171,6 +189,7 @@ void MeshViewer::draw_scene(mat4& _projection, mat4& _view)
 	phong_shader_.set_uniform("modelview_matrix", mv_matrix);
 	phong_shader_.set_uniform("normal_matrix", n_matrix);
 	phong_shader_.set_uniform("light_position", vec3(light));
+    phong_shader_.set_uniform("mat", false);
 
 	landActor->draw();
     phong_shader_.disable();
@@ -204,7 +223,8 @@ void MeshViewer::draw_scene(mat4& _projection, mat4& _view)
 	phong_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
 	phong_shader_.set_uniform("modelview_matrix", mv_matrix);
 	phong_shader_.set_uniform("normal_matrix", n_matrix);
-	phong_shader_.set_uniform("light_position", vec3(light));
+	phong_shader_.set_uniform("light_position", -vec3(light));
+    phong_shader_.set_uniform("mat", true);
 
 	fillerActor->draw();
     phong_shader_.disable();
