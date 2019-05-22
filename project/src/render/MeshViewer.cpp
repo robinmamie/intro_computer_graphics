@@ -31,6 +31,8 @@ MeshViewer::MeshViewer(std::string const& _title, int _width, int _height)
 	, waterActor(new StaticMeshActor(waterMesh))
 	, fillerMesh(new Mesh)
 	, fillerActor(new StaticMeshActor(fillerMesh))
+	, sky_ (2.5f) // radius
+	, unit_sphere_(50) //level of tesselation
 {
     ;
 }
@@ -46,7 +48,6 @@ void MeshViewer::setMesh(std::shared_ptr<Mesh> new_landMesh, std::shared_ptr<Mes
 }
 
 void MeshViewer::update_water(double dt){
-	//TODO: change mesh or waterActor
     waterActor->mesh->move(dt);
 }
 
@@ -137,12 +138,29 @@ void MeshViewer::initialize()
     glEnable(GL_DEPTH_TEST);
 
     // setup shaders
+    std::vector<std::string> sky_vert = {SHADER_PATH "/sky.vert"};
+    std::vector<std::string> sky_frag = {SHADER_PATH "/noise.frag", SHADER_PATH "/sky.frag"};
+
     phong_shader_.load(SHADER_PATH "/terrain.vert", SHADER_PATH "/terrain.frag");
     reflection_shader_.load(SHADER_PATH "/reflection.vert", SHADER_PATH "/reflection.frag");
     color_shader_.load(SHADER_PATH "/paint_color.vert", SHADER_PATH "/paint_color.frag");
+    sky_shader_.load(sky_vert, sky_frag);
 }
 //-----------------------------------------------------------------------------
 
+void MeshViewer::render_sky(Sky& sky, mat4 &_projection, mat4 &_view, Sphere unit_sphere) {
+	mat4 m_matrix = mat4::translate(sky.pos_)
+	              * mat4::scale(sky.radius_);
+    
+	mat4 mv_matrix  = _view * m_matrix;
+    mat4 mvp_matrix = _projection * mv_matrix;
+    sky_shader_.use();
+    sky_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
+	unit_sphere.draw();
+    sky_shader_.disable();
+}
+
+//-----------------------------------------------------------------------------
 
 void MeshViewer::paint()
 {
@@ -243,6 +261,9 @@ void MeshViewer::draw_scene(mat4& _projection, mat4& _view)
 	mv_matrix  = _view * m_matrix;
 	mvp_matrix = _projection * mv_matrix;
 	n_matrix    = transpose(inverse(mv_matrix));
+	
+	/// Draw sky 
+	render_sky(sky_, _projection, _view, unit_sphere_);
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
