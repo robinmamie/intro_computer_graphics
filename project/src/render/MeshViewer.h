@@ -7,6 +7,8 @@
 #include "shader.h"
 #include "StaticMeshActor.h"
 #include <memory>
+#include "../sky/sky.h"
+#include "../sky/sphere.h"
 
 //=============================================================================
 
@@ -27,6 +29,11 @@ public:
 
 	virtual void update_water(double dt) override;
 
+	void render_sky(Sky& sky, mat4 &_projection, mat4 &_view, Shader& cs, Sphere unit_sphere);
+	
+	void render_object(mat4& m_matrix, mat4 &_projection, mat4 &_view, Shader& color_shader);
+
+	
 protected:
 
 	/// function that is called on the creation of the widget for the initialisation of OpenGL
@@ -55,7 +62,7 @@ private:
 	Shader reflection_shader_;
 
 	Shader color_shader_;
-
+	
     std::unique_ptr<FrameBuffer> fb;
 
 	/// the field of view for the camera
@@ -84,6 +91,11 @@ private:
 
 
     GLuint frame_buffer_, color_, depth_;
+    
+	Sky sky_;
+	
+	/// sphere object
+    Sphere unit_sphere_;
 
 };
 
