@@ -9,15 +9,14 @@
 
 #version 140
 
-in  vec2 v2f_texcoord;
+in  vec3 position;
 out vec4 f_color;
 
-float clouds(vec2 point); // Implemented in noise.frag
+float perlin_fbm_3d(vec3 point); // Implemented in noise.frag
 
 void main()
 {
     vec3 sky_basis_color = vec3(0.5, 0.8, 0.9);
-    //float cloud_element = clouds(vec2(1,3));
-    //cloud_element = (cloud_element>1.0) 1.0: cloud_element;
-    f_color = vec4(sky_basis_color, 1.0);
+    vec3 white = vec3(1,1,1);
+    f_color = vec4(mix(sky_basis_color, white, perlin_fbm_3d(5*position+500)), 1.0);
 }

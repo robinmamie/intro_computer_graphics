@@ -31,7 +31,7 @@ MeshViewer::MeshViewer(std::string const& _title, int _width, int _height)
 	, waterActor(new StaticMeshActor(waterMesh))
 	, fillerMesh(new Mesh)
 	, fillerActor(new StaticMeshActor(fillerMesh))
-	, sky_ (1.0f, 0.0f) // radius, distance
+	, sky_ (2.5f) // radius
 	, unit_sphere_(50) //level of tesselation
 {
     ;
@@ -48,7 +48,6 @@ void MeshViewer::setMesh(std::shared_ptr<Mesh> new_landMesh, std::shared_ptr<Mes
 }
 
 void MeshViewer::update_water(double dt){
-	//TODO: change mesh or waterActor
     waterActor->mesh->move(dt);
 }
 
@@ -139,10 +138,13 @@ void MeshViewer::initialize()
     glEnable(GL_DEPTH_TEST);
 
     // setup shaders
+    std::vector<std::string> sky_vert = {SHADER_PATH "/sky.vert"};
+    std::vector<std::string> sky_frag = {SHADER_PATH "/noise.frag", SHADER_PATH "/sky.frag"};
+
     phong_shader_.load(SHADER_PATH "/terrain.vert", SHADER_PATH "/terrain.frag");
     reflection_shader_.load(SHADER_PATH "/reflection.vert", SHADER_PATH "/reflection.frag");
     color_shader_.load(SHADER_PATH "/paint_color.vert", SHADER_PATH "/paint_color.frag");
-    sky_shader_.load(SHADER_PATH "/sky.vert", SHADER_PATH "/sky.frag");
+    sky_shader_.load(sky_vert, sky_frag);
 }
 //-----------------------------------------------------------------------------
 

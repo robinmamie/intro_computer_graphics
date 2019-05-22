@@ -20,17 +20,14 @@ class Sky
 public:
 
     /// default constructor
-    Sky(const float _radius,
-        const float _distance) :
-        pos_(_distance,0,0,1),
-        distance_(_distance),
+    Sky(const float _radius) :
+        pos_(0,0,0,1),
         radius_(_radius)
     {}
 
     /// the current position of the planet
     vec4 pos_;
-    /// distance of the planet from the orbit center (=origin)
-    float distance_;
+
     /// the radius of the planet
     float radius_;
 
