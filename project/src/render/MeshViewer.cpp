@@ -140,9 +140,11 @@ void MeshViewer::initialize()
     // setup shaders
     std::vector<std::string> sky_vert = {SHADER_PATH "/sky.vert"};
     std::vector<std::string> sky_frag = {SHADER_PATH "/noise.frag", SHADER_PATH "/sky.frag"};
+    std::vector<std::string> refl_vert = {SHADER_PATH "/reflection.vert"};
+    std::vector<std::string> refl_frag = {SHADER_PATH "/noise.frag", SHADER_PATH "/reflection.frag"};
 
     phong_shader_.load(SHADER_PATH "/terrain.vert", SHADER_PATH "/terrain.frag");
-    reflection_shader_.load(SHADER_PATH "/reflection.vert", SHADER_PATH "/reflection.frag");
+    reflection_shader_.load(refl_vert, refl_frag);
     color_shader_.load(SHADER_PATH "/paint_color.vert", SHADER_PATH "/paint_color.frag");
     sky_shader_.load(sky_vert, sky_frag);
 }
@@ -273,6 +275,7 @@ void MeshViewer::draw_scene(mat4& _projection, mat4& _view)
     reflection_shader_.set_uniform("modelview_matrix", mv_matrix);
     reflection_shader_.set_uniform("normal_matrix", n_matrix);
     reflection_shader_.set_uniform("projection_matrix", _projection);
+    reflection_shader_.set_uniform("sky_radius", sky_.radius_);
     //reflection_shader_.set_uniform("resolution", vec2(width_, height_));
     reflection_shader_.set_uniform("light_position", vec3(light));
 
