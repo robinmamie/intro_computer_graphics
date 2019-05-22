@@ -26,7 +26,8 @@ add_library(render_shared STATIC
 	src/render/glfw_window.cpp
 	src/render/MeshViewer.cpp
 	src/render/ShaderViewer.cpp
-    src/render/FrameBuffer.cpp
+	src/render/FrameBuffer.cpp
+	src/sky/sphere.cpp
 )
 
 add_executable(terrain
