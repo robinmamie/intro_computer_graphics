@@ -14,11 +14,13 @@ out vec4 f_color;
 
 float perlin_fbm_3d(vec3 point); // Implemented in noise.frag
 
+const vec3 sky_basis_color = vec3(0.5, 0.8, 0.9);
+const vec3 white = vec3(1,1,1);
+const vec3 sun = vec3(1,1,0.6);
+
 void main()
 {
-    vec3 sky_basis_color = vec3(0.5, 0.8, 0.9);
-    vec3 white = vec3(1,1,1);
-    vec3 sun = vec3(1,1,0.6);
+    
     float clouds_coeff = perlin_fbm_3d(5*position+500);
 
     if (position.z > 0.99f)

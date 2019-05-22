@@ -14,7 +14,7 @@ uniform vec2 resolution;
 uniform vec3 light_position;
 
 const float terrain_water_level = -0.03125 + 1e-6;
-const vec3 sky_color = vec3(0.4f, 0.4f, 0.7f);
+const vec3 sky_color = vec3(0.4f, 0.4f, 0.7f);//vec3(0.5, 0.8, 0.9);
 const vec3 camera_view = vec3(0.0f, 0.0f, -1.0f);
 const float shininess = 8.0f;
 
