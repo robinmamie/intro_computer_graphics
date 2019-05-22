@@ -31,6 +31,8 @@ MeshViewer::MeshViewer(std::string const& _title, int _width, int _height)
 	, waterActor(new StaticMeshActor(waterMesh))
 	, fillerMesh(new Mesh)
 	, fillerActor(new StaticMeshActor(fillerMesh))
+	, sky_ (21.0, 0.0)
+	, unit_sphere_(50) //level of tesselation
 {
     ;
 }
@@ -143,6 +145,33 @@ void MeshViewer::initialize()
 }
 //-----------------------------------------------------------------------------
 
+void MeshViewer::render_sky(Sky& sky, mat4 &_projection, mat4 &_view, Shader& cs, Sphere unit_sphere) {
+	mat4 m_matrix = mat4::translate(sky.pos_)
+	              * mat4::scale(sky.radius_);
+	render_object(m_matrix, _projection, _view, cs);
+	unit_sphere.draw();
+
+}
+
+//-----------------------------------------------------------------------------
+//Helper function to modularize the code to render the elements of the scene
+void MeshViewer::render_object(mat4& m_matrix, mat4 &_projection, mat4 &_view, Shader& color_shader) {
+    // the sun is centered at the origin and -- for lighting -- considered to be a point, so that is the light position in world coordinates
+    vec4 light = vec4(0.0, 0.0, 0.0, 1.0); //in world coordinates
+    // convert light into camera coordinates
+    light = _view * light;
+
+	mat4 mv_matrix  = _view * m_matrix;
+    mat4 mvp_matrix = _projection * mv_matrix;
+
+    color_shader.use();
+    color_shader.set_uniform("modelview_projection_matrix", mvp_matrix);
+    color_shader_.set_uniform("resolution", vec2(width_, height_));
+    color_shader_.set_uniform("color_map", 0);
+    color_shader_.disable();
+}
+
+//-----------------------------------------------------------------------------
 
 void MeshViewer::paint()
 {
@@ -243,6 +272,9 @@ void MeshViewer::draw_scene(mat4& _projection, mat4& _view)
 	mv_matrix  = _view * m_matrix;
 	mvp_matrix = _projection * mv_matrix;
 	n_matrix    = transpose(inverse(mv_matrix));
+	
+	/// Draw sky
+	render_sky(sky_,   _projection, _view, color_shader_, unit_sphere_);
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
