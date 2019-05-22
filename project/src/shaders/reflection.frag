@@ -40,7 +40,7 @@ vec2 from_ray_to_pixel(vec3 ray)
 vec3 sky(vec3 reflected, vec3 light)
 {
     float dot_rl = dot(reflected, light);
-    return sky_color;//dot_rl > 0.7 ? vec3(1,1,1) : sky_color;
+    return dot_rl > 0.95 ? vec3(1,1,1) : sky_color;
 }
 
 vec3 reflection()
@@ -71,7 +71,7 @@ vec3 reflection()
     return sky(reflected, light);
 }
 
-vec4 water_color()
+void main()
 {
     vec3 color     = reflection();
     vec3 light     = normalize(light_position - v2f_ec_vertex);
@@ -90,16 +90,5 @@ vec4 water_color()
             factor += pow(dot_rv, shininess);
         }
     }
-    return vec4(color * factor, 0.8f);
+    f_color = vec4(color * factor, 0.8f);
 }
-
-void main()
-{
-    //vec2 position = gl_FragCoord.xy / resolution;
-    //vec4 color_terrain = texture(color_map, position);
-    f_color = water_color();
-    //f_color = height_terrain > v2f_height && height_terrain >= 1.0f ?
-    //            vec4(1.0f) :
-    //            water_color();
-}
-

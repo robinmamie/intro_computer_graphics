@@ -182,7 +182,8 @@ void MeshViewer::paint()
 
 void MeshViewer::draw_scene(mat4& _projection, mat4& _view)
 {
-    if (!phong_shader_.is_valid() || !reflection_shader_.is_valid()) {
+    if (!phong_shader_.is_valid() || !reflection_shader_.is_valid() ||
+        !color_shader_.is_valid() || !sky_shader_.is_valid()) {
         return;
     }
 
