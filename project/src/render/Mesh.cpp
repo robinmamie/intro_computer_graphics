@@ -72,15 +72,15 @@ void Mesh::set(std::vector<vec3> const& new_pts,  std::vector<Face> const& new_f
     m_generate_vao();
 }
 
-#define POSITION_Z vertices_[x*96+y].position.z
+#define POSITION_Z vertices_[x*water_values[0].size().first+y].position.z
 #define ANIMATION_SPEED 10
 
 void Mesh::move(double dt){
     time += ANIMATION_SPEED*dt;
     
     // update vertices
-	for(int x = 0; x < 96; ++x){
-		for(int y = 0; y<  96; ++y){
+	for(int x = 0; x < water_values[0].size().first; ++x){
+		for(int y = 0; y<  water_values[0].size().second; ++y){
             POSITION_Z = water_values[((int)time)%NB_WATER_ITERATIONS](x,y);
         }	
 	}

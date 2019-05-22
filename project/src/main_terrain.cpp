@@ -135,7 +135,7 @@ std::shared_ptr<Mesh> build_filler_mesh(Array2D<float> const& height_map) {
 
 	long unsigned int index = 0;
 
-	float z_low = -0.35;
+	float z_low = -0.5;
 
 	// First wall
 	float x = -0.5f;
@@ -234,7 +234,7 @@ std::shared_ptr<Mesh> build_filler_mesh(Array2D<float> const& height_map) {
 
 
 int main(int arg_count, char *arg_values[]) {
-	std::pair<size_t, size_t> grid_size(96, 96);
+	std::pair<size_t, size_t> grid_size(256, 256);
 
 	// If we try to build meshes when no window is created (GLFW is not loaded)
 	// calls to OpenGL will crash randomly
