@@ -18,5 +18,11 @@ void main()
 {
     vec3 sky_basis_color = vec3(0.5, 0.8, 0.9);
     vec3 white = vec3(1,1,1);
-    f_color = vec4(mix(sky_basis_color, white, perlin_fbm_3d(5*position+500)), 1.0);
+    vec3 sun = vec3(1,1,0.6);
+    float clouds_coeff = perlin_fbm_3d(5*position+500);
+
+    if (position.z > 0.99f)
+        f_color = vec4(mix(sun, white, clouds_coeff), 1);
+    else
+        f_color = vec4(mix(sky_basis_color, white, clouds_coeff), 1);
 }
