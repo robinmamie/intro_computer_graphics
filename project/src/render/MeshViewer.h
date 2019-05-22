@@ -29,9 +29,7 @@ public:
 
 	virtual void update_water(double dt) override;
 
-	void render_sky(Sky& sky, mat4 &_projection, mat4 &_view, Shader& cs, Sphere unit_sphere);
-	
-	void render_object(mat4& m_matrix, mat4 &_projection, mat4 &_view, Shader& color_shader);
+	void render_sky(Sky& sky, mat4 &_projection, mat4 &_view, Sphere unit_sphere);
 
 	
 protected:
@@ -58,10 +56,9 @@ protected:
 
 private:
 	Shader phong_shader_;
-
 	Shader reflection_shader_;
-
 	Shader color_shader_;
+	Shader sky_shader_;
 	
     std::unique_ptr<FrameBuffer> fb;
 

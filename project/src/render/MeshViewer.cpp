@@ -31,7 +31,7 @@ MeshViewer::MeshViewer(std::string const& _title, int _width, int _height)
 	, waterActor(new StaticMeshActor(waterMesh))
 	, fillerMesh(new Mesh)
 	, fillerActor(new StaticMeshActor(fillerMesh))
-	, sky_ (21.0, 0.0)
+	, sky_ (1.0f, 0.0f) // radius, distance
 	, unit_sphere_(50) //level of tesselation
 {
     ;
@@ -142,33 +142,20 @@ void MeshViewer::initialize()
     phong_shader_.load(SHADER_PATH "/terrain.vert", SHADER_PATH "/terrain.frag");
     reflection_shader_.load(SHADER_PATH "/reflection.vert", SHADER_PATH "/reflection.frag");
     color_shader_.load(SHADER_PATH "/paint_color.vert", SHADER_PATH "/paint_color.frag");
+    sky_shader_.load(SHADER_PATH "/sky.vert", SHADER_PATH "/sky.frag");
 }
 //-----------------------------------------------------------------------------
 
-void MeshViewer::render_sky(Sky& sky, mat4 &_projection, mat4 &_view, Shader& cs, Sphere unit_sphere) {
+void MeshViewer::render_sky(Sky& sky, mat4 &_projection, mat4 &_view, Sphere unit_sphere) {
 	mat4 m_matrix = mat4::translate(sky.pos_)
 	              * mat4::scale(sky.radius_);
-	render_object(m_matrix, _projection, _view, cs);
-	unit_sphere.draw();
-
-}
-
-//-----------------------------------------------------------------------------
-//Helper function to modularize the code to render the elements of the scene
-void MeshViewer::render_object(mat4& m_matrix, mat4 &_projection, mat4 &_view, Shader& color_shader) {
-    // the sun is centered at the origin and -- for lighting -- considered to be a point, so that is the light position in world coordinates
-    vec4 light = vec4(0.0, 0.0, 0.0, 1.0); //in world coordinates
-    // convert light into camera coordinates
-    light = _view * light;
-
+    
 	mat4 mv_matrix  = _view * m_matrix;
     mat4 mvp_matrix = _projection * mv_matrix;
-
-    color_shader.use();
-    color_shader.set_uniform("modelview_projection_matrix", mvp_matrix);
-    color_shader_.set_uniform("resolution", vec2(width_, height_));
-    color_shader_.set_uniform("color_map", 0);
-    color_shader_.disable();
+    sky_shader_.use();
+    sky_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
+	unit_sphere.draw();
+    sky_shader_.disable();
 }
 
 //-----------------------------------------------------------------------------
@@ -273,8 +260,8 @@ void MeshViewer::draw_scene(mat4& _projection, mat4& _view)
 	mvp_matrix = _projection * mv_matrix;
 	n_matrix    = transpose(inverse(mv_matrix));
 	
-	/// Draw sky
-	render_sky(sky_,   _projection, _view, color_shader_, unit_sphere_);
+	/// Draw sky 
+	render_sky(sky_, _projection, _view, unit_sphere_);
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
