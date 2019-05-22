@@ -12,18 +12,12 @@
 in  vec2 v2f_texcoord;
 out vec4 f_color;
 
-uniform sampler2D tex;
-
+float clouds(vec2 point); // Implemented in noise.frag
 
 void main()
 {
-    // fetch color (rgb and alpha) from texture
-    //vec4 color = texture(tex, v2f_texcoord.st);
-
-    // For greyscale mode, convert RGB color to YUV and use only the luminance
-    /*color.rgb = vec3(0.299 * color.r
-                    + 0.587 * color.g
-                    + 0.114 * color.b);*/
-
-    f_color = vec4(0.5, 0.8, 0.9, 1.0);
+    vec3 sky_basis_color = vec3(0.5, 0.8, 0.9);
+    //float cloud_element = clouds(vec2(1,3));
+    //cloud_element = (cloud_element>1.0) 1.0: cloud_element;
+    f_color = vec4(sky_basis_color, 1.0);
 }

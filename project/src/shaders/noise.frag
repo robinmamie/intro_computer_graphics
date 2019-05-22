@@ -84,6 +84,19 @@ float perlin_fbm(vec2 point) {
 	return fbm;
 }
 
+// Clouds generated with noise turbulences
+float clouds(vec2 point) {
+    float fbm = 0.0f;
+    float am  = 1.0f;
+    float fm  = 1.0f;
+    for (int i = 0; i < num_octaves; ++i) {
+        fbm += am * abs(perlin_noise(point * fm));
+        am  *= ampl_multiplier;
+        fm  *= freq_multiplier;
+    }
+	return fbm;
+}
+
 // constants for water
 const float freq_multiplier_water = 11;
 const float ampl_multiplier_water = 0.3;
