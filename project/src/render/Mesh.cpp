@@ -79,8 +79,8 @@ void Mesh::move(double dt){
     time += ANIMATION_SPEED*dt;
     
     // update vertices
-	for(int x = 0; x < water_values[0].size().first; ++x){
-		for(int y = 0; y<  water_values[0].size().second; ++y){
+	for(int y = 0; y < water_values[0].size().first; ++y){
+		for(int x = 0; x<  water_values[0].size().second; ++x){
             POSITION_Z = water_values[((int)time)%NB_WATER_ITERATIONS](x,y);
         }	
 	}
