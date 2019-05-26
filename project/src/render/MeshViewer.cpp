@@ -8,6 +8,7 @@
 //=============================================================================
 
 #include "MeshViewer.h"
+#include "dumpOpenGLBuffer.h"
 #include "../utils/vec.h"
 #include <stdlib.h>     /* srand, rand */
 #include <time.h>       /* time */
@@ -33,6 +34,7 @@ MeshViewer::MeshViewer(std::string const& _title, int _width, int _height)
 	, fillerActor(new StaticMeshActor(fillerMesh))
 	, sky_ (2.5f) // radius
 	, unit_sphere_(50) //level of tesselation
+    , capture_(false)
 {
     ;
 }
@@ -103,6 +105,11 @@ void MeshViewer::keyboard(int key, int scancode, int action, int mods)
 
         case GLFW_KEY_W: {
             x_angle_ -= cinematic_v;
+            break;
+        }
+
+        case GLFW_KEY_C: {
+            capture_ = !capture_;
             break;
         }
 
@@ -286,6 +293,11 @@ void MeshViewer::draw_scene(mat4& _projection, mat4& _view)
 
     fb->unbind();
 
+    if (capture_) {
+        static int frame_counter = 0;
+        dumpOpenGLBuffer("frame_" + std::to_string(frame_counter) + ".png", width_, height_);
+        ++frame_counter;
+    }
     // check for OpenGL errors
     glCheckError("MeshViewer::draw_scene");
 }

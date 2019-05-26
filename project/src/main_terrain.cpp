@@ -44,7 +44,7 @@ Array2D<float> compute_water_at_time(ShaderViewer& shvi, std::pair<size_t, size_
 }
 
 // NB_WATER_ITERATIONS is defined in mesh.h
-#define WATER_DELTA_T 0.007f // corresponds to the steps in the z coordinate in the perlin3d function
+#define WATER_DELTA_T 0.001f//0.007f // corresponds to the steps in the z coordinate in the perlin3d function
 
 // This function simply remaps the nested Array2D<vec4> into an Array2D<float>
 std::vector<Array2D<float>> remap(std::vector<Array2D<vec4>> values){

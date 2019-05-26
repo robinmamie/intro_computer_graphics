@@ -79,6 +79,8 @@ private:
 	/// current viewport dimension
 	int  width_, height_;
 
+    bool capture_;
+
 	std::shared_ptr<Mesh> landMesh;
 	std::shared_ptr<Mesh> waterMesh;
 	std::shared_ptr<Mesh> fillerMesh;
