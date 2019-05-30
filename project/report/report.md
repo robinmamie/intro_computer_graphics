@@ -2,30 +2,26 @@
 
 ###### Markus Ding, Robin Mamie & Charline Montial
 
-## Achievements
+## What is our project about
 
-The screen space reflection feature has been implemented.
-The dynamic waving water, using Perlin noise as requested, is also done.
+## Technical approach
 
-## Preliminary results
+### Screenspace reflections
 
-![Screen space reflections + Phong](images/ssr.jpeg){width="600px"}
+### Dynamic water
 
-![Screen space reflections + Phong](images/ssr1.png){width="600px"}
+### Sky and clouds
 
-![Screen space reflections + Phong](images/ssr2.png){width="600px"}
+### Minor improvements
 
-![Screen space reflections + Phong + Perlin waves](images/ssrpn.jpeg){width="600px"}
+#### Sun shimmering on water
 
-![Screen space reflections + Phong + Perlin waves (dynamic)](images/ssr_waves.gif){width="600px"}
+#### Sky reflection on water
 
-## Updated schedule
+#### Sides of the terrain closed
 
-The next extension we plan on implementing probably are the shadows - the 4th extension proposed.
+## Results
 
-To deal with the ugly water borders as seen on the screens, we will split the one mesh we currently have into two.
-One will be the normal terrain, the other will exclusively be the water.
-This will give a far more natural look to our coasts by eliminating this "vertical mirror" look.
-It will eventually enable us to add some transparency to the water.
+## Contributions
 
-Diverse optimizations will be made on what was already written (screen space reflections for the most part).
+## References
