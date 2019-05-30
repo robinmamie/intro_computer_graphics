@@ -177,10 +177,10 @@ make -j
 <p>To achieve this, we added two attributes to the <code>MeshViewer</code> class for the water, namely a shared pointer to an instance of the class <code>Mesh</code> and another one to an instance of the class <code>StaticMeshActor</code>. Then, the water mesh is also generated in the file <code>main_terrain.cpp</code> in the same way as the land mesh, but using its own function to generate the wanted values for the water. The newly created water mesh is simply superposed it to the land mesh.</p>
 <h4 id="sides-of-the-terrain-closed">Sides of the terrain closed</h4>
 <p><em>Most of the work for this part was done in the files <code>src/render/MeshViewer.[(cpp)|h]</code> and <code>src/main_terrain.cpp</code>.</em></p>
-<p>We wanted to close the sides of the terrain because we could see the water under the mountain and it was less pleasant to see.</p>
+<p>We wanted to close the sides of the terrain because we could see the water under the mountain and it was not very pleasant.</p>
 <p>To achieve this goal, we added another mesh similarly to the water and passed the correct values to it.</p>
 <p>Since we only need the sides for our mesh, we were allowed to have an array of vertices of a size much smaller than the one needed to generate the land and the water.</p>
-<p>To fill in the array, we fix one coordinate and iterate on the other to fill one wall. We repeat the procedure four times to fill in the array and push the newly constructed faces. We alternate between vertices having the z coordinate at the height of the terrain and another one being at the base of our wall. We can then construct our faces using the vertices which follow the terrain and the ones being aligned at the bottom of the terrain.</p>
+<p>To fill in the array, we fix one coordinate and iterate on the other to fill one wall. We repeat the procedure four time for each wall and push the newly constructed faces. We alternate between vertices having the z coordinate at the height of the terrain and another one being at the base of our wall. We can then construct our faces using the vertices which follow the terrain and the ones being aligned at the bottom of the terrain.</p>
 <p>The ground has also been implemented and was simpler since it did not need the height map.</p>
 <p>For a more good-looking result, Phong has been disabled for the sides.</p>
 <h4 id="miscellaneous">Miscellaneous</h4>
