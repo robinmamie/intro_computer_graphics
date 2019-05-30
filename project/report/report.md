@@ -47,7 +47,7 @@ But by clipping the result back to the border of the screen, it offers very beau
 
 ### Dynamic Water
 
-The animation of the water is implmented  by changing the values of the points on the mesh, more precisely by making the z-coordinate change at each iteration.
+The animation of the water is implemented  by changing the values of the points on the mesh, more precisely by making the z-coordinate change at each iteration.
 We have gone over several different implementations before reaching the final one but all had in common that we generated an `Array2D` of the same size of the terrain corresponding to the z-coordinate values of the simulated water.
 
 We also never recreate a mesh for each step of the animation but simply update the values of the current one for obvious performance reasons.
