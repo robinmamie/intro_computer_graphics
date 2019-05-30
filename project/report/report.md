@@ -28,6 +28,7 @@
 
 ![Closer look at the sun shimmering on the water](images/3.png){width="600px"}
 
+![Closer look at the side walls of the terrain](images/4.png){width="600px"}
 
 ## Contributions
 
