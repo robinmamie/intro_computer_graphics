@@ -105,7 +105,7 @@ The code for the different parts can be found in:
 
 - A few additional minor changes to link it all together in various other files
 
-##### Additional points the Perlin 3D noise
+##### Additional points about the Perlin 3D noise
 
 We [adapted the code](./pdf/perlin3d_assignment9.pdf) of the original assignment 9 (so not included in this project) in order to be able to visualize the Perlin 3D noise by running the `run_fb.sh` script: by clicking on the keys `E` and `R`, we can change the value of the z-coordinate of the Perlin function and thus see different 2D layers being generated.
 
@@ -130,15 +130,17 @@ _Most of the work for this part was done in the files `src/sky/sphere.[(cpp)|h]`
 For the main strategy, we wanted to render a sphere as a support for our background in a similar way as the stars in the solar system assignment. Then, our idea was to use a noise function and interpolate the blue and white colors according to the noise value to generate our cloudy sky. The last step is then to map the generated values on the sphere.
 
 To implement this, we first imported and adapted the classes `sphere` and `planet` (which is now called `sky`) from assignment 6 which was about the solar system.
-Then we added an attribute of type `Sky`to `Meshviewer` as well as a sky shader.
+Then we added an attribute of type `Sky` to `Meshviewer` as well as a sky shader.
 
 We first tried to use Perlin 2D noise, but the mapping on the sphere was terrible because the texture was deformed on the sides which led to unrealistic results and we could see that the support of our sky was a sphere, which was undesirable.
 
-//TODO MARKUS: ADD FIGURE OF THE UGLY PERLIN 2D FOR THE SKY
+![Mappings issues with perlin 2d function](./images/perlin2d_mappingissues.png)
 
-When we swiched to 3D Perlin noise, the problem was solved.
+When we switched to 3D Perlin noise, the problem was solved after shifting the parameters as the `position` in the shaders is normalized and that resulted in our spheres being "cut" into quarters (where one of the coordinates crosses 0):
 
-//TODO MARKUS: ADD DETAILS ON HOW YOU TWEAKED THE VALUE (au début c'était coupé en sections je me rappelle le 3D)
+![Perlin3d mapping with unshifted values](./images/perlin3d_notshifted.png)
+
+So we tweaked the values a bit and finally, we were very pleased with the visaul aspect of the clouds with the following values: `perlin_fbm_3d(5*position+500)`.
 
 ### Minor Improvements
 

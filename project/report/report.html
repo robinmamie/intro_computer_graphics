@@ -1,83 +1,49 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-  <meta charset="utf-8" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
   <meta name="generator" content="pandoc" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <title>Group 5</title>
-  <style>
-      code{white-space: pre-wrap;}
-      span.smallcaps{font-variant: small-caps;}
-      span.underline{text-decoration: underline;}
-      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
   </style>
-  <style>
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
-}
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-div.sourceCode
-  {  }
-@media screen {
-a.sourceLine::before { text-decoration: underline; }
-}
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-  </style>
-  <link rel="stylesheet" href="icg_report.css" />
-  <!--[if lt IE 9]>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
-  <![endif]-->
+  <link rel="stylesheet" href="icg_report.css" type="text/css" />
 </head>
 <body>
 <h1 id="project-report---group-5">Project Report - Group 5</h1>
@@ -91,47 +57,51 @@ make -j
 ./terrain</code></pre>
 <h3 id="screen-space-reflections">Screen-space Reflections</h3>
 <p><em>Most of the work for this part was done in the files <code>src/render/MeshViewer.cpp</code>, <code>src/render/FrameBuffer.[(cpp)|h]</code> and <code>src/shader/reflection.frag</code>.</em></p>
-<p>At first, we had to accommodate the code in order to communicate the colors of the terrain to the reflection shader. For that, we created the class <code>FrameBuffer</code>, that contains all the informations necessary to generate simple screen-space reflections. Namely, we forward the depth of the pixel and its color to the other shader, using frame buffers. Even though we used screen buffers in assignment 7, using two of them as output of the same shader was not trivial, and we spent a lot of time looking for online resources talking about this. After stringing bits and pieces of information, we finally managed to get a fully working implementation of this idea. We also learnt the hard way that online OpenGL support is either scarce or very specialised…</p>
+<p>At first, we had to accommodate the code in order to communicate the colors of the terrain to the reflection shader. For that, we created the class <code>FrameBuffer</code>, that contains all the informations necessary to generate simple screen-space reflections. Namely, we forward the depth of the pixel and its color to the other shader, using frame buffers. Even though we used screen buffers in assignment 7, using two of them as output of the same shader was not trivial, and we spent a lot of time looking for online resources talking about this. After stringing bits and pieces of information, we finally managed to get a fully working implementation of this idea. We also learnt the hard way that online OpenGL support is either scarce or very specialised...</p>
 <p>Then, we wanted to adapt the code provided by one of the links displayed on the page reserved for the project ideas, namely <a href="https://gizmosandgames.com/2017/01/17/screen-space-reflections/">this blog post</a>. Unfortunately for us, after a few days of trying, we did not manage to adapt the algorithm in our code, to our dismay. No visible results were convincing and/or made sense.</p>
-<p>Therefore, we decided to work out an even simpler algorithm, that uses a trivial ray marching technique. Indeed, using the ray reflected from our viewing ray - according to the normal of the water -, we just iterate over very small portions of it until the resulting ray (i.e. viewing ray + <code>i</code> number of small reflection rays) “hit” the terrain, i.e. its depth is greater than the terrain. The latter was sampled in a frame buffer, and can be directly used in the shader for this purpose. The search is abandoned if the ray is outside of the screen or it “hits” the sky, meaning there will never be terrain after that.</p>
-<p>There is a small exception to the screen rule. To make the reflections look nicer, we still output a color when the ray exits the screen horizontally, mening they are not strictly speaking “screen-space” reflections. But by clipping the result back to the border of the screen, it offers very beautiful results when the terrain is not perfectly flat, which is the case in this project.</p>
-<figure>
-<img src="images/still_reflection_wo.png" alt="Reflections on still water" width="600" /><figcaption>Reflections on still water</figcaption>
-</figure>
-<figure>
-<img src="images/still_reflection.png" alt="Adjusted reflections on still water" width="600" /><figcaption>Adjusted reflections on still water</figcaption>
-</figure>
-<figure>
-<img src="images/wavy_reflection.png" alt="Adjusted reflections on waving water" width="600" /><figcaption>Adjusted reflections on waving water</figcaption>
-</figure>
+<p>Therefore, we decided to work out an even simpler algorithm, that uses a trivial ray marching technique. Indeed, using the ray reflected from our viewing ray - according to the normal of the water -, we just iterate over very small portions of it until the resulting ray (i.e. viewing ray + <code>i</code> number of small reflection rays) &quot;hit&quot; the terrain, i.e. its depth is greater than the terrain. The latter was sampled in a frame buffer, and can be directly used in the shader for this purpose. The search is abandoned if the ray is outside of the screen or it &quot;hits&quot; the sky, meaning there will never be terrain after that.</p>
+<p>There is a small exception to the screen rule. To make the reflections look nicer, we still output a color when the ray exits the screen horizontally, mening they are not strictly speaking &quot;screen-space&quot; reflections. But by clipping the result back to the border of the screen, it offers very beautiful results when the terrain is not perfectly flat, which is the case in this project.</p>
+<div class="figure">
+<img src="images/still_reflection_wo.png" alt="Reflections on still water" width="600" />
+<p class="caption">Reflections on still water</p>
+</div>
+<div class="figure">
+<img src="images/still_reflection.png" alt="Adjusted reflections on still water" width="600" />
+<p class="caption">Adjusted reflections on still water</p>
+</div>
+<div class="figure">
+<img src="images/wavy_reflection.png" alt="Adjusted reflections on waving water" width="600" />
+<p class="caption">Adjusted reflections on waving water</p>
+</div>
 <h3 id="dynamic-water">Dynamic Water</h3>
 <p>The animation of the water is implemented by changing the values of the points on the mesh, more precisely by making the z-coordinate change at each iteration. We have gone over several different implementations before reaching the final one but all had in common that we generated an <code>Array2D</code> of the same size of the terrain corresponding to the z-coordinate values of the simulated water.</p>
 <p>We also never recreate a mesh for each step of the animation but simply update the values of the current one for obvious performance reasons.</p>
 <h4 id="d-perlin-and-sinusoidal-movement">2D Perlin and sinusoidal movement</h4>
 <p>At first, we kept a single mesh where both, the land mass and the water was on it. The water level surface was generated by subtracting some 2D perlin noise from the water level (<code>z-coordinate = WATER_LEVEL - perlin_noise(x,y)</code> instead of simply clamping it to <code>WATER_LEVEL</code> as done in assignment 9) in order to have the points of the mesh forming wave forms. This allowed us the have a static water surface.</p>
 <p>Then, we added the movement by adding a sinusoidal function (with a parameter containing its x and y coordinates as well as the elapsed time) to the z-value of all water points on our mesh at each iteration.</p>
-<p>This gave us some bigger waves with a nice water surface but it didn’t really satisfy us.</p>
-<video class='center' width="1000" controls>
+<p>This gave us some bigger waves with a nice water surface but it didn't really satisfy us.</p>
+<video class="center" width="1000" controls>
 <source src="video/sinusoidal_water.mp4" type="video/mp4">
 </video>
 <h4 id="shifted-2d-perlin-function">Shifted 2D Perlin function</h4>
-<p>We decided to abandon the idea of the sinusoidal waves on top of our generated water surface and we decided to simply keep the current smaller waves created by the perlin noise and simply shifted the points along the x-axis in order to have the wave “move over the water”. We considered our world to be a torus which allowed us the loop infinitely without having to render extra water surface.</p>
+<p>We decided to abandon the idea of the sinusoidal waves on top of our generated water surface and we decided to simply keep the current smaller waves created by the perlin noise and simply shifted the points along the x-axis in order to have the wave &quot;move over the water&quot;. We considered our world to be a torus which allowed us the loop infinitely without having to render extra water surface.</p>
 <p>So in short, at each <code>dt</code> step of the animation we did the following:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode c++"><code class="sourceCode cpp"><a class="sourceLine" id="cb2-1" title="1">time += dt;</a>
-<a class="sourceLine" id="cb2-2" title="2"></a>
-<a class="sourceLine" id="cb2-3" title="3"><span class="cf">for</span>(<span class="dt">int</span> x = <span class="dv">0</span>; x &lt;TERRAIN_SIZE; ++x){</a>
-<a class="sourceLine" id="cb2-4" title="4">    <span class="cf">for</span>(<span class="dt">int</span> y = <span class="dv">0</span>; y&lt; TERRAIN_SIZE; ++y){</a>
-<a class="sourceLine" id="cb2-5" title="5">        <span class="dt">int</span> index = x*TERRAIN_SIZE+y;</a>
-<a class="sourceLine" id="cb2-6" title="6">        <span class="cf">if</span> (<span class="va">vertices_</span>[index].position.z &lt; WATER_LEVEL) <span class="co">// is water</span></a>
-<a class="sourceLine" id="cb2-7" title="7">            <span class="va">vertices_</span>[index].position.z = water_values[(x+time)%TERRAIN_SIZE][y];</a>
-<a class="sourceLine" id="cb2-8" title="8">    }</a>
-<a class="sourceLine" id="cb2-9" title="9">}</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode c++"><code class="sourceCode cpp">time += dt;
+
+<span class="cf">for</span>(<span class="dt">int</span> x = <span class="dv">0</span>; x &lt;TERRAIN_SIZE; ++x){
+    <span class="cf">for</span>(<span class="dt">int</span> y = <span class="dv">0</span>; y&lt; TERRAIN_SIZE; ++y){
+        <span class="dt">int</span> index = x*TERRAIN_SIZE+y;
+        <span class="cf">if</span> (<span class="va">vertices_</span>[index].position.z &lt; WATER_LEVEL) <span class="co">// is water</span>
+            <span class="va">vertices_</span>[index].position.z = water_values[(x+time)%TERRAIN_SIZE][y];
+    }
+}</code></pre></div>
 <p>But this created the problem that if our two opposite borders (the one at <code>x=0</code> and the other at <code>x=TERRAIN_SIZE-1</code>) were not the exact same height (z-coordinate), there will be a bump (or a mini-tsunami) when we loop around the indices and we jump from one to the other as can be seen on the image below:</p>
-<figure>
-<img src="images/rogue_wave.png" alt="Here we can see the altitude difference between the first and last values of the water array (the darker blue line on the right) when they meet during the loop." width="600" /><figcaption>Here we can see the altitude difference between the first and last values of the water array (the darker blue line on the right) when they meet during the loop.</figcaption>
-</figure>
+<div class="figure">
+<img src="images/rogue_wave.png" alt="Here we can see the altitude difference between the first and last values of the water array (the darker blue line on the right) when they meet during the loop." width="600" />
+<p class="caption">Here we can see the altitude difference between the first and last values of the water array (the darker blue line on the right) when they meet during the loop.</p>
+</div>
 <h4 id="improved-3d-perlin-version">Improved 3D Perlin version</h4>
-<p>In the end, we opted for a real 3D perlin noise which allowed us the simply use all 3 coordinates as follows: <code>perlin3d(x, y, time)</code> and so we didn’t have to fake the movement of the water by adding a sin-function or shifting the points along an axis.</p>
+<p>In the end, we opted for a real 3D perlin noise which allowed us the simply use all 3 coordinates as follows: <code>perlin3d(x, y, time)</code> and so we didn't have to fake the movement of the water by adding a sin-function or shifting the points along an axis.</p>
 <p>We do not compute the new waves in real-time but we generate a certain number of steps at the launch of the program in the shader and store them in our water mesh as an attribute. Then on each step of the simulation, we simply have to iterate over them by updating the z-coordinate values of all <code>(x,y)</code> pairs of water points.</p>
 <p>The code for the different parts can be found in:</p>
 <ul>
@@ -140,7 +110,7 @@ make -j
 <li><p>The <code>void Mesh::move(double dt)</code> to add the movement</p></li>
 <li><p>A few additional minor changes to link it all together in various other files</p></li>
 </ul>
-<h5 id="additional-points-the-perlin-3d-noise">Additional points the Perlin 3D noise</h5>
+<h5 id="additional-points-about-the-perlin-3d-noise">Additional points about the Perlin 3D noise</h5>
 <p>We <a href="./pdf/perlin3d_assignment9.pdf">adapted the code</a> of the original assignment 9 (so not included in this project) in order to be able to visualize the Perlin 3D noise by running the <code>run_fb.sh</code> script: by clicking on the keys <code>E</code> and <code>R</code>, we can change the value of the z-coordinate of the Perlin function and thus see different 2D layers being generated.</p>
 <p>We did this as a proof of concept before using the Perlin 3D noise to our wave generation. Below you can see a few of these <em>layers</em> and thus how the noise evolves according to the z-coordinate:</p>
 <p float="left">
@@ -149,56 +119,70 @@ make -j
 <h3 id="sky-and-clouds">Sky and Clouds</h3>
 <p><em>Most of the work for this part was done in the files <code>src/sky/sphere.[(cpp)|h]</code>, <code>src/sky/sky.h</code>,<code>src/render/MeshViewer.[(cpp)|h]</code>, <code>src/shader/sky.[(frag)|(vert)]</code> and <code>src/shader/noise.frag</code>.</em></p>
 <p>For the main strategy, we wanted to render a sphere as a support for our background in a similar way as the stars in the solar system assignment. Then, our idea was to use a noise function and interpolate the blue and white colors according to the noise value to generate our cloudy sky. The last step is then to map the generated values on the sphere.</p>
-<p>To implement this, we first imported and adapted the classes <code>sphere</code> and <code>planet</code> (which is now called <code>sky</code>) from assignment 6 which was about the solar system. Then we added an attribute of type <code>Sky</code>to <code>Meshviewer</code> as well as a sky shader.</p>
+<p>To implement this, we first imported and adapted the classes <code>sphere</code> and <code>planet</code> (which is now called <code>sky</code>) from assignment 6 which was about the solar system. Then we added an attribute of type <code>Sky</code> to <code>Meshviewer</code> as well as a sky shader.</p>
 <p>We first tried to use Perlin 2D noise, but the mapping on the sphere was terrible because the texture was deformed on the sides which led to unrealistic results and we could see that the support of our sky was a sphere, which was undesirable.</p>
-<p>//TODO MARKUS: ADD FIGURE OF THE UGLY PERLIN 2D FOR THE SKY</p>
-<p>When we swiched to 3D Perlin noise, the problem was solved.</p>
-<p>//TODO MARKUS: ADD DETAILS ON HOW YOU TWEAKED THE VALUE (au début c’était coupé en sections je me rappelle le 3D)</p>
+<div class="figure">
+<img src="./images/perlin2d_mappingissues.png" alt="Mappings issues with perlin 2d function" />
+<p class="caption">Mappings issues with perlin 2d function</p>
+</div>
+<p>When we switched to 3D Perlin noise, the problem was solved after shifting the parameters as the <code>position</code> in the shaders is normalized and that resulted in our spheres being &quot;cut&quot; into quarters (where one of the coordinates crosses 0):</p>
+<div class="figure">
+<img src="./images/perlin3d_notshifted.png" alt="Perlin3d mapping with unshifted values" />
+<p class="caption">Perlin3d mapping with unshifted values</p>
+</div>
+<p>So we tweaked the values a bit and finally, we were very pleased with the visaul aspect of the clouds with the following values: <code>perlin_fbm_3d(5*position+500)</code>.</p>
 <h3 id="minor-improvements">Minor Improvements</h3>
 <h4 id="sun-shimmering-on-the-water">Sun Shimmering on the Water</h4>
-<p>We wanted to amplify the effect of the phong lighting model in order to have a bigger effect of the sun shimmering on the water. This was simply done by, instead of the “normal” colour of the sky, outputting plain white when the dot product between the reflected ray and the light source was greater than 0.8. This value was empirically computed, and gave us the most convincing results.</p>
+<p>We wanted to amplify the effect of the phong lighting model in order to have a bigger effect of the sun shimmering on the water. This was simply done by, instead of the &quot;normal&quot; colour of the sky, outputting plain white when the dot product between the reflected ray and the light source was greater than 0.8. This value was empirically computed, and gave us the most convincing results.</p>
 <h4 id="sky-reflection-on-the-water">Sky Reflection on the Water</h4>
 <p>As specified in our contract, we wanted to add the reflections of the sky. We have done it, but we decided to not include it in the final presentation. Unfortunately, the clouds we use have a frequency too high for the reflections to look good, as showcased by the following examples:</p>
-<figure>
-<img src="images/sky_reflection1.png" alt="Example of sky reflection" width="600" /><figcaption>Example of sky reflection</figcaption>
-</figure>
-<figure>
-<img src="images/sky_reflection2.png" alt="Example of sky reflection" width="600" /><figcaption>Example of sky reflection</figcaption>
-</figure>
+<div class="figure">
+<img src="images/sky_reflection1.png" alt="Example of sky reflection" width="600" />
+<p class="caption">Example of sky reflection</p>
+</div>
+<div class="figure">
+<img src="images/sky_reflection2.png" alt="Example of sky reflection" width="600" />
+<p class="caption">Example of sky reflection</p>
+</div>
 <p>The sky reflections are even weirder when the water is moving, and the whole landscape just looks like a giant ugly vortex. As proof for our work, we have included the shader under the name <code>src/shader/cursed_reflection.frag</code>.</p>
 <h4 id="separation-of-water-and-land-meshes">Separation of water and land meshes</h4>
 <p><em>Most of the work for this part was done in the files <code>src/render/MeshViewer.[(cpp)|h]</code> and <code>src/main_terrain.cpp</code>.</em></p>
 <p>We wanted to separate the land and water meshes in our project for two reasons.</p>
 <p>First, the transition between the land and the water was weird as it can be seen in the screenshot below and it certainly did not improve when the water began to wave.</p>
 <p>Secondly, we wanted to achieve this because it would allow us to have a transparent water. We thought that it would be more realistic to see the bottom of our land and for that, we needed to separate the two meshes, which is what we did.</p>
-<figure>
-<img src="images/bad_transition.png" alt="The transition between the land and the water was not very nice when the land and the water were rendered using a single mesh." width="600" /><figcaption>The transition between the land and the water was not very nice when the land and the water were rendered using a single mesh.</figcaption>
-</figure>
+<div class="figure">
+<img src="images/bad_transition.png" alt="The transition between the land and the water was not very nice when the land and the water were rendered using a single mesh." width="600" />
+<p class="caption">The transition between the land and the water was not very nice when the land and the water were rendered using a single mesh.</p>
+</div>
 <p>To achieve this, we added two attributes to the <code>MeshViewer</code> class for the water, namely a shared pointer to an instance of the class <code>Mesh</code> and another one to an instance of the class <code>StaticMeshActor</code>. Then, the water mesh is also generated in the file <code>main_terrain.cpp</code> in the same way as the land mesh, but using its own function to generate the wanted values for the water. The newly created water mesh is simply superposed it to the land mesh.</p>
 <h4 id="sides-of-the-terrain-closed">Sides of the terrain closed</h4>
 <p><em>Most of the work for this part was done in the files <code>src/render/MeshViewer.[(cpp)|h]</code> and <code>src/main_terrain.cpp</code>.</em></p>
-<p>We wanted to close the sides of the terrain because we could see the water under the mountain and it was less pleasant to see.</p>
+<p>We wanted to close the sides of the terrain because we could see the water under the mountain and it was not very pleasant.</p>
 <p>To achieve this goal, we added another mesh similarly to the water and passed the correct values to it.</p>
 <p>Since we only need the sides for our mesh, we were allowed to have an array of vertices of a size much smaller than the one needed to generate the land and the water.</p>
-<p>To fill in the array, we fix one coordinate and iterate on the other to fill one wall. We repeat the procedure four times to fill in the array and push the newly constructed faces. We alternate between vertices having the z coordinate at the height of the terrain and another one being at the base of our wall. We can then construct our faces using the vertices which follow the terrain and the ones being aligned at the bottom of the terrain.</p>
+<p>To fill in the array, we fix one coordinate and iterate on the other to fill one wall. We repeat the procedure four time for each wall and push the newly constructed faces. We alternate between vertices having the z coordinate at the height of the terrain and another one being at the base of our wall. We can then construct our faces using the vertices which follow the terrain and the ones being aligned at the bottom of the terrain.</p>
 <p>The ground has also been implemented and was simpler since it did not need the height map.</p>
 <p>For a more good-looking result, Phong has been disabled for the sides.</p>
 <h4 id="miscellaneous">Miscellaneous</h4>
 <p>The user can dump all frames in files by pressing <code>C</code>.</p>
 <h2 id="results">Results</h2>
-<figure>
-<img src="images/1.png" alt="Screen space reflections + Phong + Sky and clouds" width="600" /><figcaption>Screen space reflections + Phong + Sky and clouds</figcaption>
-</figure>
-<figure>
-<img src="images/2.png" alt="Closer look at screen space reflections" width="600" /><figcaption>Closer look at screen space reflections</figcaption>
-</figure>
-<figure>
-<img src="images/3.png" alt="Closer look at the sun shimmering on the water" width="600" /><figcaption>Closer look at the sun shimmering on the water</figcaption>
-</figure>
-<figure>
-<img src="images/4.png" alt="Closer look at the side walls of the terrain" width="600" /><figcaption>Closer look at the side walls of the terrain</figcaption>
-</figure>
-<video class='center' width="1000" controls>
+<div class="figure">
+<img src="images/1.png" alt="Screen space reflections + Phong + Sky and clouds" width="600" />
+<p class="caption">Screen space reflections + Phong + Sky and clouds</p>
+</div>
+<div class="figure">
+<img src="images/2.png" alt="Closer look at screen space reflections" width="600" />
+<p class="caption">Closer look at screen space reflections</p>
+</div>
+<div class="figure">
+<img src="images/3.png" alt="Closer look at the sun shimmering on the water" width="600" />
+<p class="caption">Closer look at the sun shimmering on the water</p>
+</div>
+<div class="figure">
+<img src="images/4.png" alt="Closer look at the side walls of the terrain" width="600" />
+<p class="caption">Closer look at the side walls of the terrain</p>
+</div>
+<video class="center" width="1000" controls>
 <source src="video/sample.mp4" type="video/mp4">
 </video>
 <p><em>Demonstration video starring all the implemented features</em></p>
