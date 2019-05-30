@@ -140,7 +140,7 @@ When we switched to 3D Perlin noise, the problem was solved after shifting the p
 
 ![Perlin3d mapping with unshifted values](./images/perlin3d_notshifted.png)
 
-So we tweaked the values a bit and finally, we were very pleased with the visaul aspect of the clouds with the following values: `perlin_fbm_3d(5*position+500)`.
+So we tweaked the values a bit and finally, we were very pleased with the visual aspect of the clouds with the following values: `perlin_fbm_3d(5*position+500)`.
 
 ### Minor Improvements
 
