@@ -124,7 +124,7 @@ make -j
 <a class="sourceLine" id="cb2-5" title="5">        <span class="dt">int</span> index = x*TERRAIN_SIZE+y;</a>
 <a class="sourceLine" id="cb2-6" title="6">        <span class="cf">if</span> (<span class="va">vertices_</span>[index].position.z &lt; WATER_LEVEL) <span class="co">// is water</span></a>
 <a class="sourceLine" id="cb2-7" title="7">            <span class="va">vertices_</span>[index].position.z = water_values[(x+time)%TERRAIN_SIZE][y];</a>
-<a class="sourceLine" id="cb2-8" title="8">    }   </a>
+<a class="sourceLine" id="cb2-8" title="8">    }</a>
 <a class="sourceLine" id="cb2-9" title="9">}</a></code></pre></div>
 <p>But this created the problem that if our two opposite borders (the one at <code>x=0</code> and the other at <code>x=TERRAIN_SIZE-1</code>) were not the exact same height (z-coordinate), there will be a bump (or a mini-tsunami) when we loop around the indices and we jump from one to the other as can be seen on the image below:</p>
 <figure>
@@ -147,14 +147,9 @@ make -j
 <img src="./images/perlin3d_01.png" width="100" /> <img src="./images/perlin3d_02.png" width="100" /> <img src="./images/perlin3d_03.png" width="100" /> <img src="./images/perlin3d_04.png" width="100" /> <img src="./images/perlin3d_05.png" width="100" /> <img src="./images/perlin3d_06.png" width="100" /> <img src="./images/perlin3d_07.png" width="100" />
 </p>
 <h3 id="sky-and-clouds">Sky and Clouds</h3>
-<p>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD <em>Most of the work for this part was done in the files <code>src/sky/sphere.[(cpp)|h]</code>, <code>src/sky/sky.h</code>,<code>src/render/MeshViewer.[(cpp)|h]</code>, <code>src/shader/sky.[(frag)|(vert)]</code> and <code>src/shader/noise.frag</code>.</em></p>
-<p>For the main strategy, we wanted to render a sphere as a support for our background in a similar way as the stars in the solar system assignment.</p>
-<p>Then, we wanted to use a noise function and interpolate the blue and white colours according to the noise value to generate our cloudy sky. The last step is then to map the generated values on the sphere.</p>
-<p>First we imported and adapted the classes <code>sphere</code> and <code>planet</code> (which is now called <code>sky</code>) from assignment 6 which was about the solar system. Then we added an attribute of type <code>Sky</code>to <code>Meshviewer</code> as well as a sky shader.</p>
-<p>We first tried to use Perlin 2D noise, but the mapping on the sphere was terrible because the texture was deformed on the sides which led to unrealistic results and we could see that the support of our sky was a sphere, which was undesirable.</p>
-<h3 id="sky-and-clouds-1">Sky and Clouds</h3>
-<p>Then, we wanted to use a noise function and interpolate the blue and white colours according to the noise value to generate our cloudy sky. The last step is then to map the generated values on the sphere.</p>
-<p>First we imported and adapted the classes <code>sphere</code> and <code>planet</code> (which is now called <code>sky</code>) from assignment 6 which was about the solar system. Then we added an attribute of type <code>Sky</code> to <code>Meshviewer</code> as well as a sky shader.</p>
+<p><em>Most of the work for this part was done in the files <code>src/sky/sphere.[(cpp)|h]</code>, <code>src/sky/sky.h</code>,<code>src/render/MeshViewer.[(cpp)|h]</code>, <code>src/shader/sky.[(frag)|(vert)]</code> and <code>src/shader/noise.frag</code>.</em></p>
+<p>For the main strategy, we wanted to render a sphere as a support for our background in a similar way as the stars in the solar system assignment. Then, our idea was to use a noise function and interpolate the blue and white colors according to the noise value to generate our cloudy sky. The last step is then to map the generated values on the sphere.</p>
+<p>To implement this, we first imported and adapted the classes <code>sphere</code> and <code>planet</code> (which is now called <code>sky</code>) from assignment 6 which was about the solar system. Then we added an attribute of type <code>Sky</code>to <code>Meshviewer</code> as well as a sky shader.</p>
 <p>We first tried to use Perlin 2D noise, but the mapping on the sphere was terrible because the texture was deformed on the sides which led to unrealistic results and we could see that the support of our sky was a sphere, which was undesirable.</p>
 <p>//TODO MARKUS: ADD FIGURE OF THE UGLY PERLIN 2D FOR THE SKY</p>
 <p>When we swiched to 3D Perlin noise, the problem was solved.</p>
@@ -212,7 +207,7 @@ make -j
 <p>Robin Mamié</p>
 <h4 id="dynamic-water-1">Dynamic water</h4>
 <p>Markus Ding, Robin Mamié &amp; Charline Montial</p>
-<h4 id="sky-and-clouds-2">Sky and clouds</h4>
+<h4 id="sky-and-clouds-1">Sky and clouds</h4>
 <p>Markus Ding &amp; Charline Montial</p>
 <h4 id="sky-and-clouds-reflections">Sky and clouds reflections</h4>
 <p>Robin Mamié</p>
