@@ -71,9 +71,6 @@ Unfortunately, the clouds we use have a frequency too high for the reflections t
 The sky reflections are even weirder when the water is moving, and the whole landscape just looks like a giant ugly vortex.
 As proof for our work, we have included the shader under the name `src/shader/cursed_reflection.frag`.
 
-
-#### Sides of the terrain closed
-
 #### Separation of water and land meshes
 
 _Most of the work for this part was done in the files `src/render/MeshViewer.[(cpp)|h]` and `src/main_terrain.cpp`._
@@ -87,6 +84,23 @@ Secondly, we wanted to achieve this because it would allow us to have a transpar
 ![The transition between the land and the water was not very nice when the land and the water were rendered using a single mesh.](images/bad_transition.png){width="600px"}
 
 To achieve this, we added two attributes to the `MeshViewer` class for the water, namely a shared pointer to an instance of the class `Mesh` and another one to an instance of the class `StaticMeshActor`. Then, the water mesh is also generated in the file `main_terrain.cpp` in the same way as the land mesh, but using its own function to generate the wanted values for the water.
+
+#### Sides of the terrain closed
+
+_Most of the work for this part was done in the files `src/render/MeshViewer.[(cpp)|h]` and `src/main_terrain.cpp`._
+
+We wanted to close the sides of the terrain because we could see the water under the mountain and it was less pleasant to see.
+
+To achieve this goal, we added another mesh similarly to the water and passed the correct values to it.
+
+Since we only need the sides for our mesh, we were allowed to have an array of vertices of a size much smaller than the one needed to generate the land and the water.
+
+To fill in the array, we fix one coordinate and iterate on the other to fill one wall. We repeat the procedure four times to fill in the array and push the newly constructed faces.
+We alternate between vertices having the z coordinate at the height of the terrain and another one being at the base of our wall. We can then construct our faces using the vertices which follow the terrain and the ones being aligned at the bottom of the terrain.
+
+The ground has also been implemented and was simpler since it did not need the height map.
+
+For a more good-looking result, Phong has been disabled for the sides.
 
 #### Miscellaneous
 
