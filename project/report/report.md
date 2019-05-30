@@ -1,12 +1,18 @@
-# Project report - Group 5
+# Project Report - Group 5
 
 ###### Markus Ding, Robin Mamie & Charline Montial
 
-## What is our project about
+## What is our Project About
 
-## Technical approach
+## Technical Approach
 
-### Screen-space reflections
+The project is built and run using the usual way of this semester, by creating a build folder, and executing inside:
+
+    cmake ..
+    make -j
+    ./terrain
+
+### Screen-space Reflections
 
 _Most of the work for this part was done in the files `src/render/MeshViewer.cpp`, `src/render/FrameBuffer.[(cpp)|h]` and `src/shader/reflection.frag`._
 
@@ -36,21 +42,39 @@ But by clipping the result back to the border of the screen, it offers very beau
 
 ![Adjusted reflections on waving water](images/wavy_reflection.png){width="600px"}
 
-Finally, we wanted to add the reflections of the sky.
+
+### Dynamic Water
+
+### Sky and Clouds
+
+### Minor Improvements
+
+#### Sun Shimmering on the Water
+
+We wanted to amplify the effect of the phong lighting model in order to have a bigger effect of the sun shimmering on the water.
+This was simply done by, instead of the "normal" colour of the sky, outputting plain white when the dot product between the reflected ray and the light source was greater than 0.8.
+This value was empirically computed, and gave us the most convincing results.
+
+#### Sky Reflection on the Water
+
+As specified in our contract, we wanted to add the reflections of the sky.
+We have done it, but we decided to not include it in the final presentation.
 Unfortunately, the clouds we use have a frequency too high for the reflections to look good, as showcased by the following examples:
 
+![Example of sky reflection](images/sky_reflection1.png){width="600px"}
 
-### Dynamic water
+![Example of sky reflection](images/sky_reflection2.png){width="600px"}
 
-### Sky and clouds
+The sky reflections are even weirder when the water is moving, and the whole landscape just looks like a giant ugly vortex.
+As proof for our work, we have included the shader under the name `src/shader/cursed_reflection.frag`.
 
-### Minor improvements
-
-#### Sun shimmering on water
-
-#### Sky reflection on water
 
 #### Sides of the terrain closed
+
+
+#### Miscellaneous
+
+The user can dump all frames in files by pressing `C`.
 
 ## Results
 
@@ -65,7 +89,7 @@ Unfortunately, the clouds we use have a frequency too high for the reflections t
 <video class='center' width="1000" controls>
   <source src="video/sample.mp4" type="video/mp4">
 </video>
-*Demonstration video staring all the implemented features*
+*Demonstration video starring all the implemented features*
 
 ## Contributions
 
