@@ -47,7 +47,7 @@ But by clipping the result back to the border of the screen, it offers very beau
 
 ### Dynamic Water
 
-The animation of the water is implemented  by changing the values of the points on the mesh, more precisely by making the z-coordinate change at each iteration.
+The animation of the water is implmented  by changing the values of the points on the mesh, more precisely by making the z-coordinate change at each iteration.
 We have gone over several different implementations before reaching the final one but all had in common that we generated an `Array2D` of the same size of the terrain corresponding to the z-coordinate values of the simulated water.
 
 We also never recreate a mesh for each step of the animation but simply update the values of the current one for obvious performance reasons.
@@ -60,9 +60,11 @@ Then, we added the movement by adding a sinusoidal function (with a parameter co
 
 This gave us some bigger waves with a nice water surface but it didn't really satisfy us.
 
+<video class='center' width="1000" controls>
+  <source src="video/sinusoidal_water.mp4" type="video/mp4">
+</video>
 
 
-//TODO: insert video of big waves. Commit `c8424a446d6046420eb0e86efb6acdf43bf7d742`
 
 #### Shifted 2D Perlin function
 
@@ -78,7 +80,7 @@ for(int x = 0; x <TERRAIN_SIZE; ++x){
         int index = x*TERRAIN_SIZE+y;
         if (vertices_[index].position.z < WATER_LEVEL) // is water
             vertices_[index].position.z = water_values[(x+time)%TERRAIN_SIZE][y];
-    }
+    }	
 }
 ```
 
@@ -111,32 +113,17 @@ We did this as a proof of concept before using the Perlin 3D noise to our wave g
 
 <p float="left">
   <img src="./images/perlin3d_01.png" width="100" />
-  <img src="./images/perlin3d_02.png" width="100" />
+  <img src="./images/perlin3d_02.png" width="100" /> 
   <img src="./images/perlin3d_03.png" width="100" />
   <img src="./images/perlin3d_04.png" width="100" />
-  <img src="./images/perlin3d_05.png" width="100" />
+  <img src="./images/perlin3d_05.png" width="100" /> 
   <img src="./images/perlin3d_06.png" width="100" />
   <img src="./images/perlin3d_07.png" width="100" />
 </p>
 
+
+
 ### Sky and Clouds
-
-_Most of the work for this part was done in the files `src/sky/sphere.[(cpp)|h]`, `src/sky/sky.h`,`src/render/MeshViewer.[(cpp)|h]`, `src/shader/sky.[(frag)|(vert)]` and `src/shader/noise.frag`._
-
-For the main strategy, we wanted to render a sphere as a support for our background in a similar way as the stars in the solar system assignment.
-
-Then, we wanted to use a noise function and interpolate the blue and white colours according to the noise value to generate our cloudy sky. The last step is then to map the generated values on the sphere.
-
-First we imported and adapted the classes `sphere` and `planet` (which is now called `sky`) from assignment 6 which was about the solar system.
-Then we added an attribute of type `Sky`to `Meshviewer` as well as a sky shader.
-
-We first tried to use Perlin 2D noise, but the mapping on the sphere was terrible because the texture was deformed on the sides which led to unrealistic results and we could see that the support of our sky was a sphere, which was undesirable.
-
-//TODO MARKUS: ADD FIGURE OF THE UGLY PERLIN 2D FOR THE SKY
-
-When we swiched to 3D Perlin noise, the problem was solved.
-
-//TODO MARKUS: ADD DETAILS ON HOW YOU TWEAKED THE VALUE (au début c'était coupé en sections je me rappelle le 3D)
 
 ### Minor Improvements
 
@@ -207,6 +194,7 @@ The user can dump all frames in files by pressing `C`.
 <video class='center' width="1000" controls>
   <source src="video/sample.mp4" type="video/mp4">
 </video>
+
 *Demonstration video starring all the implemented features*
 
 ## Contributions
