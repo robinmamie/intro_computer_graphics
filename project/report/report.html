@@ -20,6 +20,7 @@
 <h1 id="project-report---group-5">Project Report - Group 5</h1>
 <h6 id="markus-ding-robin-mamie-charline-montial">Markus Ding, Robin Mamie &amp; Charline Montial</h6>
 <h2 id="what-is-our-project-about">What is our Project About</h2>
+<p>The main goal to our project was to upgrade the already existing assignment 9 with various features, the main one being the screen-space reflections, followed by the waving water. The sky and clouds, with their reflection was our last objective. We managed to complete all of our goals. In addition, a few improvements have been made here and there for nicer results.</p>
 <h2 id="technical-approach">Technical Approach</h2>
 <p>The project is built and run using the usual way of this semester, by creating a build folder, and executing inside:</p>
 <pre><code>cmake ..
@@ -55,6 +56,14 @@ make -j
 </figure>
 <p>The sky reflections are even weirder when the water is moving, and the whole landscape just looks like a giant ugly vortex. As proof for our work, we have included the shader under the name <code>src/shader/cursed_reflection.frag</code>.</p>
 <h4 id="sides-of-the-terrain-closed">Sides of the terrain closed</h4>
+<h4 id="separation-of-water-and-land-meshes">Separation of water and land meshes</h4>
+<p><em>Most of the work for this part was done in the files <code>src/render/MeshViewer.[(cpp)|h]</code>, <code>src/main_terrain.cpp</code>.</em></p>
+<p>We wanted to have to separate the land and water mesh, which was not the case in the original assignment for two reasons.</p>
+<p>First, the transition between the land and the water was weird as it can be seen in the screenshot below and it certainly did not improve when the water began to wave.</p>
+<p>Secondly, we wanted to achieve this because it would allow us to have a transparent water. We thought that it would be more realistic to see the bottom of our land and for that, we needed to separate the two meshes, which is what we did.</p>
+<figure>
+<img src="images/bad_transition.png" alt="The transition between the land and the water was not very nice when the land and the water were rendered using a single mesh." width="600" /><figcaption>The transition between the land and the water was not very nice when the land and the water were rendered using a single mesh.</figcaption>
+</figure>
 <h4 id="miscellaneous">Miscellaneous</h4>
 <p>The user can dump all frames in files by pressing <code>C</code>.</p>
 <h2 id="results">Results</h2>

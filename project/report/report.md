@@ -74,6 +74,19 @@ As proof for our work, we have included the shader under the name `src/shader/cu
 
 #### Sides of the terrain closed
 
+#### Separation of water and land meshes
+
+_Most of the work for this part was done in the files `src/render/MeshViewer.[(cpp)|h]` and `src/main_terrain.cpp`._
+
+We wanted to separate the land and water meshes in our project for two reasons.
+
+First, the transition between the land and the water was weird as it can be seen in the screenshot below and it certainly did not improve when the water began to wave.
+
+Secondly, we wanted to achieve this because it would allow us to have a transparent water. We thought that it would be more realistic to see the bottom of our land and for that, we needed to separate the two meshes, which is what we did.
+
+![The transition between the land and the water was not very nice when the land and the water were rendered using a single mesh.](images/bad_transition.png){width="600px"}
+
+To achieve this, we added two attributes to the `MeshViewer` class for the water, namely a shared pointer to an instance of the class `Mesh` and another one to an instance of the class `StaticMeshActor`. Then, the water mesh is also generated in the file `main_terrain.cpp` in the same way as the land mesh, but using its own function to generate the wanted values for the water.
 
 #### Miscellaneous
 
