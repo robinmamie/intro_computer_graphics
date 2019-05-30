@@ -185,7 +185,7 @@ To achieve this goal, we added another mesh similarly to the water and passed th
 
 Since we only need the sides for our mesh, we were allowed to have an array of vertices of a size much smaller than the one needed to generate the land and the water.
 
-To fill in the array, we fix one coordinate and iterate on the other to fill one wall. We repeat the procedure four times to fill in the array and push the newly constructed faces.
+To fill in the array, we fix one coordinate and iterate on the other to fill one wall. We repeat the procedure four time for each wall and push the newly constructed faces.
 We alternate between vertices having the z coordinate at the height of the terrain and another one being at the base of our wall. We can then construct our faces using the vertices which follow the terrain and the ones being aligned at the bottom of the terrain.
 
 The ground has also been implemented and was simpler since it did not need the height map.
