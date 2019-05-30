@@ -4,6 +4,9 @@
 
 ## What is our Project About
 
+The main goal to our project was to upgrade the already existing assignment 9 with various features, the main one being the screen-space reflections, followed by the waving water. The sky and clouds, with their reflection was our last objective.
+We managed to complete all of our goals. In addition, a few improvements have been made here and there for nicer results.
+
 ## Technical Approach
 
 The project is built and run using the usual way of this semester, by creating a build folder, and executing inside:
