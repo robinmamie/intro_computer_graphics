@@ -44,6 +44,14 @@ But by clipping the result back to the border of the screen, it offers very beau
 
 ## Results
 
+![Screen space reflections + Phong + Sky and clouds](images/1.png){width="600px"}
+
+![Closer look at screen space reflections](images/2.png){width="600px"}
+
+![Closer look at the sun shimmering on the water](images/3.png){width="600px"}
+
+![Closer look at the side walls of the terrain](images/4.png){width="600px"}
+
 ## Contributions
 
 #### Screenspace reflections
@@ -64,7 +72,7 @@ Robin Mamié & Charline Montial
 #### Separate land and water mesh
 Charline Montial
 
-#### Sun shimmering on water
+#### Sun shimmering on the water
 Robin Mamié
 
 ### Total

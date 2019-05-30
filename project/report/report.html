@@ -21,7 +21,14 @@
 <h6 id="markus-ding-robin-mamie-charline-montial">Markus Ding, Robin Mamie &amp; Charline Montial</h6>
 <h2 id="what-is-our-project-about">What is our project about</h2>
 <h2 id="technical-approach">Technical approach</h2>
-<h3 id="screenspace-reflections">Screenspace reflections</h3>
+<h3 id="screen-space-reflections">Screen-space reflections</h3>
+<p>At first, we had to accommodate the code in order to communicate the colors of the terrain to the reflection shader. For that, we created the class <code>FrameBuffer</code>, that contains all the informations necessary to generate simple screen-space reflections. Namely, we forward the depth of the pixel and its color to the other shader, using frame buffers. Even though we used screen buffers in assignment 7, using two of them as output of the same shader was not trivial, and we spent a lot of time looking for online resources talking about this. After stringing bits and pieces of information, we finally managed to get a fully working implementation of this idea. We also learnt the hard way that online OpenGL support is either scarce or very specialised…</p>
+<p>Then, we wanted to adapt the code provided by one of the links displayed on the page reserved for the project ideas, namely <a href="https://gizmosandgames.com/2017/01/17/screen-space-reflections/">this blog post</a>. Unfortunately for us, after a few days of trying, we did not manage to adapt the algorithm in our code, to our dismay. No visible results were convincing and/or made sense.</p>
+<p>Therefore, we decided to work out an even simpler algorithm, that uses a trivial ray marching technique. Indeed, using the ray reflected from our viewing ray - according to the normal of the water -, we just iterate over very small portions of it until the resulting ray (i.e. viewing ray + <code>i</code> number of small reflection rays) “hit” the terrain, i.e. its depth is greater than the terrain. The latter was sampled in a frame buffer, and can be directly used in the shader for this purpose. The search is abandoned if the ray is outside of the screen or it “hits” the sky, meaning there will never be terrain after that.</p>
+<p>There is a small exception to the screen rule. To make the reflections look nicer, we still output a color when the ray exits the screen horizontally, mening they are not strictly speaking “screen-space” reflections. But by clipping the result back to the border of the screen, it offers very beautiful results when the terrain is not perfectly flat, which is the case in this project.</p>
+<figure>
+<img src="images/wavy_reflection.png" alt="Reflections on the waving water" width="600" /><figcaption>Reflections on the waving water</figcaption>
+</figure>
 <h3 id="dynamic-water">Dynamic water</h3>
 <h3 id="sky-and-clouds">Sky and clouds</h3>
 <h3 id="minor-improvements">Minor improvements</h3>
@@ -29,23 +36,35 @@
 <h4 id="sky-reflection-on-water">Sky reflection on water</h4>
 <h4 id="sides-of-the-terrain-closed">Sides of the terrain closed</h4>
 <h2 id="results">Results</h2>
+<figure>
+<img src="images/1.png" alt="Screen space reflections + Phong + Sky and clouds" width="600" /><figcaption>Screen space reflections + Phong + Sky and clouds</figcaption>
+</figure>
+<figure>
+<img src="images/2.png" alt="Closer look at screen space reflections" width="600" /><figcaption>Closer look at screen space reflections</figcaption>
+</figure>
+<figure>
+<img src="images/3.png" alt="Closer look at the sun shimmering on the water" width="600" /><figcaption>Closer look at the sun shimmering on the water</figcaption>
+</figure>
+<figure>
+<img src="images/4.png" alt="Closer look at the side walls of the terrain" width="600" /><figcaption>Closer look at the side walls of the terrain</figcaption>
+</figure>
 <h2 id="contributions">Contributions</h2>
-<h4 id="screenspace-reflection">Screenspace reflection</h4>
+<h4 id="screenspace-reflections">Screenspace reflections</h4>
 <p>Robin Mamié</p>
 <h4 id="dynamic-water-1">Dynamic water</h4>
 <p>Markus Ding, Robin Mamié &amp; Charline Montial</p>
 <h4 id="sky-and-clouds-1">Sky and clouds</h4>
 <p>Markus Ding &amp; Charline Montial</p>
-<h4 id="sky-and-clouds-reflection">Sky and clouds reflection</h4>
+<h4 id="sky-and-clouds-reflections">Sky and clouds reflections</h4>
 <p>Robin Mamié</p>
 <h4 id="sides-of-the-terrain-closed-1">Sides of the terrain closed</h4>
 <p>Robin Mamié &amp; Charline Montial</p>
 <h4 id="separate-land-and-water-mesh">Separate land and water mesh</h4>
 <p>Charline Montial</p>
-<h4 id="sun-shimmering-on-water-1">Sun shimmering on water</h4>
+<h4 id="sun-shimmering-on-the-water">Sun shimmering on the water</h4>
 <p>Robin Mamié</p>
 <h3 id="total">Total</h3>
-<p>Robin Mamié: 38%, Markus Ding: 31% &amp; Charline Montial: 31%</p>
+<p>Robin Mamié: 38% Markus Ding: 31% Charline Montial: 31%</p>
 <h2 id="references">References</h2>
 </body>
 </html>
