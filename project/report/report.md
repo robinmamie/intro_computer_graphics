@@ -87,7 +87,7 @@ for(int x = 0; x <TERRAIN_SIZE; ++x){
 But this created the problem that if our two opposite borders (the one at `x=0` and the other at `x=TERRAIN_SIZE-1`) were not the exact same height (z-coordinate), there will be a bump (or a mini-tsunami) when we loop around the indices and we jump from one to the other as can be seen on the image below:
 
 
-//TODO: insert image of rogue wave. commit `ec9e34bfd76ae038978dd3b209f98729098b3a7b`
+![Here we can see the altitude difference between the first and last values of the water array (the darker blue line on the right) when they meet during the loop.](images/rogue_wave.png){width="600px"}
 
 #### Improved 3D Perlin version
 
@@ -125,6 +125,7 @@ We did this as a proof of concept before using the Perlin 3D noise to our wave g
 
 ### Sky and Clouds
 
+<<<<<<< HEAD
 _Most of the work for this part was done in the files `src/sky/sphere.[(cpp)|h]`, `src/sky/sky.h`,`src/render/MeshViewer.[(cpp)|h]`, `src/shader/sky.[(frag)|(vert)]` and `src/shader/noise.frag`._
 
 For the main strategy, we wanted to render a sphere as a support for our background in a similar way as the stars in the solar system assignment.
@@ -137,6 +138,13 @@ Then we added an attribute of type `Sky`to `Meshviewer` as well as a sky shader.
 We first tried to use Perlin 2D noise, but the mapping on the sphere was terrible because the texture was deformed on the sides which led to unrealistic results and we could see that the support of our sky was a sphere, which was undesirable.
 
 ### Sky and Clouds
+
+Then, we wanted to use a noise function and interpolate the blue and white colours according to the noise value to generate our cloudy sky. The last step is then to map the generated values on the sphere.
+
+First we imported and adapted the classes `sphere` and `planet` (which is now called `sky`) from assignment 6 which was about the solar system.
+Then we added an attribute of type `Sky` to `Meshviewer` as well as a sky shader.
+
+We first tried to use Perlin 2D noise, but the mapping on the sphere was terrible because the texture was deformed on the sides which led to unrealistic results and we could see that the support of our sky was a sphere, which was undesirable.
 
 //TODO MARKUS: ADD FIGURE OF THE UGLY PERLIN 2D FOR THE SKY
 
