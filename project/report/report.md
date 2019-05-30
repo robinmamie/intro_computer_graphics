@@ -62,6 +62,11 @@ Unfortunately, the clouds we use have a frequency too high for the reflections t
 
 ![Closer look at the side walls of the terrain](images/4.png){width="600px"}
 
+<video class='center' width="1000" controls>
+  <source src="video/sample.mp4" type="video/mp4">
+</video>
+*Demonstration video staring all the implemented features*
+
 ## Contributions
 
 #### Screenspace reflections
