@@ -8,6 +8,8 @@
 
 ### Screen-space reflections
 
+_Most of the work for this part was done in the files `src/render/MeshViewer.cpp`, `src/render/FrameBuffer.[(cpp)|h]` and `src/shader/reflection.frag`._
+
 At first, we had to accommodate the code in order to communicate the colors of the terrain to the reflection shader.
 For that, we created the class `FrameBuffer`, that contains all the informations necessary to generate simple screen-space reflections.
 Namely, we forward the depth of the pixel and its color to the other shader, using frame buffers.
@@ -28,7 +30,15 @@ There is a small exception to the screen rule.
 To make the reflections look nicer, we still output a color when the ray exits the screen horizontally, mening they are not strictly speaking "screen-space" reflections.
 But by clipping the result back to the border of the screen, it offers very beautiful results when the terrain is not perfectly flat, which is the case in this project.
 
-![Reflections on the waving water](images/wavy_reflection.png){width="600px"}
+![Reflections on still water](images/still_reflection_wo.png){width="600px"}
+
+![Adjusted reflections on still water](images/still_reflection.png){width="600px"}
+
+![Adjusted reflections on waving water](images/wavy_reflection.png){width="600px"}
+
+Finally, we wanted to add the reflections of the sky.
+Unfortunately, the clouds we use have a frequency too high for the reflections to look good, as showcased by the following examples:
+
 
 ### Dynamic water
 
