@@ -49,7 +49,7 @@ Robin Mamié & Charline Montial
 #### Separate land and water mesh
 Charline Montial
 
-#### Sun shimmering on  the water
+#### Sun shimmering on the water
 Robin Mamié
 
 ### Total
