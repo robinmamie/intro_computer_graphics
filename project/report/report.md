@@ -85,15 +85,7 @@ for(int x = 0; x <TERRAIN_SIZE; ++x){
 But this created the problem that if our two opposite borders (the one at `x=0` and the other at `x=TERRAIN_SIZE-1`) were not the exact same height (z-coordinate), there will be a bump (or a mini-tsunami) when we loop around the indices and we jump from one to the other as can be seen on the image below:
 
 
-
 //TODO: insert image of rogue wave. commit `ec9e34bfd76ae038978dd3b209f98729098b3a7b`
-
-#### Visual improvement by adding a second Mesh
-
-We switched from the one mesh for both terrain and water to two distinct meshes in order to remove the not so pretty border between land and water where we had a small blue cliff.
-So we created a second mesh with only the water points on them and superposed it to the land mesh. This had the positive outcome of allowing us to see submerged water.
-
-// TODO: add picture of ugly cliff commit `369ede413c1f75c244db00b13fd0ebf83a96fa8a`
 
 #### Improved 3D Perlin version
 
@@ -179,7 +171,7 @@ Secondly, we wanted to achieve this because it would allow us to have a transpar
 
 ![The transition between the land and the water was not very nice when the land and the water were rendered using a single mesh.](images/bad_transition.png){width="600px"}
 
-To achieve this, we added two attributes to the `MeshViewer` class for the water, namely a shared pointer to an instance of the class `Mesh` and another one to an instance of the class `StaticMeshActor`. Then, the water mesh is also generated in the file `main_terrain.cpp` in the same way as the land mesh, but using its own function to generate the wanted values for the water.
+To achieve this, we added two attributes to the `MeshViewer` class for the water, namely a shared pointer to an instance of the class `Mesh` and another one to an instance of the class `StaticMeshActor`. Then, the water mesh is also generated in the file `main_terrain.cpp` in the same way as the land mesh, but using its own function to generate the wanted values for the water. The newly created water mesh is simply superposed it to the land mesh.
 
 #### Sides of the terrain closed
 
