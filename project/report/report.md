@@ -179,7 +179,7 @@ To achieve this, we added two attributes to the `MeshViewer` class for the water
 
 _Most of the work for this part was done in the files `src/render/MeshViewer.[(cpp)|h]` and `src/main_terrain.cpp`._
 
-We wanted to close the sides of the terrain because we could see the water under the mountain and it was less pleasant to see.
+We wanted to close the sides of the terrain because we could see the water under the mountain and it was not very pleasant.
 
 To achieve this goal, we added another mesh similarly to the water and passed the correct values to it.
 
