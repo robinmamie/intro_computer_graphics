@@ -24,4 +24,30 @@
 
 ## Contributions
 
+#### Screenspace reflection
+Robin Mamié
+
+#### Dynamic water
+Markus Ding, Robin Mamié & Charline Montial
+
+#### Sky and clouds
+Markus Ding & Charline Montial
+
+#### Sky and clouds reflection
+Robin Mamié
+
+#### Sides of the terrain closed
+Robin Mamié & Charline Montial
+
+#### Separate land and water mesh
+Charline Montial
+
+#### Sun shimmering on water
+Robin Mamié
+
+### Total
+Robin Mamié: 38%,
+Markus Ding: 31% & 
+Charline Montial: 31%
+
 ## References
