@@ -36,14 +36,17 @@ The latter was sampled in a frame buffer, and can be directly used in the shader
 The search is abandoned if the ray is outside of the screen or it "hits" the sky, meaning there will never be terrain after that.
 
 There is a small exception to the screen rule.
-To make the reflections look nicer, we still output a color when the ray exits the screen horizontally, mening they are not strictly speaking "screen-space" reflections.
+To make the reflections look nicer, we still output a color when the ray exits the screen horizontally, meaning they are not strictly speaking "screen-space" reflections.
 But by clipping the result back to the border of the screen, it offers very beautiful results when the terrain is not perfectly flat, which is the case in this project.
 
-![Reflections on still water](images/still_reflection_wo.png){width="600px"}
+![Reflections on still water, missing on the side](images/still_reflection_wo.png){width="600px"}
 
-![Adjusted reflections on still water](images/still_reflection.png){width="600px"}
+![Adjusted (clipped horizontally) reflections on still water, filled on the side, and they seem artificial](images/still_reflection.png){width="600px"}
 
-![Adjusted reflections on waving water](images/wavy_reflection.png){width="600px"}
+![Adjusted reflections on waving water, filled on the side, but they do not seem artificial anymore](images/wavy_reflection.png){width="600px"}
+
+As a final touch, we also "dimmed" the reflections the further away they are, for a more realistic effect.
+You can see this effect on the previous images: the reflections of the mountains in the background are bright on the base, and dimmed on the tips.
 
 ### Dynamic Water
 
@@ -75,9 +78,9 @@ So in short, at each `dt` step of the animation we did the following:
 ```C++
 time += dt;
 
-for(int x = 0; x <TERRAIN_SIZE; ++x){
-    for(int y = 0; y< TERRAIN_SIZE; ++y){
-        int index = x*TERRAIN_SIZE+y;
+for(int x = 0; x < TERRAIN_SIZE; ++x){
+    for(int y = 0; y < TERRAIN_SIZE; ++y){
+        int index = x*TERRAIN_SIZE + y;
         if (vertices_[index].position.z < WATER_LEVEL) // is water
             vertices_[index].position.z = water_values[(x+time)%TERRAIN_SIZE][y];
     }
@@ -147,7 +150,7 @@ So we tweaked the values a bit and finally, we were very pleased with the visual
 #### Sun Shimmering on the Water
 
 We wanted to amplify the effect of the phong lighting model in order to have a bigger effect of the sun shimmering on the water.
-This was simply done by, instead of the "normal" colour of the sky, outputting plain white when the dot product between the reflected ray and the light source was greater than 0.8.
+This was simply done by, instead of the "normal" colour of the sky, outputting plain white when the dot product between the reflected ray and the light source is greater than 0.8.
 This value was empirically computed, and gave us the most convincing results.
 
 #### Sky Reflection on the Water
@@ -192,11 +195,11 @@ We alternate between vertices having the z coordinate at the height of the terra
 
 The ground has also been implemented and was simpler since it did not need the height map.
 
-For a more good-looking result, Phong has been disabled for the sides.
+For a more good-looking result, Phong lighting has been disabled for the sides.
 
 #### Miscellaneous
 
-The user can dump all frames in files by pressing `C`.
+The user can dump all frames in files named `frame_<frame nb>.png` by pressing `C` during the execution of the program.
 
 ## Results
 
@@ -243,4 +246,5 @@ Charline Montial: 31%
 
 ## References
 
+- Library used : OpenGL
 - 3D-perlin noise: https://mrl.nyu.edu/~perlin/noise/
