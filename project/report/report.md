@@ -248,6 +248,8 @@ Charline Montial: 31%
 
 ## Source Files
 
+The source files are archived under the name `group5_code.zip`, in the same folder as this document.
+
 ## References
 
 - Library used : OpenGL
