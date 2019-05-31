@@ -201,6 +201,8 @@ For a more good-looking result, Phong lighting has been disabled for the sides.
 
 The user can dump all frames in files named `frame_<frame nb>.png` by pressing `C` during the execution of the program.
 
+The arrows allow the user to change the view as in assignment 9, while WASD allow them to have a smoother experience while exploring the landscape.
+
 ## Results
 
 ![Screen space reflections + Phong + Sky and clouds](images/1.png){width="600px"}
@@ -218,25 +220,25 @@ The user can dump all frames in files named `frame_<frame nb>.png` by pressing `
 
 ## Contributions
 
-#### Screenspace reflections
+#### Screen-space Reflections
 Robin Mamié
 
-#### Dynamic water
+#### Dynamic Water
 Markus Ding, Robin Mamié & Charline Montial
 
-#### Sky and clouds
+#### Sky and Clouds
 Markus Ding & Charline Montial
 
-#### Sky and clouds reflections
+#### Sky and Clouds Reflections
 Robin Mamié
 
-#### Sides of the terrain closed
+#### Sides of the Terrain Closed
 Robin Mamié & Charline Montial
 
-#### Separate land and water mesh
+#### Separate Land and Water Mesh
 Charline Montial
 
-#### Sun shimmering on the water
+#### Sun Shimmering on the Water
 Robin Mamié
 
 ### Total
@@ -244,7 +246,9 @@ Robin Mamié: 38%
 Markus Ding: 31%
 Charline Montial: 31%
 
+## Source Files
+
 ## References
 
 - Library used : OpenGL
-- 3D-perlin noise: https://mrl.nyu.edu/~perlin/noise/
+- 3D-perlin noise: <https://mrl.nyu.edu/~perlin/noise/>
